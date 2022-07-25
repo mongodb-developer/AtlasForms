@@ -1,7 +1,7 @@
 {
-    "app_id": "application-0-qklmv",
+    "app_id": "atlasforms-cdacv",
     "config_version": 20210101,
-    "name": "Application-0",
+    "name": "AtlasForms",
     "location": "IE",
     "provider_region": "aws-eu-west-1",
     "deployment_model": "LOCAL"
