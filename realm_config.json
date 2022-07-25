@@ -1,9 +1,8 @@
 {
-    "app_id": "atlasforms-jgtbe",
+    "app_id": "application-0-qklmv",
     "config_version": 20210101,
-    "name": "AtlasForms",
+    "name": "Application-0",
     "location": "IE",
     "provider_region": "aws-eu-west-1",
-    "deployment_model": "LOCAL",
-    "environment": "development"
+    "deployment_model": "LOCAL"
 }

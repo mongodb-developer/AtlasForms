@@ -2,7 +2,7 @@
     "name": "mongodb-atlas",
     "type": "mongodb-atlas",
     "config": {
-        "clusterName": "AppLiveMongoDB",
+        "clusterName": "MyData",
         "readPreference": "primary",
         "wireProtocolEnabled": false
     },
