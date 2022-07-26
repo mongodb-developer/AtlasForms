@@ -2,15 +2,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html>
     <head>
+          <!-- Include the latest Realm Web SDK from CDN-->
+        <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
         <!-- Using vue.js in as lightweight way as possible-->
         <script src="https://unpkg.com/vue@3"></script>
-        <!-- W3 is small, fast, lightweight  -->
+        <!-- W3 is small, fast, lightweight and responsive -->
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <!-- Custom style sheet too -->
         <link rel="stylesheet" href="/styles/style.css">
         <!-- class wrapping up auth functions -->
         <script src="./authentication.js"></script>
-        <!-- class wrapping up auth functions -->
+        <!-- code for our login page -->
         <script src="./login.js"></script>
     </head>
     <body onLoad="loginOnLoad()">

@@ -3,7 +3,7 @@ let vueApp;
 function passwordLogin()
 {
    try {
-    vueApp.authHelper.passwordsLogin(vueApp.usernaem,vueApp.password)
+    vueApp.authHelper.passwordLogin(vueApp.usernaem,vueApp.password)
    } 
    catch(e)
    {
