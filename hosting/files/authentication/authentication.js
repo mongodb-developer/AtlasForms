@@ -13,4 +13,9 @@ class AuthHelper {
         return false;
     }
 
+    passwordLogin(username,password) {
+        console.log(`Attempt to Login as ${username}`)
+        return true;
+    }
+
 }
