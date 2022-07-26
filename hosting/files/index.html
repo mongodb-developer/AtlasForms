@@ -6,7 +6,7 @@
     <script type="module" src="authentication/authentication.js"></script>
     <script>
       function onLoad() {
-        const authHelper = AuthHelper();
+        const authHelper = new AuthHelper();
         if (authHelper.isLoggedIn()) {
           alert("Logged in already")
         } else {
