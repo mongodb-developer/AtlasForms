@@ -1,6 +1,6 @@
 import { atlasAppConfig } from "../appConfig.js"
 
-class RealmAuthHelper {
+class AuthHelper {
 
     constructor() {
         this.realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
