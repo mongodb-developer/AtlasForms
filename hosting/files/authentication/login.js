@@ -7,8 +7,10 @@ function passwordLogin(username,password)
    try {
     if( vueApp.authHelper.passwordLogin(username,password) == true)
     {
+        console.log("Login Successful")
         // Redirect once logged in
     } else {
+        console.log("Login Failed")
         vueApp.message =  appStrings.AF_INCORRECT_PASSWORD;
     }
    } 
