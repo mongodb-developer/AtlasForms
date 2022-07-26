@@ -23,10 +23,10 @@
             <div class="w3-container">
 
                 <label for="username"><b>Username</b></label>
-                <input  class="w3-input" type="text" placeholder="Enter Username"  class="w3-input" name="username" required>
+                <input  class="w3-input" type="text" placeholder="Enter Username"  v-model="username" class="w3-input" name="username" required>
             
                 <label for="password"><b>Password</b></label>
-                <input  class="w3-input" type="password" placeholder="Enter Password" name="password" required>
+                <input  class="w3-input" type="password" placeholder="Enter Password" v-model="password" name="password" required>
             
                 <button @click="passwordLogin()" class="w3-button w3-round" >Login</button>
 
