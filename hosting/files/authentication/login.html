@@ -22,16 +22,20 @@
 <body onLoad="loginOnLoad()">
     <div class="w3-container" id="loginapp">
 
-        <div class="w3-auto w3-twothirds w3-cell w3-cell-middle">
-
-            <label class="w3-third" for="username"><b>Username</b></label>
-            <input class="w3-input w3-border  w3-twothird" type="text" placeholder="Enter Username" v-model="username"
+        <div class="w3-auto w3-twothirds">
+            <div class="w3-cell-row">
+                <label class="w3-container w3-red w3-cell" for="username"><b>Username</b></label>
+                <input class="w3-input w3-border  w3-container w3-green w3-cell" type="text" placeholder="Enter Username" v-model="username"
                 class="w3-input" name="username" required>
+            </div>
 
-            <label class="w3-third" for="password"><b>Password</b></label>
-            <input class="w3-input w3-border w3-twothird" type="password" placeholder="Enter Password"
+            <div class="w3-cell-row">
+            <label  class="w3-container w3-red w3-cell"  for="password"><b>Password</b></label>
+            <input class="w3-input w3-border  w3-container w3-green w3-cell"  type="password" placeholder="Enter Password"
                 v-model="password" name="password" required>
-            <div class="w3-container">
+            </div>
+
+             <div class="w3-cell-row">
                 <div class="w3-auto w3-quarter">
                     <button @click="passwordLogin(username,password)"
                         class="w3-button w3-round w3-green w3-auto">Login</button>
