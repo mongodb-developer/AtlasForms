@@ -31,7 +31,7 @@ function loginOnLoad() {
     
     vueApp  = createApp({
        methods: {
-        passwordLogin : authHelper.passwordLogin,
+        passwordLogin,
        },
        data() {
         return {
