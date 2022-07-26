@@ -7,7 +7,7 @@ class AuthHelper {
 
     //Verify is we are already logged in
     isLoggedIn() {
-        if (this.realmApp.currentUser.id != null) {
+        if (this.realmApp.currentUser != null) {
             return true;
         }
         return false;
