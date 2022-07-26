@@ -18,9 +18,9 @@
         <script src="./login.js"></script>
     </head>
     <body onLoad="loginOnLoad()">
-        <div id="loginapp">
+        <div class="w3-container" id="loginapp">
 
-            <div class="w3-twothirds w3-container">
+            <div class="w3-auto w3-twothirds">
 
                 <label class="w3-third" for="username"><b>Username</b></label>
                 <input  class="w3-input w3-border  w3-twothird" type="text" placeholder="Enter Username"  v-model="username" class="w3-input" name="username" required>
@@ -29,8 +29,11 @@
                 <input  class="w3-input w3-border w3-twothird" type="password" placeholder="Enter Password" v-model="password" name="password" required>
             
                 <button @click="passwordLogin(username,password)" class="w3-button w3-round" >Login</button>
-                {{message}}
+              
               </div>
+              <div class="w3-panel">
+                <p>  {{message}}</p>
+              </div> 
 
         </div>
     </body>
