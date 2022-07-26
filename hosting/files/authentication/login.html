@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+    <head>
+        <!-- Using vue.js in as lightweight way as possible-->
+        <script src="https://unpkg.com/vue@3"></script>
+        <!-- W3 is small, fast, lightweight  -->
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <!-- Custom style sheet too -->
+        <link rel="stylesheet" href="/styles/style.css">
+        <!-- class wrapping up auth functions -->
+        <script src="authentication/authentication.js"></script>
+        <!-- class wrapping up auth functions -->
+        <script src="authentication/login.js"></script>
+    </head>
+    <body onLoad="loginOnLoad()">
+        <div id="loginapp">
+
+            <div class="w3-container">
+
+                <label for="username"><b>Username</b></label>
+                <input  class="w3-input" type="text" placeholder="Enter Username"  class="w3-input" name="username" required>
+            
+                <label for="password"><b>Password</b></label>
+                <input  class="w3-input" type="password" placeholder="Enter Password" name="password" required>
+            
+                <button @click="passwordLogin()" class="w3-button w3-round" >Login</button>
+
+              </div>
+
+        </div>
+    </body>
+    </html>
+</html>

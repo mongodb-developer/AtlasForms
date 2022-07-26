@@ -1,4 +1,6 @@
-<!-- This simply verified if authenticated and then redirects to the app or auth flows-->
+<!DOCTYPE html>
+<!-- This  verifies if authenticated and then redirects to the app or auth flows-->
+
 <html>
 
 <head>
@@ -13,9 +15,9 @@
     function onLoad() {
       const authHelper = new AuthHelper();
       if (authHelper.isLoggedIn()) {
-        alert("Logged in already")
+        window.location.replace("formsapp/formsapp.html");
       } else {
-        alert("Not Logged in yet")
+        window.location.replace("authentication/login.html");
       }
     }
   </script>
