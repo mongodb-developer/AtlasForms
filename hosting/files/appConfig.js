@@ -1,2 +1,2 @@
-export const atlasAppConfig = { ATLAS_SERVICES_APPID : "atlasforms-xrpys" }
+const atlasAppConfig = { ATLAS_SERVICES_APPID : "atlasforms-xrpys" }
 

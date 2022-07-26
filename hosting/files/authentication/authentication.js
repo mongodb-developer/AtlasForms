@@ -1,4 +1,3 @@
-import { atlasAppConfig } from "../appConfig.js"
 
 class AuthHelper {
 

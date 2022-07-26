@@ -1,20 +1,28 @@
 <!-- This simply verified if authenticated and then redirects to the app or auth flows-->
 <html>
-  <head>
-    <!-- Unclude the Realm Web SDK-->
-    <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
-    <script type="module" src="authentication/authentication.js"></script>
-    <script>
-      function onLoad() {
-        const authHelper = new AuthHelper();
-        if (authHelper.isLoggedIn()) {
-          alert("Logged in already")
-        } else {
-          alert("Not Logged in yet")
-        }
+
+<head>
+  <!-- Include the latest Realm Web SDK from CDN-->
+  <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+  <!-- Installation specific parameters-->
+  <script src="appConfig.js"></script>
+  <!-- class wrapping up auth functions -->
+  <script src="authentication/authentication.js"></script>
+
+  <script>
+    function onLoad() {
+      const authHelper = new AuthHelper();
+      if (authHelper.isLoggedIn()) {
+        alert("Logged in already")
+      } else {
+        alert("Not Logged in yet")
       }
-    </script>
-  </head>
-  <body onLoad="onLoad();">
-  </body>
+    }
+  </script>
+
+</head>
+
+<body onLoad="onLoad();">
+</body>
+
 </html>
