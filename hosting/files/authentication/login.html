@@ -1,41 +1,50 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html>
-    <head>
-          <!-- Include the latest Realm Web SDK from CDN-->
-        <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
-        <!-- Using vue.js in as lightweight way as possible-->
-        <script src="https://unpkg.com/vue@3"></script>
-        <!-- W3 is small, fast, lightweight and responsive -->
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <!-- Custom style sheet too -->
-        <link rel="stylesheet" href="/styles/style.css">
-        <!-- Installation specific parameters-->
-        <script src="/appConfig.js"></script>
-        <!-- class wrapping up auth functions -->
-        <script src="./authentication.js"></script>
-        <!-- code for our login page -->
-        <script src="./login.js"></script>
-    </head>
-    <body onLoad="loginOnLoad()">
-        <div class="w3-container" id="loginapp">
 
-            <div class="w3-auto w3-twothirds">
+<head>
+    <!-- Include the latest Realm Web SDK from CDN-->
+    <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+    <!-- Using vue.js in as lightweight way as possible-->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- W3 is small, fast, lightweight and responsive -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- Custom style sheet too -->
+    <link rel="stylesheet" href="/styles/style.css">
+    <!-- Installation specific parameters-->
+    <script src="/appConfig.js"></script>
+    <!-- class wrapping up auth functions -->
+    <script src="./authentication.js"></script>
+    <!-- code for our login page -->
+    <script src="./login.js"></script>
+</head>
 
-                <label class="w3-third" for="username"><b>Username</b></label>
-                <input  class="w3-input w3-border  w3-twothird" type="text" placeholder="Enter Username"  v-model="username" class="w3-input" name="username" required>
-            
-                <label class="w3-third"  for="password"><b>Password</b></label>
-                <input  class="w3-input w3-border w3-twothird" type="password" placeholder="Enter Password" v-model="password" name="password" required>
-            
-                <button @click="passwordLogin(username,password)" class="w3-button w3-round w3-green w3-auto" >Login</button>
-              
-              </div>
-              <div class="w3-panel">
-                <p>  {{message}}</p>
-              </div> 
+<body onLoad="loginOnLoad()">
+    <div class="w3-container" id="loginapp">
 
+        <div class="w3-auto w3-twothirds w3-cell w3-cell-middle">
+
+            <label class="w3-third" for="username"><b>Username</b></label>
+            <input class="w3-input w3-border  w3-twothird" type="text" placeholder="Enter Username" v-model="username"
+                class="w3-input" name="username" required>
+
+            <label class="w3-third" for="password"><b>Password</b></label>
+            <input class="w3-input w3-border w3-twothird" type="password" placeholder="Enter Password"
+                v-model="password" name="password" required>
+            <div class="w3-container">
+                <div class="w3-auto w3-quarter">
+                    <button @click="passwordLogin(username,password)"
+                        class="w3-button w3-round w3-green w3-auto">Login</button>
+                </div>
+            </div>
         </div>
-    </body>
-    </html>
+        <div class="w3-panel">
+            <p class="w3-center"> {{message}}</p>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
 </html>
