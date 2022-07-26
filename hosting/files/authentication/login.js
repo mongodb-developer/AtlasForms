@@ -35,7 +35,7 @@ function loginOnLoad() {
         return {
             username: "",
             password: "",
-            message: ""
+            message: "here"
         }
        }
     }).mount("#loginapp")
