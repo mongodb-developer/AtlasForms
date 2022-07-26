@@ -1,9 +1,11 @@
+'use strict';
+
 let vueApp;
 
 function passwordLogin()
 {
    try {
-    vueApp.authHelper.passwordLogin(vueApp.usernaem,vueApp.password)
+    vueApp.authHelper.passwordLogin(vueApp.username,vueApp.password)
    } 
    catch(e)
    {
