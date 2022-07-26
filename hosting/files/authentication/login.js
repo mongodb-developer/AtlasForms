@@ -2,10 +2,15 @@
 
 let vueApp;
 
-function passwordLogin()
+function passwordLogin(username,password)
 {
    try {
-    vueApp.authHelper.passwordLogin(vueApp.username,vueApp.password)
+    if( vueApp.authHelper.passwordLogin(username,password) == true)
+    {
+        // Redirect once logged in
+    } else {
+        vueApp.message =  appStrings.AF_INCORRECT_PASSWORD;
+    }
    } 
    catch(e)
    {
@@ -29,7 +34,8 @@ function loginOnLoad() {
        data() {
         return {
             username: "",
-            password: ""
+            password: "",
+            message: ""
         }
        }
     }).mount("#loginapp")
