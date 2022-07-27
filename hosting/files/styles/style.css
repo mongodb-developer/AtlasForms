@@ -36,7 +36,12 @@ body {
 .passlab { grid-area: passlab}
 .passtxt { grid-area: passtxt}
 .loginbut { grid-area: loginbut}
-.loginmsg { grid-area: loginmsg}
+.loginmsg { grid-area: loginmsg;
+            color: red;
+            padding: 20px;
+            text-align: center;
+        }
+
 /* All labels on forms includign login */
 .formlabel {
     padding: 10px;
