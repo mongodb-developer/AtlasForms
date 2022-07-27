@@ -29,7 +29,8 @@ body {
         "userlab usertxt"
         "passlab passtxt"
         "loginbut loginbut"
-        "loginmsg loginmsg";
+        "loginmsg loginmsg"
+        "newuser resetpass";
 }
 
 .userlab { grid-area: userlab}
@@ -42,6 +43,8 @@ body {
             padding: 20px;
             text-align: center;
         }
+.newuser { grid-area: newuser}
+.resetpass { grid-area: resetpass}
 
 /* All labels on forms includign login */
 .formlabel {
