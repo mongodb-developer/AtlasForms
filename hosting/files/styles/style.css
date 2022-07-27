@@ -46,7 +46,8 @@ body {
     margin-top: 10px;
     min-width: 80px;
     display: block;
-    margin: 0 auto;
+    margin-left:  auto;
+    margin-right: auto;
 }
 /*All data entry on forms including login etc. */
 .formwriteable {
