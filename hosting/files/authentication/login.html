@@ -27,9 +27,9 @@
         <label for="password"  class="formlabel passlab" >Password</label>
         <input type="password" class="formwriteable passtxt"  placeholder="Enter Password" v-model="password" name="password" required><br/>
 
-
-        <button class="loginbut formbutton" @click="passwordLogin(username,password)">Login</button>
-    
+        <div class="loginbut">
+                    <button class="formbutton" @click="passwordLogin(username,password)">Login</button>
+    </div>
         </div>
         <div>
          {{message}}
