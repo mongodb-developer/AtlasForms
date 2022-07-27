@@ -15,6 +15,7 @@ body {
     width: 40%;
     min-width: 400px;  
     border: 2px red;
+    height: 300px;
     position: absolute;
     top: 0;
     bottom: 0;
