@@ -32,7 +32,7 @@
                 name="password" required><br />
 
             <div class="loginbut">
-                <button class="formbutton" :disabled='username.length>0 && password.length>0' @click="passwordLogin(username,password)">Login</button>
+                <button class="formbutton" :disabled='username.length==0 || password.length==0' @click="passwordLogin(username,password)">Login</button>
             </div>
 
             <div class="loginmsg">
