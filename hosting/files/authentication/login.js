@@ -37,7 +37,7 @@ function loginOnLoad() {
         return {
             username: "",
             password: "",
-            message: "here",
+            message: "",
             authHelper,
         }
        }
