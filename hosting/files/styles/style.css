@@ -14,6 +14,7 @@ body {
 .loginbox {
     width: 40%;
     min-width: 400px;
+   
     border: 2px red;
     position: absolute;
     top: 0;
@@ -22,6 +23,7 @@ body {
     right: 0;
     margin: auto;
     display: grid;
+    grid-auto-rows: minmax(min-content, max-content);
     grid-template-areas:
         "userlab usertxt"
         "passlab passtxt"
