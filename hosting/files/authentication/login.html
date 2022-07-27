@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <html>
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Include the latest Realm Web SDK from CDN-->
     <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
     <!-- Using vue.js in as lightweight way as possible-->
@@ -21,20 +23,22 @@
     <div class="login" id="loginapp">
         <div class="loginbox">
 
-        <label for="username" class="formlabel userlab" >Username</label>
-        <input type="text" class="formwriteable usertxt" placeholder="Enter Username" v-model="username" name="username" required><br/>
+            <label for="username" class="formlabel userlab">Username</label>
+            <input type="text" class="formwriteable usertxt" placeholder="Enter Username" v-model="username"
+                name="username" required><br />
 
-        <label for="password"  class="formlabel passlab" >Password</label>
-        <input type="password" class="formwriteable passtxt"  placeholder="Enter Password" v-model="password" name="password" required><br/>
+            <label for="password" class="formlabel passlab">Password</label>
+            <input type="password" class="formwriteable passtxt" placeholder="Enter Password" v-model="password"
+                name="password" required><br />
 
-        <div class="loginbut">
-                    <button class="formbutton" @click="passwordLogin(username,password)">Login</button>
-    </div>
+            <div class="loginbut">
+                <button class="formbutton" @click="passwordLogin(username,password)">Login</button>
+            </div>
+
+            <div class="loginmsg">
+                {{message}}
+            </div>
         </div>
-        <div>
-         {{message}}
-        </div>
-   
     </div>
 </body>
 
