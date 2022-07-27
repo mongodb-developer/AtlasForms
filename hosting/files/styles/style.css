@@ -41,6 +41,10 @@ body {
     padding: 10px;
 }
 
+.formbutton {
+    padding: 10px;
+    display: inline-block;
+}
 /*All data entry on forms including login etc. */
 .formwriteable {
     border: 1px solid black;
