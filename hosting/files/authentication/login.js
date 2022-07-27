@@ -20,18 +20,30 @@ function passwordLogin(username,password)
    }
 }
 
+function resetPassword()
+{
+    window.location.replace("resetPassword.html");
+}
+
+function newUser()
+{
+    window.location.replace("newUser.html");
+}
+
 function loginOnLoad() {
     const { createApp } = Vue
     const authHelper = new AuthHelper();
 
     if (authHelper.isLoggedIn()) {
       //We should not be here if we are already logged in
-      window.location.replace("formsapp/formsapp.html");
+      window.location.replace("/formsapp/formsapp.html");
     }
     
     vueApp  = createApp({
        methods: {
         passwordLogin,
+        newUser,
+        resetPassword
        },
        data() {
         return {
