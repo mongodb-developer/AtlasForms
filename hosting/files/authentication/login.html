@@ -20,12 +20,11 @@
 <body onLoad="loginOnLoad()">
     <div class="login" id="loginapp">
         <div class="loginbox">
-        <label for="username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" v-model="username" name="username" required>
 
+        <label for="username" class="formlabel" >Username</label>
+        <input type="text" placeholder="Enter Username" v-model="username" name="username" required><br/>
 
-
-        <label for="password"><b>Password</b></label>
+        <label for="password" class="formlabel">Password</label>
         <input type="password" placeholder="Enter Password" v-model="password" name="password" required>
 
 

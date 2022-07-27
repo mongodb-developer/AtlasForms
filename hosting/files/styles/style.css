@@ -1,15 +1,18 @@
+/* Minimalist CSS using only standard CSS not any library like bootstrap,
+wanted this to have minimal opinion on external libraries */
+
+/* Very  global style elements */
+
 body {
     background-color: lightblue;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: black;
 }
 
-input {
-    border: 1px;
-    background-color: white;
-}
 
+/* Login centered on login screen */
 .loginbox {
-    width: 40%;
+    width: 40vmin;
     min-width: 400px;
     border: 2px red;
     position: absolute;
@@ -18,4 +21,15 @@ input {
     left: 0;
     right: 0;
     margin: auto;
+}
+
+/* All labels on forms includign login */
+.formlabel {
+    padding: 10px;
+}
+
+/*All data entry on forms including login etc. */
+.formwriteable {
+    border: 1px;
+    background-color: white;
 }
