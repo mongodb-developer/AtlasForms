@@ -14,8 +14,9 @@ body {
 .loginbox {
     width: 40%;
     min-width: 400px;  
+    padding: 10px;
     border: 1px solid black;
-    height: 300px;
+    height: 250px;
     position: absolute;
     top: 0;
     bottom: 0;
