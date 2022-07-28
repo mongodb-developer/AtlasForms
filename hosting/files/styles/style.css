@@ -10,41 +10,6 @@ body {
 }
 
 
-/* Login centered on login screen */
-.loginbox {
-    width: 40%;
-    min-width: 400px;  
-    padding: 10px;
-    border: 1px solid black;
-    height: 200px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    display: grid;
-    grid-auto-rows: minmax(min-content, max-content);
-    grid-template-areas:
-        "userlab usertxt"
-        "passlab passtxt"
-        "loginbut loginbut"
-        "loginmsg loginmsg"
-        "newuser resetpass";
-}
-
-.userlab { grid-area: userlab}
-.usertxt { grid-area: usertxt}
-.passlab { grid-area: passlab}
-.passtxt { grid-area: passtxt}
-.loginbut { grid-area: loginbut}
-.loginmsg { grid-area: loginmsg;
-            color: red;
-            padding: 20px;
-            text-align: center;
-        }
-.newuser { grid-area: newuser}
-.resetpass { grid-area: resetpass}
 
 /* All labels on forms includign login */
 .formlabel {
@@ -56,7 +21,7 @@ body {
 .formbutton {
     padding: 5px 10px 5px 10px;
     margin-top: 10px;
-    min-width: 80px;
+    min-width: 100px;
     display: block;
     margin-left:  auto;
     margin-right: auto;

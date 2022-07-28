@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- Not using Vue for this one as so simple API call to server and response-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> Atlas Forms - Confirm Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include the latest Realm Web SDK from CDN-->
+    <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+    <!-- overall style -->
+    <link rel="stylesheet" href="/styles/style.css">
+    <!-- Installation specific parameters-->
+    <script src="/appConfig.js"></script>
+
+    <script>
+        'use strict';
+
+        async function confirmUser() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token')
+            const tokenId = urlParams.get('tokenId')
+
+            const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
+
+            try {
+                await realmApp.emailPasswordAuth.confirmUser({ token, tokenId });
+                //Redirect back to login
+                window.location.replace("../login/login.html");
+            }
+            catch (e) {
+                document.getElementById("app").innerText = e
+                console.error(e)
+            }
+
+        }
+
+    </script>
+
+</head>
+
+<body>
+    <div id="app">
+        <center>
+            This is confirming that you have signed up as a user for an Atlas Forms based application.<p></p>
+            If you have done so in the last 30 minutes then to complete registraions Click the button below.
+            <p />
+            <button class="formbutton" onclick="confirmUser()"> Confirm My Email </button>
+        </center>
+    </div>
+</body>
+
+</html>
+
+</html>

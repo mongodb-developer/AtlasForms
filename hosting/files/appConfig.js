@@ -3,5 +3,11 @@
 const atlasAppConfig = { ATLAS_SERVICES_APPID : "atlasforms-xrpys" }
 
 //All the strings that aren't in HTML to allow localization
-
-const appStrings = { AF_INCORRECT_PASSWORD : "Incorrect username or password."}
+//Avoid showing end users errors returned from the server, log them instead.
+const appStrings = {
+     AF_INCORRECT_PASSWORD : "Unable to log in with those credentials.",
+     AF_PASSWORDS_DONT_MATCH : "Passwords do not match.",
+     AF_CHECK_EMAIL : "Please check your email for link to confirm this is your address.",
+     AF_CHECK_EMAIL_RESET : "Please check your email for link to reset your password.",
+     AF_PASSWORD_CHANGED : "Your password has been sucessfully changed.",
+}

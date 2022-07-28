@@ -1,15 +1,31 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<html>
-    <head>
-        <!-- Using vue.js in as lightweight way as possible-->
-        <script src="https://unpkg.com/vue@3"></script>
-        <!-- W3 is small, fast, lightweight  -->
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link rel="stylesheet" href="styles/style.css">
-    </head>
-    <body>
 
-    </body>
-    </html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> Atlas Forms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include the latest Realm Web SDK from CDN-->
+    <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+    <!-- Using vue.js in as lightweight way as possible-->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!--  Style sheet  -->
+    <link rel="stylesheet" href="../styles/style.css">
+    <!-- Installation specific parameters-->
+    <script src="/appConfig.js"></script>
+    <!-- code for our login page -->
+    <script src="./formsapp.js"></script>
+</head>
+
+<body onLoad="formsOnLoad()">
+    <div class="forms" id="formsapp">
+        <div class="formsapplayout">
+            <button class="formbutton"  @click="logOut()"> Logout </button>          
+        </div>
+    </div>
+</body>
+
+</html>
+
 </html>

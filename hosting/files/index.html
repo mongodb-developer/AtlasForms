@@ -8,18 +8,17 @@
   <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
   <!-- Installation specific parameters-->
   <script src="appConfig.js"></script>
-  <!-- class wrapping up auth functions -->
-  <script src="authentication/authentication.js"></script>
 
   <script>
     'use strict';
     
     function onLoad() {
-      const authHelper = new AuthHelper();
-      if (authHelper.isLoggedIn()) {
+    const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
+
+    if (realmApp.currentUser != null) {
         window.location.replace("formsapp/formsapp.html");
       } else {
-        window.location.replace("authentication/login.html");
+        window.location.replace("login/login.html");
       }
     }
   </script>
