@@ -18,8 +18,10 @@
             "confirmationFunctionName": "confirmFunc",
             "emailConfirmationUrl": "http://localhost:8000/newUser/confirmEmail.html",
             "resetFunctionName": "resetFunc",
+            "resetPasswordSubject": "Request to reset your Atlas Forms password.",
+            "resetPasswordUrl": "http://localhost:8000/newUser/resetPassword.html",
             "runConfirmationFunction": false,
-            "runResetFunction": true
+            "runResetFunction": false
         },
         "disabled": false
     }
