@@ -2,5 +2,9 @@
     {
         "name": "resetFunc",
         "private": true
+    },
+    {
+        "name": "confirmFunc",
+        "private": false
     }
 ]
