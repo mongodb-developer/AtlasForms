@@ -13,8 +13,10 @@
         "name": "local-userpass",
         "type": "local-userpass",
         "config": {
-            "autoConfirm": true,
+            "autoConfirm": false,
+            "confirmEmailSubject": "Confirm email for Access to Atlas Forms",
             "confirmationFunctionName": "confirmFunc",
+            "emailConfirmationUrl": "https://localhost:8000/newUser/confirmEmail",
             "resetFunctionName": "resetFunc",
             "runConfirmationFunction": false,
             "runResetFunction": true
