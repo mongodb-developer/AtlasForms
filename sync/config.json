@@ -1,3 +1,11 @@
 {
-    "development_mode_enabled": false
+    "type": "partition",
+    "state": "",
+    "development_mode_enabled": false,
+    "service_name": "mongodb-atlas",
+    "partition": {
+        "key": "",
+        "type": "",
+        "permissions": {}
+    }
 }
