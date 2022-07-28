@@ -15,9 +15,9 @@
         "config": {
             "autoConfirm": false,
             "confirmEmailSubject": "Confirm your  email for Atlas Forms user registration.",
-            "confirmationFunctionName": "confirmFunc",
+            "confirmationFunctionName": "nullfunction",
             "emailConfirmationUrl": "http://localhost:8000/newUser/confirmEmail.html",
-            "resetFunctionName": "resetFunc",
+            "resetFunctionName": "nullfunction",
             "resetPasswordSubject": "Request to reset your Atlas Forms password.",
             "resetPasswordUrl": "http://localhost:8000/resetPassword/resetPassword.html",
             "runConfirmationFunction": false,
