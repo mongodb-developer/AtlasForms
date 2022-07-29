@@ -46,10 +46,13 @@ function loginOnLoad() {
         return {
             email: "",
             password: "",
-            message: "",
-            realmApp
-        }
-       }
+            message: ""
+            }
+        },
+        mounted() {
+            //Non reactive , dont want reactivity on a deep component app like this.
+            this.realmApp = realmApp;
+          },
     }).mount("#loginapp")
 
 

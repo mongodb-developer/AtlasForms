@@ -12,6 +12,8 @@
     <script src="https://unpkg.com/vue@3"></script>
     <!--  Style sheet  -->
     <link rel="stylesheet" href="../styles/style.css">
+    <!--Layout and UI for this-->
+    <link rel="stylesheet" href="formsapp_layout.css">
     <!-- Installation specific parameters-->
     <script src="/appConfig.js"></script>
     <!-- code for our login page -->
@@ -19,9 +21,37 @@
 </head>
 
 <body onLoad="formsOnLoad()">
-    <div class="forms" id="formsapp">
-        <div class="formsapplayout">
-            <button class="formbutton"  @click="logOut()"> Logout </button>          
+    <div id="formsapp">
+        <div class="formsappouterlayout">
+            <div class="header">
+
+                <div class="left">
+                    Header
+                </div>
+
+                <div class="right">
+                    <button class="formbutton" @click="logOut()"> Logout </button>
+                </div>
+
+            </div>
+
+            <div class="doctypes">
+                Document Types<p/>
+                {{docTypes}}
+            </div>
+
+            <div class="listview">
+                Listview
+            </div>
+
+            <div class="panel">
+                Panel
+            </div>
+
+            <div class="formview">
+                Formview
+            </div>
+
         </div>
     </div>
 </body>

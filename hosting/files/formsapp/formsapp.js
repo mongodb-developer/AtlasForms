@@ -14,8 +14,22 @@ async function logOut(email,password)
    }
 }
 
+//Fetch the list of document types I can interact with from the server*/
 
-function formsOnLoad() {
+async function getListOfDocTypes()
+{
+  try {
+    const docTypes = await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
+    return docTypes;
+   } 
+   catch(e)
+   {
+    console.error(e)
+    return [];
+   }
+}
+
+async function formsOnLoad() {
     const { createApp } = Vue
     
     const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
@@ -24,6 +38,7 @@ function formsOnLoad() {
       // We should not be here if we are not logged in
       window.location.replace("/login/login.html");
     }
+
     
     vueApp  = createApp({
        methods: {
@@ -31,10 +46,15 @@ function formsOnLoad() {
        },
        data() {
         return {
-            realmApp
+            realmApp,
+            docTypes : []
         }
        }
     }).mount("#formsapp")
+
+        
+    vueApp.docTypes = await getListOfDocTypes()
+    
 
 
 }
