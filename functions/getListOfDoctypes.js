@@ -11,10 +11,10 @@ exports = async function(arg){
 
   const docTypes = []
   
-  /*Add Logig here to decide who sees what*/
+  /*Add Logic here to decide who sees what*/
   
   docTypes.push({ title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews"})
-  docTypes.push({ title: "Rsetauraunts", namespace: "sample_restauraunts.restaurants"})
+  docTypes.push({ title: "Restaurants", namespace: "sample_restauraunts.restaurants"})
   
   return docTypes;
 };
