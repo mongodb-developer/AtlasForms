@@ -15,11 +15,9 @@
         "config": {
             "autoConfirm": false,
             "confirmEmailSubject": "Confirm your  email for Atlas Forms user registration.",
-            "confirmationFunctionName": "confirmFunc",
-            "emailConfirmationUrl": "http://localhost:8000/newUser/confirmEmail.html",
-            "resetFunctionName": "resetFunc",
+            "emailConfirmationUrl": "https://atlasforms-xrpys.mongodbstitch.com/newUser/confirmEmail.html",
             "resetPasswordSubject": "Request to reset your Atlas Forms password.",
-            "resetPasswordUrl": "http://localhost:8000/resetPassword/resetPassword.html",
+            "resetPasswordUrl": "https://atlasforms-xrpys.mongodbstitch.com/resetPassword/resetPassword.html",
             "runConfirmationFunction": false,
             "runResetFunction": false
         },
