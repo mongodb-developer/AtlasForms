@@ -14,5 +14,7 @@ exports = function(arg){
 
     Try running in the console below.
   */
+  test = 1
   return {arg: arg};
+
 };
