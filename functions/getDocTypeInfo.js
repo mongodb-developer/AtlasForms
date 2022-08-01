@@ -14,7 +14,7 @@ exports = async function(docType){
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     const exampleDoc = await collection.findOne({});
     
-    if(exampleDoc == null) { return {} };
+    if(exampleDoc == null) { return {} }
 
   return exampleDoc;
 };
