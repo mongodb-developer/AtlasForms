@@ -8,7 +8,7 @@ rather than be an explicit definition */
 exports = async function(docType){
     
     const [databaseName,collectionName] = docType.namespace.split('.');
-    if(!databaseName || !collectionName) { return {} }
+    if(!databaseName || !collectionName) { return {}}
     
     
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
@@ -16,5 +16,16 @@ exports = async function(docType){
     
     if(exampleDoc == null) { return {} }
 
-  return exampleDoc;
+  const templateDoc = documentToTemplate(exampleDoc)
+  return templateDoc;
 };
+
+
+function documentToTemplate(doc) {
+  const templateDoc = {}
+  // Iterate through the members adding each to the typemap
+  for ( let key of Object.keys(doc)) {
+    templateDoc[key] = typeof doc[key]
+  }
+  return templateDoc
+}
