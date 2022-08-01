@@ -25,6 +25,10 @@ function documentToTemplate(doc) {
   const templateDoc = {}
   // Iterate through the members adding each to the typemap
   for ( let key of Object.keys(doc)) {
+    if(typeof doc[key] == object) {
+      //Special rules for handling non basic types
+      template[key] = documentToTemplate(doc[key])
+    }
     templateDoc[key] = typeof doc[key]
   }
   return templateDoc
