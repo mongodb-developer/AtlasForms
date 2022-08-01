@@ -7,7 +7,7 @@ rather than be an explicit definition */
 
 exports = async function(docType){
     
-    const [databaseName,collectionName] = docType.split('.');
+    const [databaseName,collectionName] = docType.namespace.split('.');
     if(!databaseName || !collectionName) { return {} }
     
     
