@@ -27,7 +27,7 @@ function documentToTemplate(doc) {
   for ( let key of Object.keys(doc)) {
     if(typeof doc[key] == "object") {
       //Special rules for handling non basic types
-      template[key] = documentToTemplate(doc[key])
+      templateDoc[key] = documentToTemplate(doc[key])
     }
     templateDoc[key] = typeof doc[key]
   }
