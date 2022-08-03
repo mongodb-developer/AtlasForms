@@ -50,7 +50,12 @@ async function resetPassword(password,password2,token,tokenId) {
 
 function resetPasswordOnLoad() {
     const { createApp } = Vue
+    
     const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
+    if (realmApp.currentUser != null) {
+        // We should not be here if we are already logged in
+        window.location.replace("/formsapp/formsapp.html");
+      }
 
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
@@ -68,10 +73,14 @@ function resetPasswordOnLoad() {
                 password: "",
                 password2: "",
                 message: "",
-                realmApp,
                 token,
                 tokenId
-            }
+            },
+            mounted() {
+                //Non reactive data , don't want reactivity on a deep component like this.
+                //Also confiuses first login attempt for a new user.
+                this.realmApp = realmApp;
+              },
         }
     }).mount("#resetpasswordapp")
 

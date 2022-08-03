@@ -50,7 +50,8 @@ function loginOnLoad() {
             }
         },
         mounted() {
-            //Non reactive , dont want reactivity on a deep component app like this.
+            //Non reactive data , don't want reactivity on a deep component like this.
+            //Also confiuses first login attempt for a new user.
             this.realmApp = realmApp;
           },
     }).mount("#loginapp")

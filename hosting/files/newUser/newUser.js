@@ -28,6 +28,11 @@ async function registerNewUser(email,password,password2) {
 function newUserOnLoad() {
     const { createApp } = Vue
     const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
+    
+    if (realmApp.currentUser != null) {
+        // We should not be here if we are already logged in
+        window.location.replace("/formsapp/formsapp.html");
+      }
 
     vueApp = createApp({
         methods: {
@@ -40,8 +45,12 @@ function newUserOnLoad() {
                 password: "",
                 password2: "",
                 message: "",
-                realmApp,
-            }
+            },
+            mounted() {
+                //Non reactive data , don't want reactivity on a deep component like this.
+                //Also confiuses first login attempt for a new user.
+                this.realmApp = realmApp;
+              },
         }
     }).mount("#app")
 

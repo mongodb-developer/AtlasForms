@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../styles/style.css">
     <!--Layout and UI for this-->
     <link rel="stylesheet" href="formsapp_layout.css">
+    <link rel="stylesheet" href="dynamicform.css">
     <!-- Installation specific parameters-->
     <script src="/appConfig.js"></script>
     <!-- code for our login page -->
@@ -31,25 +32,107 @@
 
                 <div class="right">
                     <button class="formbutton" @click="logOut()"> Logout </button>
+                    <button class="formbutton" @click="runQuery()"> Search </button>
                 </div>
 
             </div>
 
             <div class="doctypes">
-                Document Types<p/>
-                {{docTypes}}
+                Document Types
+                <p />
+                <ul>
+                    <li @click="selectDocType(docType)" v-for="docType in docTypes">{{docType.title}}</li>
+                </ul>
             </div>
 
             <div class="listview">
-                Listview
+                Listview : {{selectedDocType.title}}
+                <ul>
+                    <li @click="currentDoc = result" v-for="result in results">{{result._id}}</li>
+                </ul>
             </div>
 
             <div class="panel">
                 Panel
             </div>
 
+            <!-- THe code below may look daunting but it's relatively simple-->
+            <!--Iterate over keys and values and print the key and value-->
+            <!-- Special case for nested docs and arrays-->
+
             <div class="formview">
-                Formview
+                <div class='form_container'>
+                    <!-- For each K,V pair in document-->
+                    <!-- In the line below we add class newline if value is a document or array
+                      sorry that it's ugly, we could put it in a function-->
+                    <div :class="'dynamicformitem' + (['document','array'].includes(getBsonType(value))?' newline':'') "
+                        v-for="(value,name) in currentDoc ">
+
+                        <!-- Nested Object -  We are only supprting one level of nesting here -->
+                        <template v-if="getBsonType(value) == 'document'">
+                            <div class="dynamicformlabel">{{name}}:</div>
+                            <div class='form_container nested'>
+                                <div class="dynamicformitem" v-for="(value,name) in value ">
+                                    <div class="dynamicformlabel">{{name}}:</div>
+                                    <!-- Is this a nested object? -->
+                                    <template v-if="getBsonType(value) == 'document'">
+                                        <div> {{getBsonType(value)}} </div>
+                                    </template>
+                                    <template v-else>
+                                        <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
+                                        :disabled="editing == false" type="datetime-local"
+                                            :value="toDateTime(value)">
+                                        <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
+                                            {{value}} </div>
+                                        <br />
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Array -->
+                        <template v-else-if="getBsonType(value) == 'array'">
+
+                            <div class=" dynamicformlabel">{{name}}:
+                            </div>
+                            <div class="dynamicformitem arrayscroller">
+                                <div v-for="arrayElement in value" class='form_container nested'>
+                                    <!-- With an Array, for each array memeber we repeat the top level code-->
+                                    <!-- Not adding code for nested arrays but will support arrays of objects with objects-->
+
+                                    <!-- Object in Array-->
+                                    <template v-if="getBsonType(arrayElement) == 'document'">
+                                        <div class="dynamicformitem" v-for="(value,name) in arrayElement ">
+                                            <div class="dynamicformlabel">{{name}}:</div>
+                                            <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
+                                            :disabled="editing == false" type="datetime-local"
+                                                :value="toDateTime(value)">
+                                            <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
+                                                {{value}}
+                                            </div>
+                                    </template>
+                                    <!-- Scalar in an Array-->
+                                    <template v-else>
+                                        <input v-if="getBsonType(arrayElement) == 'date'" class="dynamicformvalue"
+                                            :disabled="editing == false" type="datetime-local"
+                                            :value="toDateTime(arrayElement)">
+                                        <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
+                                            {{arrayElement}} </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Scalar value, formatting and control based on type -->
+                        <template v-else>
+                            <div class="dynamicformlabel">{{name}}:</div>
+                            <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
+                            :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
+                            <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">{{value}} </div>
+                            <br />
+                        </template>
+                    </div>
+                </div>
             </div>
 
         </div>

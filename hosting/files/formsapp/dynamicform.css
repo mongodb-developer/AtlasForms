@@ -1,0 +1,69 @@
+.form_container {
+   padding: 3px;
+   overflow: hidden;
+}
+
+.dynamicformlabel {
+  
+    text-transform: capitalize;
+    text-align: left;
+    white-space: nowrap;
+    float: left;
+    min-width: 150px;
+    vertical-align: middle;
+    
+}
+
+.dynamicformvalue {
+    border: 1px solid black;
+    background-color: white;
+    resize: vertical;
+    /* Remove line below for labels above boxes*/
+    float: left;
+    padding: 3px;
+    min-width: 150px;
+    padding: 3px;
+    margin-left: 5px;
+    max-height: 100px;
+    min-height: 20px;
+    overflow: auto;
+}
+
+/* This means a manual resize can override the inital max-height*/
+
+.dynamicformvalue[style*="height"] {
+    max-height: unset; 
+  } 
+
+.dynamicformitem {    
+    margin: 5px;
+    float: left;
+    display: inline-block;
+}
+
+input[type="datetime-local"] {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: black;
+}
+
+.nested {
+    border: 1px solid black;
+    xmargin-left: 100px;
+}
+
+.newline {
+    clear: both;
+}
+
+.arrayscroller {
+    max-height: 300px;
+    resize: vertical;
+    overflow: auto;
+    padding: 5px;
+}
+
+
+.arrayscroller[style*="height"] {
+    max-height: unset; 
+
+  } 

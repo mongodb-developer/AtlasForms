@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> Atlas Forms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include the latest Realm Web SDK from CDN-->
+    <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+    <!-- Using vue.js in as lightweight way as possible-->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!--  Style sheet  -->
+    <link rel="stylesheet" href="../styles/style.css">
+    <!--Layout and UI for this-->
+    <link rel="stylesheet" href="formsapp_layout.css">
+    <!-- Installation specific parameters-->
+    <script src="/appConfig.js"></script>
+    <!-- code for our login page -->
+    <script src="./formsapp.js"></script>
+</head>
+
+<body onLoad="formsOnLoad()">
+    <div id="formsapp">
+        <div class="formsappouterlayout">
+            <div class="header">
+
+                <div class="left">
+                    Header
+                </div>
+
+                <div class="right">
+                    <button class="formbutton" @click="logOut()"> Logout </button>
+                    <button class="formbutton" @click="runQuery()"> Search </button>
+                </div>
+
+            </div>
+
+            <div class="doctypes">
+                Document Types<p/>
+                <ul>
+                    <li @click="selectDocType(docType)" v-for="docType in docTypes">{{docType.title}}</li>
+                </ul>
+            </div>
+
+            <div class="listview">
+                Listview : {{selectedDocType.title}}
+                <ul>
+                    <li @click="currentDoc = result" v-for="result in results">{{result._id}}</li>
+                </ul>
+            </div>
+
+            <div class="panel">
+                Panel
+            </div>
+
+            <div class="formview">
+                Formview<br>
+                <pre>
+{{currentDoc}}
+                </pre>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+</html>
