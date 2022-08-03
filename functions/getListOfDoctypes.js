@@ -14,7 +14,7 @@ exports = async function(arg){
   /*Add Logic here to decide who sees what*/
   
   docTypes.push({ title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews"})
-  docTypes.push({ title: "Restaurants", namespace: "sample_restauraunts.restaurants"})
+  docTypes.push({ title: "Restaurants", namespace: "sample_restaurants.restaurants"})
   
   return docTypes;
 };
