@@ -1,7 +1,7 @@
 # AtlasForms
 Forms Based UI for MongoDB Atlas
 
-##Work in Progress / TODO / Ideas
+## Work in Progress / TODO / Ideas
 
 - Listview
 - Query Search
@@ -12,7 +12,7 @@ Forms Based UI for MongoDB Atlas
 - Array Editing
 - Authorization
 
-**MVP At this point **
+*** MVP At this point ***
 
 - Controls
   - Numbers
