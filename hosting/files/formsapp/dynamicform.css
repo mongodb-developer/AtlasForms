@@ -1,19 +1,20 @@
 .form_container {
-   padding: 3px;
-   overflow-y: auto;
-   overflow-x: hidden;
-   height: calc(100% - 400px);
+    padding: 3px;
+   
+    overflow-x: hidden;
+    overflow-y: scroll;
+  
 }
 
 .dynamicformlabel {
-  
+
     text-transform: capitalize;
     text-align: left;
     white-space: nowrap;
     float: left;
     min-width: 150px;
     vertical-align: middle;
-    
+
 }
 
 .dynamicformvalue {
@@ -34,10 +35,10 @@
 /* This means a manual resize can override the inital max-height*/
 
 .dynamicformvalue[style*="height"] {
-    max-height: unset; 
-  } 
+    max-height: unset;
+}
 
-.dynamicformitem {    
+.dynamicformitem {
     margin: 5px;
     float: left;
 }
@@ -63,11 +64,9 @@ input[type="datetime-local"] {
     padding: 5px;
 }
 
-
 .arrayscroller[style*="height"] {
-    max-height: unset; 
-
-  } 
+    max-height: unset;
+}
 
 div.listview {
     border: 1 solid black;
@@ -83,14 +82,25 @@ table.listview {
     border-spacing: 0px;
     border: 1px solid black;
     height: 300px;
+    display: flex;
+
 }
 
+tr.listview {
+    border: 1px solid black;
+}
 
-th.listview {
+tr.selected {
+    background-color: red;
+}
+
+td.listview ,th.listview {
     padding: 0;
     margin: 0px;
     overflow: auto;
+      border: 1px solid black;
 }
+
 
 
 div.listviewheader {
@@ -99,7 +109,7 @@ div.listviewheader {
     overflow: auto;
     word-break: break-all;
     word-wrap: break-word;
-    width: 24vw;
+
 }
 
 div.listviewitem {
@@ -108,6 +118,6 @@ div.listviewitem {
     word-break: break-all;
     word-wrap: break-word;
     height: 20px;
-  
-   
+
+
 }

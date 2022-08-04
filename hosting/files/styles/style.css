@@ -7,9 +7,12 @@ body {
     background-color: lightblue;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: black;
+    
 }
 
-
+html {
+    overflow:hidden;
+}
 
 /* All labels on forms includign login */
 .formlabel {

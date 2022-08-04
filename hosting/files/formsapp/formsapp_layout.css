@@ -1,14 +1,9 @@
 /* Login centered on login screen */
 .formsappouterlayout {
-    display: grid;
-
-    grid-auto-rows: minmax(min-content, max-content);
-    /* Overkill for a basic layout but alows more complex*/
-
-    grid-template-areas:
-        "header"
-        "listview"
-        "formview";
+    display: flex;
+    flex-flow: column nowrap;
+   
+    align-items: stretch;
     width: 100%;
     border: 1px solid black;
     height: 100%;
@@ -22,19 +17,28 @@
 }
 
 .header {
-    grid-area: header;
+    flex: 0 1 auto;
     border: 1px solid black;
-}
-
-
-.listview {
-    grid-area: listview;
-    border: 1px solid black;
-}
-
-.formview {
-    grid-area: formview;
+    padding: 3px;
    
+}
+
+
+.listview_control {
+    padding: 3px;
+    flex: 0 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+   
+}
+
+.formview_control {
+    padding: 3px;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    height: 100%;
+    border: 1px solid black;
+    overflow-x: hidden;
 }
 
 .right {

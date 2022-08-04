@@ -41,16 +41,16 @@
                 </div>
             </div>
 
-            <div class="listview">
+            <div class="listview_control">
                 <!-- This data *is* a table and so HTML Table is fine to use-->
                 <table class="listview" id="listviewheaderrow">
                     <tr>
-                        <th class="listview" v-for="fieldname in listViewFields">
-                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader">{{fieldname}}</div>
+                        <th class="listview" v-for="(fieldname,idx) in listViewFields">
+                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader" :style="{width: (98/listViewFields.length) +'vw'}">{{fieldname}}</div>
                         </th>
                     </tr>
-                    <tr class="listview" v-for="result in results">
-                        <td @click="currentDoc = result" class="listview" v-for="fieldname in listViewFields">
+                    <tr class="listview" :class="{selected:(result == currentDoc)}" v-for="result in results">
+                        <td @click="currentDoc = result"  class="listview" v-for="fieldname in listViewFields">
                             <div class="listviewitem"> {{result[fieldname]}} </div>
                         </td>
                     </tr>
@@ -63,7 +63,7 @@
             <!-- Special cases are basially repeats for nested docs and arrays-->
             <!-- there is no easy recursive definition option -->
 
-            <div class="formview">
+            <div class="formview_control">
                 <div class='form_container'>
                     <!-- For each K,V pair in document-->
                     <!-- In the line below we add class 'newline' if value is a document or array
