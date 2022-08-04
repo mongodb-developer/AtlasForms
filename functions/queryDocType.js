@@ -7,7 +7,7 @@ exports = async function(docType,query){
     
     
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-    const cursor = await collection.find(query).limit(10);
+    const cursor = await collection.find(query).limit(30);
     const results = cursor.toArray(); 
     return results; 
 };
