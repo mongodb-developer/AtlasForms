@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- This is a large file, can't easily break it into sub components as-->
+<!-- a consequence of wanting no 'compile' stage for this application -->
 
 <html>
 
@@ -27,44 +29,45 @@
             <div class="header">
 
                 <div class="left">
-                    Header
+                    <!-- odd binding as we do work on change to lookup details-->
+                    Document Type:
+                    <select name="docType" @change="selectDocType" v-model="selectedDocType">
+                        <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
+                    </select>
+                    <button class="headerbutton" @click="runQuery()"> Search </button>
                 </div>
-
                 <div class="right">
-                    <button class="formbutton" @click="logOut()"> Logout </button>
-                    <button class="formbutton" @click="runQuery()"> Search </button>
+                    <button class="headerbutton" @click="logOut()"> Logout </button>
                 </div>
-
-            </div>
-
-            <div class="doctypes">
-                Document Types
-                <p />
-                <ul>
-                    <li @click="selectDocType(docType)" v-for="docType in docTypes">{{docType.title}}</li>
-                </ul>
             </div>
 
             <div class="listview">
-                Listview : {{selectedDocType.title}}
-                <ul>
-                    <li @click="currentDoc = result" v-for="result in results">{{result._id}}</li>
-                </ul>
+                <!-- This data *is* a table and so HTML Table is fine to use-->
+                <table class="listview" id="listviewheaderrow">
+                    <tr>
+                        <th class="listview" v-for="fieldname in listViewFields">
+                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader">{{fieldname}}</div>
+                        </th>
+                    </tr>
+                    <tr class="listview" v-for="result in results">
+                        <td @click="currentDoc = result" class="listview" v-for="fieldname in listViewFields">
+                            <div class="listviewitem"> {{result[fieldname]}} </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
-            <div class="panel">
-                Panel
-            </div>
 
-            <!-- THe code below may look daunting but it's relatively simple-->
-            <!--Iterate over keys and values and print the key and value-->
-            <!-- Special case for nested docs and arrays-->
+            <!-- The code below may look daunting but it's relatively simple-->
+            <!-- Iterate over keys and values and print the key and value-->
+            <!-- Special cases are basially repeats for nested docs and arrays-->
+            <!-- there is no easy recursive definition option -->
 
             <div class="formview">
                 <div class='form_container'>
                     <!-- For each K,V pair in document-->
-                    <!-- In the line below we add class newline if value is a document or array
-                      sorry that it's ugly, we could put it in a function-->
+                    <!-- In the line below we add class 'newline' if value is a document or array
+                      sorry that the code is ugly, put it in a function if it bothers you -->
                     <div :class="'dynamicformitem' + (['document','array'].includes(getBsonType(value))?' newline':'') "
                         v-for="(value,name) in currentDoc ">
 
@@ -80,7 +83,7 @@
                                     </template>
                                     <template v-else>
                                         <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
-                                        :disabled="editing == false" type="datetime-local"
+                                            :disabled="editing == false" type="datetime-local"
                                             :value="toDateTime(value)">
                                         <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
                                             {{value}} </div>
@@ -105,7 +108,7 @@
                                         <div class="dynamicformitem" v-for="(value,name) in arrayElement ">
                                             <div class="dynamicformlabel">{{name}}:</div>
                                             <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
-                                            :disabled="editing == false" type="datetime-local"
+                                                :disabled="editing == false" type="datetime-local"
                                                 :value="toDateTime(value)">
                                             <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
                                                 {{value}}
@@ -127,7 +130,7 @@
                         <template v-else>
                             <div class="dynamicformlabel">{{name}}:</div>
                             <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
-                            :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
+                                :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
                             <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">{{value}} </div>
                             <br />
                         </template>

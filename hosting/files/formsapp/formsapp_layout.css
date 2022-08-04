@@ -3,48 +3,38 @@
     display: grid;
 
     grid-auto-rows: minmax(min-content, max-content);
-    grid-template-areas:
-        "header header header header"
-        "doctypes listview listview listview"
-        "doctypes formview formview formview"
-        "panel formview formview formview"
-        "panel formview formview formview";
+    /* Overkill for a basic layout but alows more complex*/
 
-    width: 95%;
+    grid-template-areas:
+        "header"
+        "listview"
+        "formview";
+    width: 100%;
     border: 1px solid black;
-    height: 95%;
+    height: 100%;
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     margin: auto;
-    overflow: scroll;
+    overflow: hidden;
 }
 
 .header {
     grid-area: header;
-    border: 1px solid red;
+    border: 1px solid black;
 }
 
-.doctypes {
-    grid-area: doctypes;
-    border: 1px solid red;
-}
-
-.panel {
-    grid-area: panel;
-    border: 1px solid red;
-}
 
 .listview {
     grid-area: listview;
-    border: 1px solid red;
+    border: 1px solid black;
 }
 
 .formview {
     grid-area: formview;
-    border: 1px solid red;
+   
 }
 
 .right {

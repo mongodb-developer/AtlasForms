@@ -16,6 +16,10 @@ body {
     padding: 10px;
 }
 
+.headerbutton {
+    min-width: 100px;
+    
+}
 /* Buttons on forms */
 
 .formbutton {
