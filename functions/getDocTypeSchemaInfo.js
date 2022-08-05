@@ -43,9 +43,11 @@ function getScalarType(obj) {
 }
 
 //This isn't easy to read but it converts object keys to their types
-//as Strings and does a deep merge at the same time 
+//as Strings and does a deep merge at the same time to create a schema from
+//multiple docs - turns out the $mergeObjects or ... operator won't play
+//due to shallow copying
 
-function addDocumentToTemplate(doc, templateDoc, nest) {
+function addDocumentToTemplate(doc, templateDoc) {
 
     //If doc is a simple scalar return the type
 
@@ -82,10 +84,10 @@ function addDocumentToTemplate(doc, templateDoc, nest) {
                 } else {
                     //Basic Objects
                     if (templateDoc[key] == null) { templateDoc[key] = {} }
-                    templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key], true)
+                    templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key])
                 }
         } else {
-            templateDoc[key] = typeof doc[key]
+            templateDoc[key] = typeof doc[key] 
         }
     }
     return templateDoc
