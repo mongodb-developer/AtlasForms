@@ -1,9 +1,10 @@
 /* This returns a template document for a given type with information about the fields ,
-data type AND the arrangement/order of those fields. It could also be user to return 
-additional information */
+data types AND the arrangement/order of those fields. This is needed to provide an empty
+form for Query or data entry  */
 
 /*Default will take the first record in a collection and use it to derive this information
-rather than be an explicit definition */
+rather than be an explicit definition btu you could explicity define it here or read a definition from
+a given collection. As it stands we just look at some of the existing docs*/
 
 exports = async function(docType){
     
