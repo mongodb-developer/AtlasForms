@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="dynamicform.css">
     <!-- Installation specific parameters-->
     <script src="/appConfig.js"></script>
-    <!-- code for our login page -->
+    <script src="./listview_functions.js"></script>
     <script src="./formsapp.js"></script>
 </head>
 
@@ -45,13 +45,13 @@
                 <!-- This data *is* a table and so HTML Table is fine to use-->
                 <table class="listview" id="listviewheaderrow">
                     <tr>
-                        <th class="listview" v-for="(fieldname,idx) in listViewFields">
-                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader" :style="{width: (98/listViewFields.length) +'vw'}">{{fieldname}}</div>
+                        <th @click="sortListviewColumn(fieldname)" class="listview" v-for="(fieldname,idx) in listViewFields">
+                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader" :style="{width: (98/listViewFields.length) +'vw'}">{{formatFieldname(fieldname)}}</div>
                         </th>
                     </tr>
                     <tr class="listview" :class="{selected:(result == currentDoc)}" v-for="result in results">
                         <td @click="currentDoc = result"  class="listview" v-for="fieldname in listViewFields">
-                            <div class="listviewitem"> {{result[fieldname]}} </div>
+                            <div class="listviewitem"> {{ getFieldValue(result,fieldname) }} </div>
                         </td>
                     </tr>
                 </table>
@@ -73,10 +73,10 @@
 
                         <!-- Nested Object -  We are only supprting one level of nesting here -->
                         <template v-if="getBsonType(value) == 'document'">
-                            <div class="dynamicformlabel">{{name}}:</div>
+                            <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
                             <div class='form_container nested'>
                                 <div class="dynamicformitem" v-for="(value,name) in value ">
-                                    <div class="dynamicformlabel">{{name}}:</div>
+                                    <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
                                     <!-- Is this a nested object? -->
                                     <template v-if="getBsonType(value) == 'document'">
                                         <div> {{getBsonType(value)}} </div>
@@ -96,7 +96,7 @@
                         <!-- Array -->
                         <template v-else-if="getBsonType(value) == 'array'">
 
-                            <div class=" dynamicformlabel">{{name}}:
+                            <div class=" dynamicformlabel">{{formatFieldname(name)}}:
                             </div>
                             <div class="dynamicformitem arrayscroller">
                                 <div v-for="arrayElement in value" class='form_container nested'>
@@ -106,7 +106,7 @@
                                     <!-- Object in Array-->
                                     <template v-if="getBsonType(arrayElement) == 'document'">
                                         <div class="dynamicformitem" v-for="(value,name) in arrayElement ">
-                                            <div class="dynamicformlabel">{{name}}:</div>
+                                            <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
                                             <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
                                                 :disabled="editing == false" type="datetime-local"
                                                 :value="toDateTime(value)">
@@ -128,7 +128,7 @@
 
                         <!-- Scalar value, formatting and control based on type -->
                         <template v-else>
-                            <div class="dynamicformlabel">{{name}}:</div>
+                            <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
                             <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
                                 :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
                             <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">{{value}} </div>

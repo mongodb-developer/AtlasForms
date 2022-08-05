@@ -4,19 +4,35 @@ Forms Based UI for MongoDB Atlas
 ## Work in Progress / TODO / Ideas
 
 - Listview
-- Query Search
-- Mobile Layout
+  - ~~Resize Column~~
+  - ~~Show selected row~~
+  - ~~Defaut to 99/N % wide~~
+  - ~~dotpath hitlist columns~~
+  - Sort by Column
+  - ~~Server side default columns~~
+  - ~~Column name formatting~~
+
+- Formview
+  - Use Template Form
+  - Query By Form
+
+  - New Record
 - Editing
   - Locking
   - Change Determination
-- Array Editing
+  - Array Editing
 - Authorization
-
+- Mobile Layout
+- 
 *** MVP At this point ***
 
+  Listview
+  - Choose Columns
+  - 
 - Controls
   - Numbers
-  - Constraints?
+  - Constraints & Validation
+    - On submit and on Change (Download JS to client??)
   - 
   - Picklist
       - Picklist Config?

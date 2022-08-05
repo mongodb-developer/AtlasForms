@@ -109,7 +109,7 @@ div.listviewheader {
     overflow: auto;
     word-break: break-all;
     word-wrap: break-word;
-
+    text-transform: capitalize;
 }
 
 div.listviewitem {
