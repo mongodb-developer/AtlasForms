@@ -8,10 +8,12 @@ Forms Based UI for MongoDB Atlas
   - ~~Show selected row~~
   - ~~Defaut to 99/N % wide~~
   - ~~dotpath hitlist columns~~
-  - Sort by Column
+  - ~~Sort by Column~~
   - ~~Server side default columns~~
   - ~~Column name formatting~~
-
+  - ~~BUG: Cannot resize smaller then content ~~
+  - listview code in own js file
+  
 - Formview
   - Use Template Form
   - Query By Form

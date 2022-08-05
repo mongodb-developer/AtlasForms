@@ -85,6 +85,9 @@ table.listview {
     display: flex;
 
 }
+th.listview {
+    width:0.1%;
+}
 
 tr.listview {
     border: 1px solid black;
@@ -104,7 +107,7 @@ td.listview ,th.listview {
 
 
 div.listviewheader {
-
+    margin: 0px 0px 0px 0px;
     resize: horizontal;
     overflow: auto;
     word-break: break-all;
