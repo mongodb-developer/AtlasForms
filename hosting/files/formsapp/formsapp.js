@@ -87,7 +87,7 @@ async function selectDocType() {
 }
 
 function getFieldDataType(name) {
-  console.log(name,selectedDocTypeSchema[name])
+  console.log(name,vueApp.selectedDocTypeSchema[name])
   return vueApp.selectedDocTypeSchema[name];
 }
 
