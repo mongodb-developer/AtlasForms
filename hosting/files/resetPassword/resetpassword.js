@@ -75,14 +75,12 @@ function resetPasswordOnLoad() {
                 message: "",
                 token,
                 tokenId
-            },
+            }
+        },
             mounted() {
                 //Non reactive data , don't want reactivity on a deep component like this.
                 //Also confiuses first login attempt for a new user.
                 this.realmApp = realmApp;
-              },
-        }
+              }
     }).mount("#resetpasswordapp")
-
-
 }

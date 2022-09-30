@@ -16,13 +16,25 @@ Forms Based UI for MongoDB Atlas
   
 - Formview
   - Use Template Form
-  - Query By Form
+    - ~~Simple~~
+    - ~~Nested~~
+    - Arrays
+      - On an Empty form display a Single Empty array element
+      - Should the contents be nested in the template or the template be nested in the contents?
 
+Monday
+
+  - Query By Form
   - New Record
+
+Tuesday
 - Editing
   - Locking
   - Change Determination
   - Array Editing
+
+Wed/Later
+
 - Authorization
 - Mobile Layout
 - 

@@ -45,9 +45,10 @@ async function selectDocType() {
   try {
     // It would be simple to cache this info client end if we want to
     const docTypeSchemaInfo = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType);
-    vueApp.selectedDocTypeInfo = docTypeSchemaInfo
+    vueApp.selectedDocTypeSchema = docTypeSchemaInfo
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
     vueApp.results = Array(20).fill({}) //Empty and show columnheaders
+    vueApp.currentDoc={}
   }
   catch (e) {
     console.error(e)
@@ -76,7 +77,7 @@ async function formsOnLoad() {
         results: [],
         docTypes: [],
         selectedDocType: {},
-        selectedDocTypeInfo: {},
+        selectedDocTypeSchema: {},
         currentDoc: {},
         listViewFields: [],
         editing: false

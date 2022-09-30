@@ -47,12 +47,14 @@
                 <!-- This data *is* a table and so HTML Table is fine to use-->
                 <table class="listview" id="listviewheaderrow">
                     <tr>
-                        <th @click="sortListviewColumn(fieldname)" class="listview" v-for="(fieldname,idx) in listViewFields">
-                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader" :style="{width: (98/listViewFields.length) +'vw'}">{{formatFieldname(fieldname)}}</div>
+                        <th @click="sortListviewColumn(fieldname)" class="listview"
+                            v-for="(fieldname,idx) in listViewFields">
+                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader"
+                                :style="{width: (98/listViewFields.length) +'vw'}">{{formatFieldname(fieldname)}}</div>
                         </th>
                     </tr>
                     <tr class="listview" :class="{selected:(result == currentDoc)}" v-for="result in results">
-                        <td @click="currentDoc = result"  class="listview" v-for="fieldname in listViewFields">
+                        <td @click="currentDoc = result" class="listview" v-for="fieldname in listViewFields">
                             <div class="listviewitem"> {{ getFieldValue(result,fieldname) }} </div>
                         </td>
                     </tr>
@@ -61,7 +63,7 @@
 
 
             <!-- The code below may look daunting but it's relatively simple-->
-            <!-- Iterate over keys and values and print the key and value-->
+            <!-- Iterate over keys in the template and print the values from the document-->
             <!-- Special cases are basially repeats for nested docs and arrays-->
             <!-- there is no easy recursive definition option -->
 
@@ -71,14 +73,15 @@
                     <!-- In the line below we add class 'newline' if value is a document or array
                       sorry that the code is ugly, put it in a function if it bothers you -->
                     <div :class="'dynamicformitem' + (['document','array'].includes(getBsonType(value))?' newline':'') "
-                        v-for="(value,name) in currentDoc ">
+                        v-for="(valtype,name) in selectedDocTypeSchema " :set=" value = getFieldValue(currentDoc,name)">
 
                         <!-- Nested Object -  We are only supprting one level of nesting here -->
-                        <template v-if="getBsonType(value) == 'document'">
+                        <template v-if="getBsonType(valtype) == 'document'">
                             <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
                             <div class='form_container nested'>
-                                <div class="dynamicformitem" v-for="(value,name) in value ">
-                                    <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
+                                <div class="dynamicformitem" v-for="(valtype,innername) in valtype "
+                                    :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
+                                    <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
                                     <!-- Is this a nested object? -->
                                     <template v-if="getBsonType(value) == 'document'">
                                         <div> {{getBsonType(value)}} </div>
@@ -96,19 +99,20 @@
                         </template>
 
                         <!-- Array -->
-                        <template v-else-if="getBsonType(value) == 'array'">
-
+                        <template v-else-if="getBsonType(valtype) == 'array'">
                             <div class=" dynamicformlabel">{{formatFieldname(name)}}:
                             </div>
                             <div class="dynamicformitem arrayscroller">
                                 <div v-for="arrayElement in value" class='form_container nested'>
                                     <!-- With an Array, for each array memeber we repeat the top level code-->
-                                    <!-- Not adding code for nested arrays but will support arrays of objects with objects-->
+                                    <!-- Not adding code for nested arrays but will support arrays of objects-->
 
                                     <!-- Object in Array-->
                                     <template v-if="getBsonType(arrayElement) == 'document'">
-                                        <div class="dynamicformitem" v-for="(value,name) in arrayElement ">
-                                            <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
+                                        <div class="dynamicformitem"
+                                            v-for="(valtype,innername) in selectedDocTypeSchema[name][0]"
+                                            :set="value = getFieldValue(arrayElement,innername)">
+                                            <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
                                             <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
                                                 :disabled="editing == false" type="datetime-local"
                                                 :value="toDateTime(value)">
