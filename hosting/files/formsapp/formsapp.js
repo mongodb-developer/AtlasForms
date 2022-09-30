@@ -86,6 +86,10 @@ async function selectDocType() {
   }
 }
 
+function getFieldDataType(name) {
+  console.log(name,selectedDocTypeSchema[name])
+  return vueApp.selectedDocTypeSchema[name];
+}
 
 async function formsOnLoad() {
   const { createApp } = Vue
@@ -99,7 +103,7 @@ async function formsOnLoad() {
   vueApp = createApp({
     methods: {
       //Method we call from  HTML
-      logOut, selectDocType, formValueChange, runQuery, clearForm, editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing, getFieldValue, formatFieldname, sortListviewColumn
+      logOut, selectDocType,getFieldDataType, formValueChange, runQuery, clearForm, editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing, getFieldValue, formatFieldname, sortListviewColumn
 
     },
     data() {
