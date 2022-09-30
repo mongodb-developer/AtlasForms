@@ -1,4 +1,6 @@
 function getBsonType(obj) {
+  console.log(obj)
+  console.log(typeof obj)
     if (typeof obj != "object") return typeof obj;
     if (Array.isArray(obj)) return "array"
     if (obj instanceof Date) return "date"
