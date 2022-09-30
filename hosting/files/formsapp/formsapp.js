@@ -26,9 +26,10 @@ async function getListOfDocTypes() {
 }
 async function clearForm() {
   //TODO maybe - add an Are you sure if they have been entering data
-  
+
   vueApp.results = [];
   vueApp.currentDoc = {};
+  vueApp.editing = true;
 }
 
 async function editRecord() {
@@ -43,9 +44,16 @@ async function newRecord() {
 
 async function runQuery() {
   try {
-    console.log(vueApp.selecedtDocType)
+    //Create a list of all fields that have a value
+    let queryTerms = []
+    //We are rendering from the current object but it's not a 2 way binding
+    //editing the contents of a formvalue shoudl be an explicit onChange
+    let formElements = document.getElementsByClassName("dynamicformvalue")
+    console.log(formElements);
+    
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType);
     vueApp.results = results;
+    vueApp.editing = false; //No implicit editing
   }
   catch (e) {
     console.error(e)
@@ -61,7 +69,7 @@ async function selectDocType() {
     vueApp.selectedDocTypeSchema = docTypeSchemaInfo
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
     vueApp.results = Array(20).fill({}) //Empty and show columnheaders
-    vueApp.currentDoc={}
+    vueApp.currentDoc = {}
   }
   catch (e) {
     console.error(e)
@@ -82,7 +90,7 @@ async function formsOnLoad() {
   vueApp = createApp({
     methods: {
       //Method we call from  HTML
-      logOut, selectDocType, runQuery,clearForm,editRecord,newRecord,toDateTime, getBsonType, watchColumnResizing,getFieldValue,formatFieldname,sortListviewColumn
+      logOut, selectDocType, runQuery, clearForm, editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing, getFieldValue, formatFieldname, sortListviewColumn
 
     },
     data() {
@@ -110,4 +118,5 @@ async function formsOnLoad() {
   //Set the Document Type dropdown to the first value
   vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
   vueApp.selectDocType();
+  vueApp.editing = true; //Can edit in empty form
 }

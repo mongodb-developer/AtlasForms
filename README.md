@@ -18,6 +18,8 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 _Here we note anything we made an explicit decision about in the design and why_
 
+30/9/2022 - Initial version is only supporting two levels of depth, so arrays and objects only at the top level or objects in a top level array. It is hard to render lower nicely in a basic GUI and also just not a nice schema. Objects might get extended one more level though.
+
 
 ## Work in Progress / TODO / Ideas
 
