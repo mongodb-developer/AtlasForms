@@ -40,24 +40,24 @@ _Here we note anything we made an explicit decision about in the design and why_
     - ~~Nested~~
     - Arrays
       - On an Empty form display a Single Empty array element
-      - Should the contents be nested in the template or the template be nested in the contents?
-
-Monday
-
+      
   - Query By Form
+    - ~~~Change capture~~~
+    - Date Handling
+    - Data Typing (Client or server?)
   - New Record
 
-Tuesday
+
 - Editing
   - Locking
   - Change Determination
   - Array Editing
 
-Wed/Later
 
 - Authorization
 - Mobile Layout
-- 
+
+
 *** MVP At this point ***
 
   Listview
@@ -72,6 +72,7 @@ Wed/Later
       - Picklist Config?
       - Picklist dtermination
 - Date Only Chooser
+- Range Queries
 - Fuzzy (Atlas) Search
 - Printing
 - Links

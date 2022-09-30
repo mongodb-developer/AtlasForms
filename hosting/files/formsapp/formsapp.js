@@ -42,22 +42,24 @@ async function newRecord() {
 
 //We use this to track editied controls so we can send an update to 
 //Atlas also because we are editing InnerText rahter than using a control we can't bind to it.
-//Also I want to keep the original verison anyway.
+//Also we want to keep the original verison anyway.
 
+//TODO - Handle Dates
 function formValueChange(event) {
   const element = event.target
   const fieldName = element.id
   const value = element.innerText
-  console.log(`${fieldName} = ${value}`)
+  //console.log(`${fieldName} = ${value}`)
+  vueApp.fieldEdits[fieldName] = value;
 }
+
 // User has clicked the button to query for data
 
 async function runQuery() {
   try {
     //Create a list of all fields that have a value
-    let queryTerms = []
+    //Send the fieldEdits to the server, we will process to the correct 
 
-   
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType);
     vueApp.results = results;
     vueApp.editing = false; //No implicit editing
@@ -102,6 +104,7 @@ async function formsOnLoad() {
     },
     data() {
       return {
+        fieldEdits: {},
         results: [],
         docTypes: [],
         selectedDocType: {},

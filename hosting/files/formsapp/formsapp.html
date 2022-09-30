@@ -32,7 +32,7 @@
 
                 <div class="left">
                     <!-- odd binding as we do work on change to lookup details-->
-                    1 Document Type:
+                    Document Type:
                     <select name="docType" @change="selectDocType" v-model="selectedDocType">
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
@@ -102,11 +102,14 @@
                         </template>
 
                         <!-- Array -->
+                       
                         <template v-else-if="getBsonType(valtype) == 'array'">
                             <div class=" dynamicformlabel">{{formatFieldname(name)}}:
                             </div>
                             <div class="dynamicformitem arrayscroller">
-                                <div v-for="(arrayElement,arrayidx) in value" class='form_container nested'>
+                                    <!-- If the Array is Empty we still need to show at least one member-->
+                                    <!-- to allow for searching or adding a first element -->
+                                <div v-for="(arrayElement,arrayidx) in value.length>0?value:[{}]" class='form_container nested'>
                                     <!-- With an Array, for each array memeber we repeat the top level code-->
                                     <!-- Not adding code for nested arrays but will support arrays of objects-->
 
