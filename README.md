@@ -1,6 +1,21 @@
 # AtlasForms
 Forms Based UI for MongoDB Atlas
 
+##Introduction
+
+Atlas forms is a Forms based, End user interface to allow users to Create, Find, Update, Delete and Link Records. It is similar to a Fourth Generation Language (4GL) in that it abstracts away all
+database development where required and makes a Zero Coding solution to building an internal GUI
+to interact with Data.
+
+It differs from a 4GL in having no proprietery coding language - it si instead a skeleton application in modern Javascript running with serverless function on MongoDBs Atlas Developer Data PLatform. It is intended to be modified to fit rewuirements and has been designed to me modular and easily modified.
+
+##Installation
+
+
+##Code Overview
+
+
+
 ## Work in Progress / TODO / Ideas
 
 - Listview
@@ -12,7 +27,7 @@ Forms Based UI for MongoDB Atlas
   - ~~Server side default columns~~
   - ~~Column name formatting~~
   - ~~BUG: Cannot resize smaller then content ~~
-  - listview code in own js file
+  - ~~listview code in own js file~~
   
 - Formview
   - Use Template Form
