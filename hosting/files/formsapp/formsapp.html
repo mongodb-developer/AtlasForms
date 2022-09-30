@@ -110,7 +110,7 @@
                                     <!-- If the Array is Empty we still need to show at least one member-->
                                     <!-- to allow for searching or adding a first element -->
                                 <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
-                                         selectedDocTypeSchema[name]" class='form_container nested'>
+                                         (selectedDocTypeSchema[name][0] instanceof 'string' ? '' : {})" class='form_container nested'>
                                     <!-- With an Array, for each array memeber we repeat the top level code-->
                                     <!-- Not adding code for nested arrays but will support arrays of objects-->
 
