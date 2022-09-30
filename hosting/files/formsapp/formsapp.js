@@ -96,4 +96,5 @@ async function formsOnLoad() {
   vueApp.docTypes = await getListOfDocTypes()
   //Set the Document Type dropdown to the first value
   vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
+  vueApp.selectDocType();
 }
