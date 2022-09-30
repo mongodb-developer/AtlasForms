@@ -139,8 +139,8 @@
                         <template v-else>
                             <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
                             <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
-                                :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
-                            <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">{{value}} </div>
+                                :disabled="editing == false" type="datetime-local" :value="toDateTime(value)" :id="name">
+                            <div :id="name" v-else :contenteditable="editing?true:null" class="dynamicformvalue">{{value}} </div>
                             <br />
                         </template>
                     </div>
