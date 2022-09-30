@@ -25,6 +25,8 @@ async function getListOfDocTypes() {
   }
 }
 async function clearForm() {
+  //TODO maybe - add an Are you sure if they have been entering data
+  
   vueApp.results = [];
   vueApp.currentDoc = {};
 }
