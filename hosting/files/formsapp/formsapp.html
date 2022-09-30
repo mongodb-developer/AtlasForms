@@ -116,7 +116,7 @@
                                     <!-- Object in Array-->
                                     <template v-if="getBsonType(arrayElement) == 'document'">
                                         <div class="dynamicformitem"
-                                            v-for="(valtype,innername) in getFieldDataType(name)"
+                                            v-for="(valtype,innername) in getFieldDataType(name)[0]"
                                             :set="value = getFieldValue(arrayElement,innername)">
                                             <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
                                             <input  v-on:input="formValueChange" :id=`${name}.${arrayidx}.${innername}`  v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
