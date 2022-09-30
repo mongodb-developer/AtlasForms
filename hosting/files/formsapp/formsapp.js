@@ -40,8 +40,15 @@ async function newRecord() {
   alert("Not Yet Implemented"); //TODO
 }
 
-function formValueChange(control) {
-  console.log(control)
+//We use this to track editied controls so we can send an update to 
+//Atlas also because we are editing InnerText rahter than using a control we can't bind to it.
+//Also I want to keep the original verison anyway.
+
+function formValueChange(event) {
+  const element = event.target
+  const fieldName = element.id
+  const value = element.innerText
+  console.log(`${fieldName} = ${value}`)
 }
 // User has clicked the button to query for data
 
