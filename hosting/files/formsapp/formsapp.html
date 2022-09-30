@@ -106,7 +106,7 @@
                             <div class=" dynamicformlabel">{{formatFieldname(name)}}:
                             </div>
                             <div class="dynamicformitem arrayscroller">
-                                <div v-for="arrayElement in value" class='form_container nested'>
+                                <div v-for="(arrayElement,arrayidx) in value" class='form_container nested'>
                                     <!-- With an Array, for each array memeber we repeat the top level code-->
                                     <!-- Not adding code for nested arrays but will support arrays of objects-->
 
@@ -116,19 +116,19 @@
                                             v-for="(valtype,innername) in selectedDocTypeSchema[name][0]"
                                             :set="value = getFieldValue(arrayElement,innername)">
                                             <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
-                                            <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
+                                            <input  :id=`${name}.${arrayidx}.${innername}`  v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
                                                 :disabled="editing == false" type="datetime-local"
                                                 :value="toDateTime(value)">
-                                            <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
+                                            <div v-else  :id=`${name}.${arrayidx}.${innername}`  :contenteditable="editing?true:null" class="dynamicformvalue">
                                                 {{value}}
                                             </div>
                                     </template>
                                     <!-- Scalar in an Array-->
                                     <template v-else>
-                                        <input v-if="getBsonType(arrayElement) == 'date'" class="dynamicformvalue"
+                                        <input :id=`${name}.${arrayidx}` v-if="getBsonType(arrayElement) == 'date'" class="dynamicformvalue"
                                             :disabled="editing == false" type="datetime-local"
                                             :value="toDateTime(arrayElement)">
-                                        <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
+                                        <div  :id=`${name}.${arrayidx}` v-else :contenteditable="editing?true:null" class="dynamicformvalue">
                                             {{arrayElement}} </div>
                                     </template>
                                 </div>
