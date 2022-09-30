@@ -40,6 +40,9 @@ async function newRecord() {
   alert("Not Yet Implemented"); //TODO
 }
 
+function formValueChange(control) {
+  console.log(control)
+}
 // User has clicked the button to query for data
 
 async function runQuery() {
@@ -90,7 +93,7 @@ async function formsOnLoad() {
   vueApp = createApp({
     methods: {
       //Method we call from  HTML
-      logOut, selectDocType, runQuery, clearForm, editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing, getFieldValue, formatFieldname, sortListviewColumn
+      logOut, selectDocType, formValueChange, runQuery, clearForm, editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing, getFieldValue, formatFieldname, sortListviewColumn
 
     },
     data() {
