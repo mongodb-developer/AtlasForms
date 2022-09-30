@@ -86,6 +86,17 @@ async function selectDocType() {
   }
 }
 
+//If the array is empty - return a single empty element as a placeholder.
+function minOneMember(array,name) {
+  if(array != null && array.length > 0) {
+    return array;
+  }
+
+  //Return an array with a scalar or with an Object depending on the 
+  example =  vueApp.selectedDocTypeSchema[name][0];
+  return example;
+}
+
 function getFieldDataType(name) {
   console.log(name,JSON.stringify(vueApp.selectedDocTypeSchema,null,2))
   return vueApp.selectedDocTypeSchema[name];
