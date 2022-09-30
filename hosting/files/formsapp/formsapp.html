@@ -90,10 +90,10 @@
                                         <div> {{getBsonType(value)}} </div>
                                     </template>
                                     <template v-else>
-                                        <input v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
+                                        <input :id=`${name}.${innername}` v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
                                             :disabled="editing == false" type="datetime-local"
                                             :value="toDateTime(value)">
-                                        <div v-else :contenteditable="editing?true:null" class="dynamicformvalue">
+                                        <div v-else :id=`${name}.${innername}` :contenteditable="editing?true:null" class="dynamicformvalue">
                                             {{value}} </div>
                                         <br />
                                     </template>
