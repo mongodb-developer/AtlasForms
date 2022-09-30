@@ -40,7 +40,7 @@ async function runQuery() {
   }
 }
 
-//user Has changes the dropdown for the document type
+//User has changed the dropdown for the document type
 async function selectDocType() {
   try {
     // It would be simple to cache this info client end if we want to
