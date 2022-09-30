@@ -56,11 +56,8 @@ async function runQuery() {
   try {
     //Create a list of all fields that have a value
     let queryTerms = []
-    //We are rendering from the current object but it's not a 2 way binding
-    //editing the contents of a formvalue shoudl be an explicit onChange
-    let formElements = document.getElementsByClassName("dynamicformvalue")
-    console.log(formElements);
-    
+
+   
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType);
     vueApp.results = results;
     vueApp.editing = false; //No implicit editing
