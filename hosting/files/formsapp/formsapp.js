@@ -24,6 +24,18 @@ async function getListOfDocTypes() {
     return [];
   }
 }
+async function clearForm() {
+  vueApp.results = [];
+  vueApp.currentDoc = {};
+}
+
+async function editRecord() {
+  alert("Not Yet Implemented"); //TODO
+}
+
+async function newRecord() {
+  alert("Not Yet Implemented"); //TODO
+}
 
 // User has clicked the button to query for data
 
@@ -31,7 +43,6 @@ async function runQuery() {
   try {
     console.log(vueApp.selecedtDocType)
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType);
-    console.log(results)
     vueApp.results = results;
   }
   catch (e) {
@@ -69,7 +80,7 @@ async function formsOnLoad() {
   vueApp = createApp({
     methods: {
       //Method we call from  HTML
-      logOut, selectDocType, runQuery, toDateTime, getBsonType, watchColumnResizing,getFieldValue,formatFieldname,sortListviewColumn
+      logOut, selectDocType, runQuery,clearForm,editRecord,newRecord,toDateTime, getBsonType, watchColumnResizing,getFieldValue,formatFieldname,sortListviewColumn
 
     },
     data() {

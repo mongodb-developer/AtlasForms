@@ -37,6 +37,9 @@
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
                     <button class="headerbutton" @click="runQuery()"> Search </button>
+                    <button class="headerbutton" @click="clearForm()"> Clear </button>
+                    <button class="headerbutton" @click="editRecord()"> Edit </button>
+                    <button class="headerbutton" @click="newRecord()"> Create </button>
                 </div>
                 <div class="right">
                     <button class="headerbutton" @click="logOut()"> Logout </button>
