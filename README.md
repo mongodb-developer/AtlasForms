@@ -31,7 +31,7 @@ _Here we note anything we made an explicit decision about in the design and why_
   - ~~Sort by Column~~
   - ~~Server side default columns~~
   - ~~Column name formatting~~
-  - ~~BUG: Cannot resize smaller then content ~~
+  - ~~BUG: Cannot resize smaller then content~~
   - ~~listview code in own js file~~
   
 - Formview
@@ -42,7 +42,7 @@ _Here we note anything we made an explicit decision about in the design and why_
       - ~~On an Empty form display a Single Empty array element~~
       
   - Query By Form
-    - ~~~Change capture~~~
+    - ~~Change capture~~
     - Data Typing (Client or server - or both)
     - Date Handling
     
@@ -62,22 +62,26 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 *** MVP At this point ***
 
-  Listview
+- Listview
   - Choose Columns
   
-  
-- Controls
-  - Numbers
-  - Constraints & Validation 
-    - On submit and on Change (Download JS to client??)
-  - 
-  - Picklist
-      - Picklist Config?
-      - Picklist dtermination
-- Date Only Chooser
+
+- FormView
+    - Better Layout
+    - Controls
+      - Numbers
+      - Constraints & Validation 
+        - On submit and on Change (Download JS to client??)
+      - 
+      - Picklist
+          - Picklist Config?
+          - Picklist dtermination
+    - Date Only Chooser
+
 - Range Queries
 - Fuzzy (Atlas) Search
-- Printing
-- Links
+- Printing (Stylesheet)
+- Linking andd following links
 - Charts?
 
+*** V1 at this point ***
