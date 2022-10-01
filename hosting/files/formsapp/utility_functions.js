@@ -1,8 +1,5 @@
 function getBsonType(obj) {
-  console.log(obj)
-  console.log(typeof obj)
     if (typeof obj != "object") return typeof obj;
-    console.log('What sort of object')
     if (Array.isArray(obj)) return "array"
     if (obj instanceof Date) return "date"
     if (obj instanceof Realm.BSON.ObjectId) return "objectid"
@@ -18,7 +15,6 @@ function getBsonType(obj) {
   //This deals with dotted fieldnames 
 //Also formatting for things like dates
 function getFieldValue(result, fieldname) {
-    console.log(result,fieldname)
     if(result == null) return;
     const [a,b] = fieldname.split('.')
     if (b && result[a]) { return result[a][b] }

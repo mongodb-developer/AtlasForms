@@ -39,19 +39,21 @@ _Here we note anything we made an explicit decision about in the design and why_
     - ~~Simple~~
     - ~~Nested~~
     - Arrays
-      - On an Empty form display a Single Empty array element
+      - ~~On an Empty form display a Single Empty array element~~
       
   - Query By Form
     - ~~~Change capture~~~
-    - Date Handling
     - Data Typing (Client or server?)
+    - Date Handling
+    
+
   - New Record
 
 
 - Editing
   - Locking
   - Change Determination
-  - Array Editing
+  - Array Editing (Add and Remove elements as needed)
 
 
 - Authorization
@@ -62,7 +64,8 @@ _Here we note anything we made an explicit decision about in the design and why_
 
   Listview
   - Choose Columns
-  - 
+  
+  
 - Controls
   - Numbers
   - Constraints & Validation

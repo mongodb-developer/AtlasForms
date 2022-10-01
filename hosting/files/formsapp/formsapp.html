@@ -113,7 +113,6 @@
                                          (typeof selectedDocTypeSchema[name][0] == 'string' ? [''] : [{a:1}] )" class='form_container nested'>
                                     <!-- With an Array, for each array memeber we repeat the top level code-->
                                     <!-- Not adding code for nested arrays but will support arrays of objects-->
-
                                     <!-- Object in Array-->
                                     <template v-if="getBsonType(arrayElement) == 'document'">
                                         <div class="dynamicformitem"
