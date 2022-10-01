@@ -49,7 +49,6 @@ function formValueChange(event) {
   const element = event.target
   const fieldName = element.id
   const value = element.innerText
-  //console.log(`${fieldName} = ${value}`)
   vueApp.fieldEdits[fieldName] = value;
 }
 
@@ -59,7 +58,7 @@ async function runQuery() {
   try {
     //Create a list of all fields that have a value
     //Send the fieldEdits to the server, we will process to the correct 
-
+    console.log(vueApp.fieldEdits);
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType);
     vueApp.results = results;
     vueApp.editing = false; //No implicit editing
