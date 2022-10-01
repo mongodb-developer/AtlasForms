@@ -4,7 +4,7 @@ wanted this to have minimal opinion on using external libraries */
 /* Very  global style elements */
 
 body {
-    background-color: lightblue;
+    background-color: white;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: black;
     
@@ -27,6 +27,7 @@ html {
 
 .formbutton {
     padding: 5px 10px 5px 10px;
+    background-color: white;
     margin-top: 10px;
     min-width: 100px;
     display: block;

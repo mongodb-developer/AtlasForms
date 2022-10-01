@@ -43,7 +43,7 @@ _Here we note anything we made an explicit decision about in the design and why_
       
   - Query By Form
     - ~~~Change capture~~~
-    - Data Typing (Client or server?)
+    - Data Typing (Client or server - or both)
     - Date Handling
     
 
@@ -68,7 +68,7 @@ _Here we note anything we made an explicit decision about in the design and why_
   
 - Controls
   - Numbers
-  - Constraints & Validation
+  - Constraints & Validation 
     - On submit and on Change (Download JS to client??)
   - 
   - Picklist

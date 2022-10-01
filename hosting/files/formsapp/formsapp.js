@@ -56,10 +56,12 @@ function formValueChange(event) {
 
 async function runQuery() {
   try {
-    //Create a list of all fields that have a value
-    //Send the fieldEdits to the server, we will process to the correct 
+
     console.log(vueApp.fieldEdits);
-    const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType);
+
+    //Send the fieldEdits to the server, we will process to the correct data type there
+    //Avoid any injection also all will be strings at this point.
+    const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType,vueApp.fieldEdits);
     vueApp.results = results;
     vueApp.editing = false; //No implicit editing
   }
