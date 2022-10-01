@@ -21,7 +21,15 @@ html {
 
 .headerbutton {
     min-width: 100px;
-    
+    padding: 5px 10px 5px 10px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 2px;
+    margin-top: 10px;
+    min-width: 100px;
+    display: block;
+    margin-left:  auto;
+    margin-right: auto;
 }
 /* Buttons on forms */
 
