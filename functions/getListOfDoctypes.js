@@ -5,7 +5,7 @@ exports = async function(arg){
   /*Here we are explicty, programatically choosing which document types to expose to the frontend*/
   /*We have the user details so wee can factor in authorization too */
   /* Although MongoDB can be 'Dynamic' we can't just expose all of them */
-  /* Partly because a newly created collection sould not just appear to all end users, better to have explicit security*/
+  /* Partly because a newly created collection should not just appear to all end users, better to have explicit security*/
   /* And partly because in App services you cannot enumerate the databases and collections in code without calling the
    REST Admin API */
 
@@ -19,6 +19,11 @@ exports = async function(arg){
   const sample_restaurants = { title: "Restaurants", namespace: "sample_restaurants.restaurants"}
   sample_restaurants.listViewFields = ["name","cuisine","bouroush","address.building","address.street"]
   docTypes.push(sample_restaurants);
+  
+  
+  const sample_mflix = { title: "Movies", namespace: "sample_mflix.moviess"}
+  sample_mflix.listViewFields = ["title","year"]
+  docTypes.push(sample_mflix);
   
   return docTypes;
 };
