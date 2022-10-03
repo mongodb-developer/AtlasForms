@@ -22,7 +22,7 @@ exports = async function(arg){
   
   
   const sample_mflix = { title: "Movies", namespace: "sample_mflix.movies"}
-  sample_mflix.listViewFields = ["title","year"]
+  sample_mflix.listViewFields = ["title","year"] 
   docTypes.push(sample_mflix);
   
   return docTypes;
