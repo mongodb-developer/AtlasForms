@@ -1,21 +1,27 @@
 exports = async function(docType,query){
+  
+   query = { "_id" : 1  }
+   docType = { namespace: "sample_airbnb.listingsAndReviews" }
   if (query == null) { query = {} }
     
     console.log(`Doctype Queried: [${docType.namespace}]`)
+ 
     const [databaseName,collectionName] = docType.namespace.split('.');
+   
     if(!databaseName || !collectionName) { return {}}
     
     console.log(`Query: ${JSON.stringify(query)}`)
-    
+   
     //Convert everything to the correct type 
     //As it's all sent as strings - also sanitises any injection
     
     const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType.namespace)
     console.log(objSchema)
+    return
     let newQuery = {}
-    for( const [field,value] of Object.entries(query) )
+    for( const field of Object.keys(query) )
     {
-      let parts = field.split['.']
+      let parts = []; //field.split['.']
       let subobj = objSchema
       for(const part of parts) {
         console.log(part)
