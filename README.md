@@ -52,7 +52,7 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 - Editing
   - Locking
-  - Change Determination
+  - ~~Change Determination~~
   - Array Editing (Add and Remove elements as needed)
 
 
