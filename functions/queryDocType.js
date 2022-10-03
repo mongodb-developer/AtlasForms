@@ -11,7 +11,11 @@ function correctValueType(value,type) {
       case "number":
       case "int32":
       case "int64":
+      case "decimal128":
         rval = Number(value)
+        break;
+      case "objectid":
+        rval = new BSON.objectId(value)
         break;
       default: 
         rval = "";
