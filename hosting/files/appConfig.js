@@ -10,4 +10,5 @@ const appStrings = {
      AF_CHECK_EMAIL : "Please check your email for link to confirm this is your address.",
      AF_CHECK_EMAIL_RESET : "Please check your email for link to reset your password.",
      AF_PASSWORD_CHANGED : "Your password has been sucessfully changed.",
+     AF_NO_RESULTS_FOUND : "Nothing was found.",
 }

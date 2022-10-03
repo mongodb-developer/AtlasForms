@@ -151,7 +151,16 @@
             </div>
 
         </div>
+        <div v-show="show_modal" id="myModal" class="modal" >
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span v-on:click="show_modal=false" class="close">&times;</span>
+              <p> {{modal_content}} </p>
+            </div>
+          
+          </div>
     </div>
+    
 </body>
 
 </html>

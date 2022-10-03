@@ -63,6 +63,10 @@ async function runQuery() {
     //Avoid any injection also all will be strings at this point.
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType,vueApp.fieldEdits);
     vueApp.results = results;
+    if( results.length == 0) {
+      vueApp.show_modal = true;
+      vueApp.modal_content = appStrings.AF_NO_RESULTS_FOUND;
+    }
     vueApp.editing = false; //No implicit editing
   }
   catch (e) {
@@ -111,7 +115,9 @@ async function formsOnLoad() {
         selectedDocTypeSchema: {},
         currentDoc: {},
         listViewFields: [],
-        editing: false
+        editing: false,
+        modal_content: "test",
+        show_modal: false
       }
     },
     mounted() {
