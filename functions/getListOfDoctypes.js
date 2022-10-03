@@ -21,7 +21,7 @@ exports = async function(arg){
   docTypes.push(sample_restaurants);
   
   
-  const sample_mflix = { title: "Movies", namespace: "sample_mflix.moviess"}
+  const sample_mflix = { title: "Movies", namespace: "sample_mflix.movies"}
   sample_mflix.listViewFields = ["title","year"]
   docTypes.push(sample_mflix);
   

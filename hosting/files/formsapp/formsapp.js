@@ -77,8 +77,6 @@ async function runQuery() {
 
 //User has changed the dropdown for the document type
 async function selectDocType() {
-  vueApp.columnResizeObserver.disconnect()
-  console.log(`Disconnected Observer`)
   try {
     // It would be simple to cache this info client end if we want to
     const docTypeSchemaInfo = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType);
@@ -86,7 +84,6 @@ async function selectDocType() {
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
     vueApp.results = Array(20).fill({}) //Empty and show columnheaders
     vueApp.currentDoc = {}
-   
   }
   catch (e) {
     console.error(e)
