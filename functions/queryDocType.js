@@ -10,7 +10,7 @@ exports = async function(docType,query){
     //Convert everything to the correct type 
     //As it's all sent as strings - also sanitises any injection
     
-    const objSchema =  context.functions.execute("getDocTypeSchemaInfo",docType.namespace)
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType.namespace)
     console.log(objSchema)
     let newQuery = {}
     for( const [field,value] of Object.entries(query) )
