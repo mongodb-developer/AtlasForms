@@ -1,5 +1,6 @@
 //Make sure things are the data type we want them to be
 //TODO - Add other data types like DocumentID
+//TODO - allow Greater than, Less than and not syntax maybe
 
 function correctValueType(value,type) {
   let rval = "";
