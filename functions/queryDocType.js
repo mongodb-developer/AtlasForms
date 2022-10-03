@@ -7,8 +7,9 @@ exports = async function(docType,query){
     
     console.log(`Query: ${JSON.stringify(query)}`)
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-    const cursor = await collection.find(query).limit(30);
+    const cursor = await collection.find(query).limit(30); //Temp limit when testing
     const results = cursor.toArray(); 
-    console.log(`Found: ${results.length} diocuments`)
+    console.log(JSON.stringify(results))
+    console.log(`Found: ${results.length} documents`)
     return results; 
 };
