@@ -1,7 +1,7 @@
 exports = async function(docType,query){
   if (query == null) { query = {} }
-    //docType = {namespace:"sample_airbnb.listingsAndReviews"}
-    console.log(docType)
+    
+    console.log(`Doctype Queried: [${docType.namespace}]`)
     const [databaseName,collectionName] = docType.namespace.split('.');
     if(!databaseName || !collectionName) { return {}}
     
