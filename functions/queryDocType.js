@@ -42,7 +42,7 @@ exports = async function(docType,query){
     //console.log(objSchema)
    
     let newQuery = {}
-    for( const field of Object.keys(query) )
+    for( let field of Object.keys(query) )
     {
       let parts = field.split('.')
       let subobj = objSchema
@@ -55,6 +55,9 @@ exports = async function(docType,query){
       //Now based on that convert value and add to our new query
       let correctlyTypedValue = correctValueType(query[field],subobj)
       if(correctlyTypedValue != null && correctlyTypedValue!="") {
+        //If we are querying an array we will have 'arrayname.0.field or 'arrayname.0'
+        //We dont want ot constrain it to the first array element so remove the .0 
+        field = field.replace('.0','');
         newQuery[field] = correctlyTypedValue
       }
     }
