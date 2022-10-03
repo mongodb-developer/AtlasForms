@@ -22,9 +22,9 @@ function correctValueType(value,type) {
 }
 exports = async function(docType,query){
   
-   query = { "_id" : 1  }
-   docType = { namespace: "sample_airbnb.listingsAndReviews" }
-  if (query == null) { query = {} }
+  // query = { "_id" : 1  }
+  // docType = { namespace: "sample_airbnb.listingsAndReviews" }
+    if (query == null) { query = {} }
     
     console.log(`Doctype Queried: [${docType.namespace}]`)
  
@@ -39,7 +39,7 @@ exports = async function(docType,query){
     // also sanitises any Javascript injection
     
     const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType)
-    console.log(objSchema)
+    //console.log(objSchema)
    
     let newQuery = {}
     for( const field of Object.keys(query) )
@@ -54,9 +54,9 @@ exports = async function(docType,query){
       console.log(subobj)
       //Now based on that convert value and add to our new query
       let correctlyTypedValue = correctValueType(query[field],subobj)
-      newquery[field] = correctlyTypedValue
+      newQuery[field] = correctlyTypedValue
     }
-    
+    console.log(EJSON.stringify(newQuery))
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     const cursor = await collection.find(query).limit(30); //Temp limit when testing
     const results = await cursor.toArray(); 
