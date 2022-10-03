@@ -20,6 +20,12 @@ function correctValueType(value,type) {
   }
   return rval;
 }
+
+
+// This just and's the values together - what it does do it cast
+// Them all to the correct data type for the field as the form
+// Thinks the numbers are strings
+
 exports = async function(docType,query){
   
   // query = { "_id" : 1  }
