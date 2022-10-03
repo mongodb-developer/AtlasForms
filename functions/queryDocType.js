@@ -16,7 +16,7 @@ function correctValueType(value,type) {
         rval = Number(value)
         break;
       case "objectid":
-        rval = new BSON.objectId(value)
+        rval = new BSON.ObjectId(value)
         break;
       default: 
         rval = "";
