@@ -43,7 +43,7 @@ _Here we note anything we made an explicit decision about in the design and why_
       
   - Query By Form
     - ~~Change capture~~
-    - Data Typing (Client or server - or both)
+    - Data Typing (Client end)
     - Date Handling
     
 
