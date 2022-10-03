@@ -54,7 +54,9 @@ exports = async function(docType,query){
       console.log(subobj)
       //Now based on that convert value and add to our new query
       let correctlyTypedValue = correctValueType(query[field],subobj)
-      newQuery[field] = correctlyTypedValue
+      if(correctlyTypedValue != null && correctlyTypedValue!="") {
+        newQuery[field] = correctlyTypedValue
+      }
     }
     console.log(EJSON.stringify(newQuery))
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
