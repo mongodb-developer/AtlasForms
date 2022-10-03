@@ -25,11 +25,20 @@ async function getListOfDocTypes() {
   }
 }
 async function clearForm() {
-  //TODO maybe - add an Are you sure if they have been entering data
+  //TODO maybe - add an Are you sure? if they have been entering data
 
   vueApp.results = [];
   vueApp.currentDoc = {};
   vueApp.editing = true;
+  //Editable divs we changed need manually cleared
+  for(const id of Object.keys(vueApp.fieldEdits)) {
+    console.log(id)
+    if(document.getElementById(id)) {
+      document.getElementById(id).innerText = ""
+      document.getElementById(id).value = null
+    }
+  }
+  vueApp.fieldEdits = {}
 }
 
 async function editRecord() {
@@ -50,6 +59,7 @@ function formValueChange(event) {
   const fieldName = element.id
   const value = element.innerText
   vueApp.fieldEdits[fieldName] = value;
+
 }
 
 // User has clicked the button to query for data
@@ -63,11 +73,13 @@ async function runQuery() {
     //Avoid any injection also all will be strings at this point.
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType,vueApp.fieldEdits);
     vueApp.results = results;
+    vueApp.editing = false; //No implicit editing
     if( results.length == 0) {
       vueApp.show_modal = true;
       vueApp.modal_content = appStrings.AF_NO_RESULTS_FOUND;
+      vueApp.editing = true;
     }
-    vueApp.editing = false; //No implicit editing
+   
   }
   catch (e) {
     console.error(e)
