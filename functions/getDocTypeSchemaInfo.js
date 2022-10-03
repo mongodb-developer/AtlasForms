@@ -90,7 +90,6 @@ function addDocumentToTemplate(doc, templateDoc) {
             templateDoc[key] = typeof doc[key] 
         }
     }
-    console.log(templateDoc)
     return templateDoc
 
 }

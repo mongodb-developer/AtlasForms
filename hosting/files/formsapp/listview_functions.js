@@ -1,8 +1,9 @@
-/* Functions specific to the listview
-
+/* Functions specific to the listview*/
 /* Register a component to record it's width, apply any saved width*/
 
 function watchColumnResizing(element) {
+    if(element == null) return; //Vue sometimes sends us a null element!
+   
     //If we have a stored size for this column apply it
     const fieldname = element.id; //Record the size for a given label
     const docTypeName = vueApp.selectedDocType.namespace;
@@ -10,6 +11,7 @@ function watchColumnResizing(element) {
     if (storedWidth) {
         element.style.width = storedWidth
     }
+
     vueApp.columnResizeObserver.observe(element)
 }
 
