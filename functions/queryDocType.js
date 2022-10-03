@@ -1,3 +1,25 @@
+//Make sure things are the data type we want them to be
+function correctValueType(value,type) {
+  let rval = "";
+  try {
+    switch(type) {
+      case "string":
+        rval = `${value}`
+        break;
+      case "number":
+      case "int32":
+      case "int64":
+        rval = Number(value)
+        break;
+      default: 
+        rval = "";
+    }
+  }
+  catch(e) {
+    console.error(e)
+  }
+  return rval;
+}
 exports = async function(docType,query){
   
    query = { "_id" : 1  }
@@ -12,16 +34,17 @@ exports = async function(docType,query){
     
     console.log(`Query: ${JSON.stringify(query)}`)
    
-    //Convert everything to the correct type 
-    //As it's all sent as strings - also sanitises any injection
+    // Convert everything to the correct Javascript/BSON type 
+    // As it's all sent as strings from the form, 
+    // also sanitises any Javascript injection
     
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType.namespace)
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType)
     console.log(objSchema)
-    return
+   
     let newQuery = {}
     for( const field of Object.keys(query) )
     {
-      let parts = []; //field.split['.']
+      let parts = field.split('.')
       let subobj = objSchema
       for(const part of parts) {
         console.log(part)
@@ -30,6 +53,8 @@ exports = async function(docType,query){
       }
       console.log(subobj)
       //Now based on that convert value and add to our new query
+      let correctlyTypedValue = correctValueType(query[field],subobj)
+      newquery[field] = correctlyTypedValue
     }
     
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
