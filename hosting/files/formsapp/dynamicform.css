@@ -3,8 +3,8 @@
    
     overflow-x: hidden;
     overflow-y: scroll;
-    /* display: grid; */
-    /* grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); */
+    /* display: grid; 
+     grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); */
 }
 
 .dynamicformlabel {
@@ -13,16 +13,16 @@
     text-align: left;
     white-space: nowrap;
     float: left;
-    min-width: 150px;
+   /*min-width: 150px;*/
     vertical-align: middle;
-
+    
 }
 
 .dynamicformvalue {
     border: 1px solid black;
     border-radius: 2px;
     background-color: white;
-    resize: vertical;
+    resize: both;
     /* Remove line below for labels above boxes*/
     float: left;
     padding: 3px;
@@ -112,7 +112,7 @@ tr.listview {
 }
 
 tr.selected {
-    background-color: red;
+    background-color: lightgrey;
 }
 
 td.listview ,th.listview {

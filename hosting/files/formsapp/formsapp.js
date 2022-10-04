@@ -46,7 +46,9 @@ async function editRecord() {
 }
 
 async function newRecord() {
-  alert("Not Yet Implemented"); //TODO
+  let rval = vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType, vueApp.fieldEdits)
+
+  
 }
 
 //We use this to track editied controls so we can send an update to 
