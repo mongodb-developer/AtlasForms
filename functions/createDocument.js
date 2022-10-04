@@ -39,14 +39,14 @@ exports = async function(docType,untypedUpdates){
         //Check here and if we cannot cast the value sent to the correct data type
         //When inserting or updating - so they types yes in a numeric field for example
         //We should raise an error
-      return { ok: false, errorField: field, errorType: subobj};   
-    }
+        return { ok: false, errorField: field, errorType: subobj};   
+      }
   
-        updates[field] = correctlyTypedValue
+      updates[field] = correctlyTypedValue
       
     }
 
-
+    console.log(JSON.stringify(updates))
     let results
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
