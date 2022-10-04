@@ -18,11 +18,16 @@ function correctValueType(value,type) {
       case "objectid":
         rval = new BSON.ObjectId(value)
         break;
+      case 'date':
+        console.log(`Converting Date: ${value}`)
+        rval = new Date(value)
+        break;
       default: 
         rval = "";
     }
   }
   catch(e) {
+    console.error(`Error converting "${value}" to a ${type}`)
     console.error(e)
   }
   return rval;
