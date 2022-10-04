@@ -57,7 +57,13 @@ async function newRecord() {
 function formValueChange(event) {
   const element = event.target
   const fieldName = element.id
-  const value = element.innerText
+  let value = ""
+  //If it'a a DIV take the text, if not take the value
+  if(element.nodeName == "INPUT") {
+    value = element.value
+  } else {
+    value = element.innerText
+  }
   vueApp.fieldEdits[fieldName] = value;
 
 }
