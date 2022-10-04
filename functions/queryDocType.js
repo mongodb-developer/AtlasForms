@@ -42,7 +42,7 @@ exports = async function(docType,query){
   
   /*Dynamically load some shared code*/
   
-  const utilityFunctions =  await context.functions.execute("utility_funcitons")
+  const utilityFunctions =  await context.functions.execute("utility_functions")
   
 
     if (query == null) { query = {} }
