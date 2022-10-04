@@ -35,10 +35,15 @@ exports = async function(docType,untypedUpdates){
       //Now based on that convert value and add to our new query
       let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
       
-      if(correctlyTypedValue != null && correctlyTypedValue!="") {
-        //Don't store empty fields
+      if(correctlyTypedValue == null) {
+        //Check here and if we cannot cast the value sent to the correct data type
+        //When inserting or updating - so they types yes in a numeric field for example
+        //We should raise an error
+      return { ok: false, errorField: field, errorType: subobj};   
+    }
+  
         updates[field] = correctlyTypedValue
-      }
+      
     }
 
 
@@ -49,7 +54,7 @@ exports = async function(docType,untypedUpdates){
       //and also grab the final document and return it
       if(updates._id == null) { updates._id = new BSON.ObjectId() } //TODO - Change this to something better
       rval = collection.findOneAndUpdate({_id:updates._id},updates,{upsert:true, returnNewDocument: true})
-      return rval;
+      return {ok: true, newDoc:rval}
     } catch(e) {
       console.error(error);
       return [];

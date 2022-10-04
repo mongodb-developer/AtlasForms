@@ -3,7 +3,7 @@ have the overhead of calling them as a context.function so we have one that
 returns an object with all the defined functions - can also do this returning a class*/
 
 function correctValueType(value,type) {
-  let rval = "";
+  let rval = null;
   try {
     switch(type) {
       case "string":
@@ -14,6 +14,7 @@ function correctValueType(value,type) {
       case "int64":
       case "decimal128":
         rval = Number(value)
+        if(Math.isNaN(rval)) { rval == null}
         break;
       case "objectid":
         rval = new BSON.ObjectId(value)
@@ -23,7 +24,7 @@ function correctValueType(value,type) {
         rval = new Date(value)
         break;
       default: 
-        rval = "";
+        
     }
   }
   catch(e) {
