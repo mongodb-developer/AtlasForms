@@ -14,7 +14,7 @@ function correctValueType(value,type) {
       case "int64":
       case "decimal128":
         rval = Number(value)
-        if(Math.isNaN(rval)) { rval == null}
+        if(isNaN(rval)) { rval == null}
         break;
       case "objectid":
         rval = new BSON.ObjectId(value)
