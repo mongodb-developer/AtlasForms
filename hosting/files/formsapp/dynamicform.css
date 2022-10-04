@@ -15,16 +15,18 @@
     float: left;
    /*min-width: 150px;*/
     vertical-align: middle;
-    
+
 }
 
 .dynamicformvalue {
+    white-space: pre-wrap;
     border: 1px solid black;
     border-radius: 2px;
     background-color: white;
     resize: both;
     /* Remove line below for labels above boxes*/
     float: left;
+    display:block;
     padding: 3px;
     min-width: 150px;
     padding: 3px;

@@ -46,17 +46,26 @@ async function editRecord() {
 }
 
 async function newRecord() {
-  let rval = vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType, vueApp.fieldEdits)
-
-  
+  console.log(vueApp.fieldEdits);
+  let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType, vueApp.fieldEdits)
+  if(rval.ok) {
+  console.log(rval)
+  vueApp.results=[rval.newDoc]
+  vueApp.currentDoc = rval.newDoc
+  vueApp.editing=false
+ } else {
+    vueApp.show_modal = true;
+    vueApp.modal_content = appStrings.AF_BAD_FIELD_TYPE(rval.errorField,rval.errorType);
+ }
 }
 
 //We use this to track editied controls so we can send an update to 
-//Atlas also because we are editing InnerText rahter than using a control we can't bind to it.
+//Atlas also because we are editing InnerText rather than using a control we can't bind to it.
 //Also we want to keep the original verison anyway.
 
 //TODO - Handle Dates
 function formValueChange(event) {
+  
   const element = event.target
   const fieldName = element.id
   let value = ""
@@ -65,6 +74,26 @@ function formValueChange(event) {
     value = element.value
   } else {
     value = element.innerText
+    //If this is not acceptable (letters in a number for example)
+    //Set it back to the previous value
+    console.log(value)
+    console.log(element.bsontype)
+    console.log(element)
+    if (['number','int32','int64','decimal128'].includes(element.getAttribute('data-bsontype'))) {
+      if(isNaN(Number(value))) {
+        element.innerText = vueApp.fieldEdits[fieldName]?vueApp.fieldEdits[fieldName]:""
+        const end = element.innerText.length;
+        let range = document.createRange()
+        let sel = window.getSelection()
+        
+        range.setStart(element,1);
+        range.collapse(true)
+        
+        sel.removeAllRanges()
+        sel.addRange(range)
+        return;
+      }
+    }
   }
   vueApp.fieldEdits[fieldName] = value;
 

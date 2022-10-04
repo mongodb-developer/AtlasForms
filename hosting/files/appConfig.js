@@ -11,4 +11,5 @@ const appStrings = {
      AF_CHECK_EMAIL_RESET : "Please check your email for link to reset your password.",
      AF_PASSWORD_CHANGED : "Your password has been sucessfully changed.",
      AF_NO_RESULTS_FOUND : "Nothing was found.",
+     AF_BAD_FIELD_TYPE: (errorField,errorType) => `Value in ${errorField} is not ${errorType}. Cannot write changes.`
 }
