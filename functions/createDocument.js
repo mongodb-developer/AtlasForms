@@ -1,51 +1,19 @@
-//Make sure things are the data type we want them to be
-//TODO - Add other data types like DocumentID
-//TODO - allow Greater than, Less than and not syntax maybe
-
-
-function correctValueType(value,type) {
-  let rval = "";
-  try {
-    switch(type) {
-      case "string":
-        rval = `${value}`
-        break;
-      case "number":
-      case "int32":
-      case "int64":
-      case "decimal128":
-        rval = Number(value)
-        break;
-      case "objectid":
-        rval = new BSON.ObjectId(value)
-        break;
-      case 'date':
-        console.log(`Converting Date: ${value}`)
-        rval = new Date(value)
-        break;
-      default: 
-        rval = "";
-    }
-  }
-  catch(e) {
-    console.error(`Error converting "${value}" to a ${type}`)
-    console.error(e)
-  }
-  return rval;
-}
 
 
 // This just and's the values together - what it does do it cast
 // Them all to the correct data type for the field as the form
 // Thinks the numbers are strings
 
-exports = async function(docType,query){
-
-    if (query == null) { query = {} }
+exports = async function(docType,untypedUpdates){
+  const utilityFunctions =  await context.functions.execute("utility_functions")
+  
+    if (untypedUpdates == null || untypedUpdates == {} ) { return {}; }
+    
     const [databaseName,collectionName] = docType.namespace.split('.');
+    //TODO - verify we have permission to write to this
+    
     if(!databaseName || !collectionName) { return {}}
     
-  
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
@@ -53,8 +21,8 @@ exports = async function(docType,query){
     const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType)
 
    
-    let newQuery = {}
-    for( let field of Object.keys(query) )
+    let updates = {}
+    for( let field of Object.keys(untypedUpdates) )
     {
       let parts = field.split('.')
       let subobj = objSchema
@@ -62,24 +30,23 @@ exports = async function(docType,query){
         subobj = subobj[part]
       }
       //Now based on that convert value and add to our new query
-      let correctlyTypedValue = correctValueType(query[field],subobj)
+      let correctlyTypedValue = correctValueType(untypedUpdates[field],subobj)
       
       if(correctlyTypedValue != null && correctlyTypedValue!="") {
-        //If we are querying an array we will have 'arrayname.0.field or 'arrayname.0'
-        //We dont want to constrain it to the first array element so remove the .0 
-        //In future add support for multiple array element querying with $elemMatch
-        
-        field = field.replace('.0','');
-        newQuery[field] = correctlyTypedValue
+        //Don't store empty fields
+        updates[field] = correctlyTypedValue
       }
     }
+
 
     let results
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
-      const cursor = await collection.find(newQuery).limit(30); //Temp limit when testing
-      const results = await cursor.toArray(); 
-      return results;
+      //We aren't going to use insertOne here, we have a list of fields we want ot set so we will to an update with upsert
+      //and also grab the final document and return it
+      if(updates._id == null) { updates._id = new BSON.ObjectId() } //TODO - Change this to something better
+      rval = collection.findOneAndUpdate({_id:updates._id},updates,{upsert:true, returnNewDocument: true})
+      return rval;
     } catch(e) {
       console.error(error);
       return [];
