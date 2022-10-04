@@ -34,6 +34,22 @@
     overflow: auto;
 }
 
+.dynamicformvaluedate {
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: white;
+   
+    /* Remove line below for labels above boxes*/
+    float: left;
+    padding: 3px;
+    min-width: 150px;
+    padding: 3px;
+    margin-left: 5px;
+    max-height: 100px;
+    min-height: 20px;
+    overflow: auto;
+}
+
 /* This means a manual resize can override the inital max-height*/
 
 .dynamicformvalue[style*="height"] {

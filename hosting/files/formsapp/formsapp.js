@@ -118,6 +118,7 @@ async function formsOnLoad() {
   vueApp = createApp({
     methods: {
       //Method we call from  HTML
+      log: console.log,
       logOut,  selectDocType, formValueChange, runQuery, clearForm, editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing, getFieldValue, formatFieldname, sortListviewColumn
 
     },

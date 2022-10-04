@@ -90,9 +90,8 @@
                                         <div> {{getBsonType(value)}} </div>
                                     </template>
                                     <template v-else>
-                                        <input  v-on:input="formValueChange" :id=`${name}.${innername}` v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
-                                            :disabled="editing == false" type="datetime-local"
-                                            :value="toDateTime(value)">
+                                        <input  v-on:input="formValueChange" :id=`${name}.${innername}`  v-if="valtype == 'date'" class="dynamicformvaluedate"
+                                            :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
                                         <div  v-on:input="formValueChange" v-else :id=`${name}.${innername}` :contenteditable="editing?true:null" class="dynamicformvalue">
                                             {{value}} </div>
                                         <br />
@@ -116,19 +115,18 @@
                                     <!-- Object in Array-->
                                     <template v-if="getBsonType(arrayElement) == 'document'">
                                         <div class="dynamicformitem"
-                                            v-for="(valtype,innername) in selectedDocTypeSchema[name][0]"
+                                            v-for="(innervaltype,innername) in selectedDocTypeSchema[name][0]"
                                             :set="value = getFieldValue(arrayElement,innername)">
-                                            <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
-                                            <input  v-on:input="formValueChange" :id=`${name}.${arrayidx}.${innername}`  v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
-                                                :disabled="editing == false" type="datetime-local"
-                                                :value="toDateTime(value)">
+                                            <div class="dynamicformlabel"> {{formatFieldname(innername)}}:</div>
+                                            <input  v-if="innervaltype == 'date'"  v-on:input="formValueChange" :id=`${name}.${arrayidx}.${innername}`  class="dynamicformvaluedate"
+                                                :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
                                             <div v-else  v-on:input="formValueChange" :id=`${name}.${arrayidx}.${innername}`  :contenteditable="editing?true:null" class="dynamicformvalue">
                                                 {{value}}
                                             </div>
                                     </template>
                                     <!-- Scalar in an Array-->
                                     <template v-else>
-                                        <input  v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-if="getBsonType(arrayElement) == 'date'" class="dynamicformvalue"
+                                        <input  v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-if="valtype == 'Date'" class="dynamicformvaluedate"
                                             :disabled="editing == false" type="datetime-local"
                                             :value="toDateTime(arrayElement)">
                                         <div  v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-else :contenteditable="editing?true:null" class="dynamicformvalue">
@@ -141,9 +139,11 @@
                         <!-- Scalar value, formatting and control based on type -->
                         <template v-else>
                             <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
-                            <input  v-on:input="formValueChange" v-if="getBsonType(value) == 'date'" class="dynamicformvalue"
+                            <input v-if="valtype == 'date'"  v-on:input="formValueChange"  class="dynamicformvaluedate"
                                 :disabled="editing == false" type="datetime-local" :value="toDateTime(value)" :id="name">
-                            <div v-on:input="formValueChange" :id="name" v-else :contenteditable="editing?true:null" class="dynamicformvalue">{{value}} </div>
+
+                            <div v-else v-on:input="formValueChange" :id="name"  :contenteditable="editing?true:null" 
+                            class="dynamicformvalue">{{value}} </div>
                             <br />
                         </template>
                     </div>
