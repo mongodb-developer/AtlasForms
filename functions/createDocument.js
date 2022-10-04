@@ -5,8 +5,8 @@
 // Thinks the numbers are strings
 
 exports = async function(docType,untypedUpdates){
-  untypedUpdates={name:"Orion's Lodge"}
-  docType = { namespace :"sample_airbnb.listingsAndReviews"}
+  //untypedUpdates={name:"Orion's Lodge"}
+  //docType = { namespace :"sample_airbnb.listingsAndReviews"}
   
   const utilityFunctions =  await context.functions.execute("utility_functions")
   
