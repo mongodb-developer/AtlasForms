@@ -5,6 +5,9 @@
 // Thinks the numbers are strings
 
 exports = async function(docType,untypedUpdates){
+  untypedUpdates={name:"Orion's Lodge"}
+  docType = { namespace :"sample_airbnb.listingsAndReviews"}
+  
   const utilityFunctions =  await context.functions.execute("utility_functions")
   
     if (untypedUpdates == null || untypedUpdates == {} ) { return {}; }
@@ -30,7 +33,7 @@ exports = async function(docType,untypedUpdates){
         subobj = subobj[part]
       }
       //Now based on that convert value and add to our new query
-      let correctlyTypedValue = correctValueType(untypedUpdates[field],subobj)
+      let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
       
       if(correctlyTypedValue != null && correctlyTypedValue!="") {
         //Don't store empty fields
