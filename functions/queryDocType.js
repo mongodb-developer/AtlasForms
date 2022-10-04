@@ -1,37 +1,4 @@
-//Make sure things are the data type we want them to be
-//TODO - Add other data types like DocumentID
-//TODO - allow Greater than, Less than and not syntax maybe
 
-function oldCorrectValueType(value,type) {
-  let rval = "";
-  try {
-    switch(type) {
-      case "string":
-        rval = `${value}`
-        break;
-      case "number":
-      case "int32":
-      case "int64":
-      case "decimal128":
-        rval = Number(value)
-        break;
-      case "objectid":
-        rval = new BSON.ObjectId(value)
-        break;
-      case 'date':
-        console.log(`Converting Date: ${value}`)
-        rval = new Date(value)
-        break;
-      default: 
-        rval = "";
-    }
-  }
-  catch(e) {
-    console.error(`Error converting "${value}" to a ${type}`)
-    console.error(e)
-  }
-  return rval;
-}
 
 
 // This just and's the values together - what it does do it cast
