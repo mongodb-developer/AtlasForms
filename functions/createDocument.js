@@ -2,7 +2,8 @@
 //TODO - Add other data types like DocumentID
 //TODO - allow Greater than, Less than and not syntax maybe
 
-function oldCorrectValueType(value,type) {
+
+function correctValueType(value,type) {
   let rval = "";
   try {
     switch(type) {
@@ -39,11 +40,6 @@ function oldCorrectValueType(value,type) {
 // Thinks the numbers are strings
 
 exports = async function(docType,query){
-  
-  /*Dynamically load some shared code*/
-  
-  const utilityFunctions =  await context.functions.execute("utility_funcitons")
-  
 
     if (query == null) { query = {} }
     const [databaseName,collectionName] = docType.namespace.split('.');
@@ -66,7 +62,7 @@ exports = async function(docType,query){
         subobj = subobj[part]
       }
       //Now based on that convert value and add to our new query
-      let correctlyTypedValue = utilityFunctions.correctValueType(query[field],subobj)
+      let correctlyTypedValue = correctValueType(query[field],subobj)
       
       if(correctlyTypedValue != null && correctlyTypedValue!="") {
         //If we are querying an array we will have 'arrayname.0.field or 'arrayname.0'

@@ -6,6 +6,8 @@ form for Query or data entry  */
 rather than be an explicit definition btu you could explicity define it here or read a definition from
 a given collection. As it stands we just look at some of the existing docs*/
 
+/* This will be extended to include lots more metadata like jsonSchema or similar*/
+
 exports = async function (docType) {
 
     //docType = { namespace: "sample_airbnb.listingsAndReviews" }
