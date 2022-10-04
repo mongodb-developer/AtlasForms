@@ -45,3 +45,11 @@ html {
     border: 1px solid black;
     background-color: white;
 }
+
+.dynamicformvalue:not([contenteditable="true"]) {
+    background-color: lightgray;
+  }
+
+  .dynamicformvaluedate:disabled {
+    background-color: lightgray;
+  }
