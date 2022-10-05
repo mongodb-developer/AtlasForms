@@ -28,7 +28,7 @@ async function getListOfDocTypes() {
 //Pop up out custom alert dialog thingy
 function formAlert(message) {
   vueApp.show_modal = true;
-  vueApp.modal_content = message
+  vueApp.modal_content = message ? message : "[Error Message Missing !]"
 }
 
 async function clearForm() {
@@ -49,14 +49,37 @@ async function clearForm() {
 }
 
 async function editRecord() {
-  formAlert("Not Yet Implemented"); //TODO
+  
+  if(vueApp.currentDoc == {} ||vueApp.currentDoc == null|| vueApp.currentDoc == undefined || vueApp.currentDoc._id == null) {
+    formAlert(appStrings.AF_NO_OPEN_FOR_EDIT)
+    return;
+  }
+
+  console.log(vueApp.currentDoc)
+  /* We need to Lock it before they can edit it, and fetch the latest version */
+  let lockResult = await vueApp.realmApp.currentUser.functions.lockDocument(vueApp.selectedDocType, vueApp.currentDoc._id);
+  console.log(lockResult);
+  if(lockResult.lockObtained) {
+    //We got the lock
+    vueApp.editing = true;
+    vueApp.currentDocLocked = true;
+    vueApp.currentDoc = lockResult.currentDoc
+  } else {
+    //Tell them Why not
+    //TODO - Perhaps offer a 'Steal Lock' option in future depending
+    //How long it's been locked for
+    formAlert(appStrings,AF_DOC_ALREADY_LOCKED(lockResult.currentDoc.__lockedBy))
+  }
+
 }
 
 async function newRecord() {
-  if(vieApp.fieldEdits._id != undefined) {
-    formAlert(appStrings.NO_MANUAL_ID)
+  
+  if(vueApp.fieldEdits._id != undefined && vueApp.fieldEdits._id != "") {
+    formAlert(appStrings.AF_NO_MANUAL_ID)
     return;
   }
+
   let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType, vueApp.fieldEdits)
   if(rval.ok) {
   console.log(rval)
@@ -99,6 +122,8 @@ function formValueChange(event) {
       }
     }
   }
+
+   
   vueApp.fieldEdits[fieldName] = value;
 
 }
@@ -173,6 +198,7 @@ async function formsOnLoad() {
         currentDoc: {},
         listViewFields: [],
         editing: false,
+        currentDocLocked: false,
         modal_content: "test",
         show_modal: false
       }

@@ -33,16 +33,18 @@
                 <div class="left">
                     <!-- odd binding as we do work on change to lookup details-->
                     Document Type:
-                    <select name="docType" @change="selectDocType" v-model="selectedDocType">
+                    <select v-show="!currentDocLocked"  name="docType" @change="selectDocType" v-model="selectedDocType">
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
-                    <button class="headerbutton" @click="runQuery()"> Search </button>
-                    <button class="headerbutton" @click="clearForm()"> Clear </button>
-                    <button class="headerbutton" @click="editRecord()"> Edit </button>
-                    <button class="headerbutton" @click="newRecord()"> Create </button>
+                    <button v-show="!currentDocLocked"  class="headerbutton" @click="runQuery()"> Search </button>
+                    <button v-show="!currentDocLocked" class="headerbutton" @click="clearForm()"> Clear </button>
+                    <button v-show="!currentDocLocked" class="headerbutton" @click="editRecord()"> Edit </button>
+                    <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit()"> Save Edits </button>
+                    <button v-show="currentDocLocked" class="headerbutton" @click="cancelEdit()"> Cancel Edits </button>
+                    <button v-show="!currentDocLocked" class="headerbutton" @click="newRecord()"> Create </button>
                 </div>
                 <div class="right">
-                    <button class="headerbutton" @click="logOut()"> Logout </button>
+                    <button  v-show="!currentDocLocked" class="headerbutton" @click="logOut()"> Logout </button>
                 </div>
             </div>
 

@@ -20,8 +20,6 @@ function watchColumnResizing(element) {
 //This is client side sorting but more complex than you might expect
 //Needs to cope with any data type
 function sortListviewColumn(column) {
-
-
     vueApp.results.sort((a, b) => {
         let value_a = getFieldValue(a, column);
         let value_b = getFieldValue(b, column);
