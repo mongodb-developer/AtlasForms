@@ -8,7 +8,20 @@ exports = async function(docType,untypedUpdates){
   //untypedUpdates={name:"Orion's Lodge"}
   //docType = { namespace :"sample_airbnb.listingsAndReviews"}
   
-  const utilityFunctions =  await context.functions.execute("utility_functions")
+    //We don't allow _id to be specified here but will accept an empty
+    //String as unspecificed
+    
+    if(untypedUpdates._id == "" || untypedUpdates._id==null) {
+       delete  untypedUpdates._id
+    }
+    
+    if(untypedUpdates._id != undefined) {
+      //Providng an _id is not allowed *Design decision* 
+      //Icky hack on error message reuse
+      return { ok: false, errorField: "_id", errorType: "supplied"};     
+    }
+    
+    const utilityFunctions =  await context.functions.execute("utility_functions")
   
     if (untypedUpdates == null || untypedUpdates == {} ) { return {}; }
     
