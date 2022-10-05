@@ -62,7 +62,7 @@ exports = async function(docType,untypedUpdates){
 
     console.log(JSON.stringify(updates))
     let results
-    var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+    const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
       //We aren't going to use insertOne here, we have a list of fields we want ot set so we will to an update with upsert
       //and also grab the final document and return it
