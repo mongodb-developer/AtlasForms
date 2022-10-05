@@ -75,22 +75,17 @@ function formValueChange(event) {
   } else {
     value = element.innerText
     //If this is not acceptable (letters in a number for example)
-    //Set it back to the previous value
-    console.log(value)
-    console.log(element.bsontype)
-    console.log(element)
+    //Set it back to the previous value and place the cursor at the end
+
     if (['number','int32','int64','decimal128'].includes(element.getAttribute('data-bsontype'))) {
       if(isNaN(Number(value))) {
-        element.innerText = vueApp.fieldEdits[fieldName]?vueApp.fieldEdits[fieldName]:""
-        const end = element.innerText.length;
-        let range = document.createRange()
-        let sel = window.getSelection()
-        
+        element.innerText = vueApp.fieldEdits[fieldName]?vueApp.fieldEdits[fieldName]:"";
+        let range = document.createRange();
+        let sel = window.getSelection();
         range.setStart(element,1);
-        range.collapse(true)
-        
-        sel.removeAllRanges()
-        sel.addRange(range)
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
         return;
       }
     }
