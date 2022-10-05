@@ -20,9 +20,28 @@ exports = async function(docType,_id){
     
     //Check it's not locked, or I already own the lock (in case of page reloaded)
     //Or lock has expired
+    let user = context.user
+    let email = user.data.email
     
-    let isAvailable = { _id,  __lockstate : null }
+   
+    let isUnlocked = { __locked: null }
+    let isLockedByMe = { __lockedby : email }
+    let halfHourAgo = new Date();
+    halfHourAgo.setMinutes(haslHourAgo.getMinutes() - 30 ) //THe time 30 mins ago
     
-    let getLock = collection.findOneAndUpdate(isAvailable)
-    return {arg: arg};
+    let isExpiredLock = { __lockTime : { $lt : halfHourAgo}}
+    let checkLock = { _id, $or : [ isUnlocked,isLockedByMe,isExpiredLock] }
+    let lockRecord = { $set : { __locked: true, __lockedby: email, __lockTime: new Date()}}
+    
+    let getLock = await collection.findOneAndUpdate(checkLock,lockRecord,{returnDocument: "after"})
+    if(getLock == null) {
+      //We couldn't find a record in editable state
+       let getRecord = await collection.findOne({_id},{__locked,__lockedby,__lockTime})
+       lockState.currentDoc = getRecord
+    } else {
+      //Grab the record details 
+      lockState.lockObtained = true;
+      lockState.currentDoc = getLock
+    }
+    return lockState;
 };
