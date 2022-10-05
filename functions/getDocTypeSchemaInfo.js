@@ -16,7 +16,7 @@ exports = async function (docType) {
 
 
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-    const removeLockingFields = { __locked:0,__lockedBy:0,__lockedTime:0}
+    const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0}
     
     const exampleDocs = await collection.find({},removeLockingFields).limit(10).toArray();
 
