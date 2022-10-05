@@ -64,7 +64,7 @@ async function newRecord() {
   vueApp.currentDoc = rval.newDoc
   vueApp.editing=false
  } else {
-  formAlert( appStrings.AF_BAD_FIELD_TYPE(rval.errorField,rval.errorType);
+  formAlert( appStrings.AF_BAD_FIELD_TYPE(rval.errorField,rval.errorType));
  }
 }
 
