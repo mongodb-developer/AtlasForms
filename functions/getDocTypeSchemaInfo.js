@@ -16,8 +16,9 @@ exports = async function (docType) {
 
 
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-
-    const exampleDocs = await collection.find({}).limit(10).toArray();
+    const removeLockingFields = { __locked:0,__lockedBy:0,__lockedTime:0}
+    
+    const exampleDocs = await collection.find({},removeLockingFields).limit(10).toArray();
 
     if (exampleDocs.length == null) {
         console.error("No example doc");

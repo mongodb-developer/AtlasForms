@@ -24,13 +24,13 @@ exports = async function(docType,_id){
     //Cannot unlock it if it's not mine  
     let isLockedByMe = { __lockedby : email }
     let checkLock = { _id, $or : [ isLockedByMe] }
-    let unlockRecord = { $set : { __locked: true, __lockedby: email, __lockTime: new Date()}}
+    let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}}
     
     let getUnlock = await collection.findOneAndUpdate(checkLock,lockRecord,{returnNewDocument: true})
     
     if(getUnlock == null) {
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
-       getUnlock = await collection.findOne({_id},{__locked,__lockedby,__lockTime})
+       getUnlock = await collection.findOne({_id},{__locked,__lockedby,__locktime})
        lockState.currentDoc = getUnlock
     } else {
       //Grab the record details 

@@ -31,12 +31,12 @@ exports = async function(docType,_id){
     
     let isExpiredLock = { __lockTime : { $lt : halfHourAgo}}
     let checkLock = { _id, $or : [ isUnlocked,isLockedByMe,isExpiredLock] }
-    let lockRecord = { $set : { __locked: true, __lockedby: email, __lockTime: new Date()}}
+    let lockRecord = { $set : { __locked: true, __lockedby: email, __locktime: new Date()}}
     
     let getLock = await collection.findOneAndUpdate(checkLock,lockRecord,{returnNewDocument: true})
     if(getLock == null) {
       //We couldn't find a record in editable state
-       let getRecord = await collection.findOne({_id},{__locked,__lockedby,__lockTime})
+       let getRecord = await collection.findOne({_id},{__locked,__lockedby,__locktime})
        lockState.currentDoc = getRecord
     } else {
       //Grab the record details 
