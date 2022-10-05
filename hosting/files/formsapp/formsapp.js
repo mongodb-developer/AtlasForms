@@ -24,6 +24,13 @@ async function getListOfDocTypes() {
     return [];
   }
 }
+
+//Pop up out custom alert dialog thingy
+function formAlert(message) {
+  vueApp.show_modal = true;
+  vueApp.modal_content = message
+}
+
 async function clearForm() {
   //TODO maybe - add an Are you sure? if they have been entering data
 
@@ -42,11 +49,14 @@ async function clearForm() {
 }
 
 async function editRecord() {
-  alert("Not Yet Implemented"); //TODO
+  formAlert("Not Yet Implemented"); //TODO
 }
 
 async function newRecord() {
-  console.log(vueApp.fieldEdits);
+  if(vieApp.fieldEdits._id != undefined) {
+    formAlert(appStrings.NO_MANUAL_ID)
+    return;
+  }
   let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType, vueApp.fieldEdits)
   if(rval.ok) {
   console.log(rval)
@@ -54,8 +64,7 @@ async function newRecord() {
   vueApp.currentDoc = rval.newDoc
   vueApp.editing=false
  } else {
-    vueApp.show_modal = true;
-    vueApp.modal_content = appStrings.AF_BAD_FIELD_TYPE(rval.errorField,rval.errorType);
+  formAlert( appStrings.AF_BAD_FIELD_TYPE(rval.errorField,rval.errorType);
  }
 }
 
@@ -107,8 +116,8 @@ async function runQuery() {
     vueApp.results = results;
     vueApp.editing = false; //No implicit editing
     if( results.length == 0) {
-      vueApp.show_modal = true;
-      vueApp.modal_content = appStrings.AF_NO_RESULTS_FOUND;
+      formAlert(appStrings.AF_NO_RESULTS_FOUND);
+
       vueApp.editing = true;
     }
    

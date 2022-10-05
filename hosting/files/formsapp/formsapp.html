@@ -142,7 +142,7 @@
                             <input  :data-bsontype="valtype"  v-if="valtype == 'date'"  v-on:input="formValueChange"  class="dynamicformvaluedate"
                                 :disabled="editing == false" type="datetime-local" :value="toDateTime(value)" :id="name">
 
-                            <div v-else v-on:input="formValueChange" :id="name"  :data-bsontype="valtype"   :contenteditable="editing && name!='_id' ? true : null" 
+                            <div v-else v-on:input="formValueChange" :id="name"  :data-bsontype="valtype"   :contenteditable="editing ? true : null" 
                             class="dynamicformvalue">{{value}} </div>
                             <br />
                         </template>

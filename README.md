@@ -55,6 +55,7 @@ _Here we note anything we made an explicit decision about in the design and why_
       - ~~Numbers~~
 
   - New Record
+    - Disable _id provision
     - ~~Create New~~
 
 
@@ -67,7 +68,8 @@ _Here we note anything we made an explicit decision about in the design and why_
 - Authorization
   - Read (Field Based)
   - Update (Field Based)
-  
+
+- Don't fetch hole documents until clicked.
 - *Make it look nicer*
 - Mobile Layout CSS/swipes
 
