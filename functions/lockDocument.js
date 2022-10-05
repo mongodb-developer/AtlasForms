@@ -27,7 +27,7 @@ exports = async function(docType,_id){
     let isUnlocked = { __locked: null }
     let isLockedByMe = { __lockedby : email }
     let halfHourAgo = new Date();
-    halfHourAgo.setMinutes(haslHourAgo.getMinutes() - 30 ) //THe time 30 mins ago
+    halfHourAgo.setMinutes(halfHourAgo.getMinutes() - 30 ) //THe time 30 mins ago
     
     let isExpiredLock = { __lockTime : { $lt : halfHourAgo}}
     let checkLock = { _id, $or : [ isUnlocked,isLockedByMe,isExpiredLock] }
