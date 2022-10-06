@@ -58,15 +58,16 @@ exports = async function(docType,_id,untypedUpdates){
     let checkLock = { _id, $or : [ isLockedByMe] };
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}, $set: updates};
     
-    let getUnlock = await collection.findOneAndUpdate(checkLock,unlockRecord,{returnNewDocument: true});
+    let postCommit = await collection.findOneAndUpdate(checkLock,unlockRecord,{returnNewDocument: true});
     
-    if(getUnlock == null) {
+    if(postCommit == null) {
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
-       getUnlock = await collection.findOne({_id},{__locked,__lockedby,__locktime});
-       lockState.currentDoc = getUnlock;
+       postCommit = await collection.findOne({_id},{__locked,__lockedby,__locktime});
+       rval.currentDoc = getUnlock;
     } else {
-      lockState.commitSuccess = true;
-      lockState.currentDoc = getUnlock;
+      rval.commitSuccess = true;
+      rval.currentDoc = getUnlock;
     }
+    return rval;
 
 };
