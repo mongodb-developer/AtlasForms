@@ -56,7 +56,7 @@ exports = async function(docType,_id,untypedUpdates){
     //Cannot unlock it if it's not mine  
     let isLockedByMe = { __lockedby : email };
     let checkLock = { _id, $or : [ isLockedByMe] };
-    let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}, ...updates};
+    let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}, $set: updates};
     
     let getUnlock = await collection.findOneAndUpdate(checkLock,unlockRecord,{returnNewDocument: true});
     
