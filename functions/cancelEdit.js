@@ -26,7 +26,7 @@ exports = async function(docType,_id){
     let checkLock = { _id, $or : [ isLockedByMe] };
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}};
     
-    let getUnlock = await collection.findOneAndUpdate(checkLock,lockRecord,{returnNewDocument: true});
+    let getUnlock = await collection.findOneAndUpdate(checkLock,unlockRecord,{returnNewDocument: true});
     
     if(getUnlock == null) {
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
