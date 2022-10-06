@@ -15,4 +15,5 @@ const appStrings = {
      AF_NO_MANUAL_ID: "This application does not let you manually specify an id when creating a new document",
      AF_NO_OPEN_FOR_EDIT: "You must have a document open to edit it",
      AF_DOC_ALREADY_LOCKED: (otherUser) => `Cannot edit this record. It is currently being edited by  ${otherUser}.`,
+     AF_NOT_LOCKED: "You do not currently have this document locked for edit",
 }

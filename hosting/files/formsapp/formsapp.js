@@ -73,6 +73,29 @@ async function editRecord() {
 
 }
 
+async function cancelEdit() {
+  if(vueApp.currentDoc == {} ||vueApp.currentDoc == null ||
+     vueApp.currentDoc == undefined || vueApp.currentDoc._id == null || !vueApp.currentDocLocked) {
+    formAlert(appStrings.AF_NOT_LOCKED)
+    return;
+  }
+  let unlockResult =   await vueApp.realmApp.currentUser.functions.lockDocument(vueApp.selectedDocType, vueApp.currentDoc._id);
+  //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
+  
+  console.log(unlockResult);
+  vueApp.currentDocLocked = false;
+  //If we change current Doc to a different Doc but with the same values
+  //Vue thinks it doesnt need to update anything, but we want to overwrite
+  //The things we edited manually that aren't in the model
+  vueApp.currentDoc = {}; //This forces Vue to rerender divs we edited manually
+  await Vue.nextTick(); // As the valuses change from nothing to the same value.
+
+  vueApp.currentDoc = unlockResult.currentDoc; //Revert to latest server version
+  vueApp.editing = false;
+  vueApp.fieldEdits = {};
+
+}
+
 async function newRecord() {
   
   if(vueApp.fieldEdits._id != undefined && vueApp.fieldEdits._id != "") {
@@ -132,9 +155,6 @@ function formValueChange(event) {
 
 async function runQuery() {
   try {
-
-    console.log(vueApp.fieldEdits);
-
     //Send the fieldEdits to the server, we will process to the correct data type there
     //Avoid any injection also all will be strings at this point.
     const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType,vueApp.fieldEdits);
@@ -142,10 +162,8 @@ async function runQuery() {
     vueApp.editing = false; //No implicit editing
     if( results.length == 0) {
       formAlert(appStrings.AF_NO_RESULTS_FOUND);
-
       vueApp.editing = true;
     }
-   
   }
   catch (e) {
     console.error(e)
@@ -185,7 +203,9 @@ async function formsOnLoad() {
     methods: {
       //Method we call from  HTML
       log: console.log,
-      logOut,  selectDocType, formValueChange, runQuery, clearForm, editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing, getFieldValue, formatFieldname, sortListviewColumn
+      logOut,  selectDocType, formValueChange, runQuery, clearForm, 
+      editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
+       getFieldValue, formatFieldname, sortListviewColumn, cancelEdit
 
     },
     data() {

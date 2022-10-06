@@ -96,7 +96,10 @@ _Here we note anything we made an explicit decision about in the design and why_
 - Range Queries
 - Fuzzy (Atlas) Search
 - Printing (Stylesheet)
+- Basic Import
 - Linking andd following links
-- Charts?
 
 *** V1 at this point for reInvent ***
+
+- Charts?
+- Acessability
