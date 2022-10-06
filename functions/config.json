@@ -1,11 +1,5 @@
 [
     {
-        "name": "getListOfDoctypes",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "queryDocType",
         "private": false,
         "run_as_system": true,
@@ -13,6 +7,12 @@
     },
     {
         "name": "utility_functions",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "cancelEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -30,13 +30,13 @@
         "disable_arg_logs": true
     },
     {
-        "name": "lockDocument",
+        "name": "getListOfDoctypes",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "cancelEdit",
+        "name": "lockDocument",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
