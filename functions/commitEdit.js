@@ -18,7 +18,8 @@ exports = async function(docType,_id,untypedUpdates){
     
     const [databaseName,collectionName] = docType.namespace.split('.');
     //TODO - verify we have permission to write to this
-    
+    const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+      
     //TODO - any server side change like a 'last update date'
     
     if(!databaseName || !collectionName) { return rval;}
