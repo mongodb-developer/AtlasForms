@@ -66,7 +66,7 @@ exports = async function(docType,_id,untypedUpdates){
        rval.currentDoc = getUnlock;
     } else {
       rval.commitSuccess = true;
-      rval.currentDoc = getUnlock;
+      rval.currentDoc = postCommit;
     }
     return rval;
 
