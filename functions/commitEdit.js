@@ -4,7 +4,7 @@
 // Them all to the correct data type for the field as the form
 // Thinks the numbers are strings
 
-exports = async function(docType,_id,untypedUpdates){
+exports = async function(namespace,_id,untypedUpdates){
   rval = { commitSuccess: false }
   
   const utilityFunctions =  await context.functions.execute("utility_functions")
@@ -16,7 +16,7 @@ exports = async function(docType,_id,untypedUpdates){
     
   if (untypedUpdates == null || untypedUpdates == {} ) { return rval; }
     
-    const [databaseName,collectionName] = docType.namespace.split('.');
+    const [databaseName,collectionName] = namespace.split('.');
     //TODO - verify we have permission to write to this
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
       

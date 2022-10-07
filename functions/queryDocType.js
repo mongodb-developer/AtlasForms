@@ -5,7 +5,7 @@
 // Them all to the correct data type for the field as the form
 // Thinks the numbers are strings
 
-exports = async function(docType,query,projection){
+exports = async function(namespace,query,projection){
   
   /*Dynamically load some shared code*/
   
@@ -13,7 +13,7 @@ exports = async function(docType,query,projection){
   
 
     if (query == null) { query = {} }
-    const [databaseName,collectionName] = docType.namespace.split('.');
+    const [databaseName,collectionName] = namespace.split('.');
     if(!databaseName || !collectionName) { return {}}
     
   
@@ -48,7 +48,7 @@ exports = async function(docType,query,projection){
     let results
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
-
+      projection = {}
       const cursor = await collection.find(newQuery).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
       return results;

@@ -4,10 +4,8 @@
 // Them all to the correct data type for the field as the form
 // Thinks the numbers are strings
 
-exports = async function(docType,untypedUpdates){
-  //untypedUpdates={name:"Orion's Lodge"}
-  //docType = { namespace :"sample_airbnb.listingsAndReviews"}
-  
+exports = async function(namespace,untypedUpdates){
+
     //We don't allow _id to be specified here but will accept an empty
     //String as unspecificed
     
@@ -25,7 +23,7 @@ exports = async function(docType,untypedUpdates){
   
     if (untypedUpdates == null || untypedUpdates == {} ) { return {}; }
     
-    const [databaseName,collectionName] = docType.namespace.split('.');
+    const [databaseName,collectionName] = namespace.split('.');
     //TODO - verify we have permission to write to this
     
     if(!databaseName || !collectionName) { return {}}
@@ -34,7 +32,7 @@ exports = async function(docType,untypedUpdates){
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
     
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType)
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
    
     let updates = {}

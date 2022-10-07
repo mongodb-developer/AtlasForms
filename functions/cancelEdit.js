@@ -1,9 +1,9 @@
 /*Call this on a documentyou are editing to cancel the changes and revert*/
 
-exports = async function(docType,_id){
+exports = async function(namespace,_id){
     let lockState = { lockReleased: false }
     
-    const [databaseName,collectionName] = docType.namespace.split('.');
+    const [databaseName,collectionName] = namespace.split('.');
     if(databaseName == null || collectionName ==null  )
     {
       return lockState; //Invalid namespace
