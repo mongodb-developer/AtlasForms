@@ -21,7 +21,7 @@ exports = async function(namespace,query,projection){
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
     
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType)
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
    
     let newQuery = {}
