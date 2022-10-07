@@ -62,8 +62,10 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 - Editing
   - ~~Locking~~
-  - Cancel
-  - Commit
+  - ~~Cancel~~
+  - ~~Commit~~
+  - Download hitlist only
+  - Update hitlist on edit
   - Move Loging Fieldnmes to config - no hard coding strings apart from "_id"
   - Array Editing (Add and Remove elements as needed)
 
@@ -72,12 +74,14 @@ _Here we note anything we made an explicit decision about in the design and why_
   - Read (Field Based)
   - Update (Field Based)
 
-- Don't fetch hole documents until clicked.
 - *Make it look nicer*
 - Mobile Layout CSS/swipes
+- Combine Cancel Edit and Commit Edit into one function each end
 
+- Error Handling review, Refactor, lint,tidy code
 
 *** MVP  ish at this point ***
+
 
 - Listview
   - Choose Columns

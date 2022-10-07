@@ -59,7 +59,7 @@
                         </th>
                     </tr>
                     <tr class="listview" :class="{selected:(result == currentDoc)}" v-for="result in results">
-                        <td @click="currentDoc = result" class="listview" v-for="fieldname in listViewFields">
+                        <td @click="resultClick(result)" class="listview" v-for="fieldname in listViewFields">
                             <div class="listviewitem"> {{ getFieldValue(result,fieldname) }} </div>
                         </td>
                     </tr>

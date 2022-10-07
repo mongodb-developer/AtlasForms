@@ -38,9 +38,9 @@ async function clearForm() {
   vueApp.currentDoc = {};
   vueApp.editing = true;
   //Editable divs we changed need manually cleared
-  for(const id of Object.keys(vueApp.fieldEdits)) {
+  for (const id of Object.keys(vueApp.fieldEdits)) {
     console.log(id)
-    if(document.getElementById(id)) {
+    if (document.getElementById(id)) {
       document.getElementById(id).innerText = ""
       document.getElementById(id).value = null
     }
@@ -49,40 +49,66 @@ async function clearForm() {
 }
 
 async function editRecord() {
-  
-  if(vueApp.currentDoc == {} ||vueApp.currentDoc == null|| vueApp.currentDoc == undefined || vueApp.currentDoc._id == null) {
+
+  if (vueApp.currentDoc == {} || vueApp.currentDoc == null || vueApp.currentDoc == undefined || vueApp.currentDoc.doc._id == null) {
     formAlert(appStrings.AF_NO_OPEN_FOR_EDIT)
     return;
   }
 
-  console.log(vueApp.currentDoc)
+
   /* We need to Lock it before they can edit it, and fetch the latest version */
-  let lockResult = await vueApp.realmApp.currentUser.functions.lockDocument(vueApp.selectedDocType, vueApp.currentDoc._id);
-  console.log(lockResult);
-  if(lockResult.lockObtained) {
+  let lockResult = await vueApp.realmApp.currentUser.functions.lockDocument(vueApp.selectedDocType, vueApp.currentDoc.doc._id);
+
+  if (lockResult.lockObtained) {
     //We got the lock
     vueApp.editing = true;
     vueApp.currentDocLocked = true;
-    vueApp.currentDoc = lockResult.currentDoc
+    vueApp.currentDoc.doc = lockResult.currentDoc
   } else {
     //Tell them Why not
     //TODO - Perhaps offer a 'Steal Lock' option in future depending
     //How long it's been locked for
-    formAlert(appStrings,AF_DOC_ALREADY_LOCKED(lockResult.currentDoc.__lockedBy))
+    formAlert(appStrings, appStrings.AF_DOC_ALREADY_LOCKED(lockResult.currentDoc.doc.__lockedBy))
   }
 
 }
 
-async function cancelEdit() {
-  if(vueApp.currentDoc == {} ||vueApp.currentDoc == null ||
-     vueApp.currentDoc == undefined || vueApp.currentDoc._id == null || !vueApp.currentDocLocked) {
+//TODO - combine commit and Cancel client and server end for clarity
+
+async function commitEdit() {
+  if (vueApp.currentDoc == {} || vueApp.currentDoc == null ||
+    vueApp.currentDoc == undefined || vueApp.currentDoc.doc._id == null || !vueApp.currentDocLocked) {
     formAlert(appStrings.AF_NOT_LOCKED)
     return;
   }
-  let unlockResult =   await vueApp.realmApp.currentUser.functions.lockDocument(vueApp.selectedDocType, vueApp.currentDoc._id);
+  let commitResult = await vueApp.realmApp.currentUser.functions.commitEdit(vueApp.selectedDocType.namespace,
+    vueApp.currentDoc.doc._id, vueApp.fieldEdits);
   //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
-  
-  console.log(unlockResult);
+
+
+  vueApp.currentDocLocked = false;
+  //If we change current Doc to a different Doc but with the same values
+  //Vue thinks it doesnt need to update anything, but we want to overwrite
+  //The things we edited manually that aren't in the model
+  vueApp.currentDoc.doc = {}; //This forces Vue to rerender divs we edited manually
+  await Vue.nextTick(); // As the valuses change from nothing to the same value.
+
+  vueApp.currentDoc.doc = commitResult.currentDoc; //Revert to latest server version
+  vueApp.editing = false;
+  vueApp.fieldEdits = {};
+}
+
+async function cancelEdit() {
+  if (vueApp.currentDoc == {} || vueApp.currentDoc == null ||
+    vueApp.currentDoc == undefined || vueApp.currentDoc.doc._id == null || !vueApp.currentDocLocked) {
+    formAlert(appStrings.AF_NOT_LOCKED)
+    return;
+  }
+  let unlockResult = await vueApp.realmApp.currentUser.functions.cancelEdit(vueApp.selectedDocType.namespace,
+    vueApp.currentDoc.doc._id);
+  //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
+
+
   vueApp.currentDocLocked = false;
   //If we change current Doc to a different Doc but with the same values
   //Vue thinks it doesnt need to update anything, but we want to overwrite
@@ -90,54 +116,67 @@ async function cancelEdit() {
   vueApp.currentDoc = {}; //This forces Vue to rerender divs we edited manually
   await Vue.nextTick(); // As the valuses change from nothing to the same value.
 
-  vueApp.currentDoc = unlockResult.currentDoc; //Revert to latest server version
+  vueApp.currentDoc.doc = unlockResult.currentDoc; //Revert to latest server version
   vueApp.editing = false;
   vueApp.fieldEdits = {};
 
 }
 
 async function newRecord() {
-  
-  if(vueApp.fieldEdits._id != undefined && vueApp.fieldEdits._id != "") {
+
+  if (vueApp.fieldEdits._id != undefined && vueApp.fieldEdits._id != "") {
     formAlert(appStrings.AF_NO_MANUAL_ID)
     return;
   }
 
-  let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType, vueApp.fieldEdits)
-  if(rval.ok) {
-  console.log(rval)
-  vueApp.results=[rval.newDoc]
-  vueApp.currentDoc = rval.newDoc
-  vueApp.editing=false
- } else {
-  formAlert( appStrings.AF_BAD_FIELD_TYPE(rval.errorField,rval.errorType));
- }
+  let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
+  if (rval.ok) {
+
+    vueApp.results = [rval.newDoc]
+    vueApp.currentDoc = rval.newDoc
+    vueApp.editing = false
+  } else {
+    formAlert(appStrings.AF_BAD_FIELD_TYPE(rval.errorField, rval.errorType));
+  }
 }
 
+async function resultClick(result) {
+  if(result.downloaded == false) {
+
+    /* Download the full doc when we select it*/
+    const [wholeDoc] =  await vueApp.realmApp.currentUser.functions.queryDocType(
+      vueApp.selectedDocType.namespace
+      , {_id:result.doc._id}, {});
+    
+      result.doc = wholeDoc
+      result.downloaded = true
+  }
+  vueApp.currentDoc = result;
+}
 //We use this to track editied controls so we can send an update to 
 //Atlas also because we are editing InnerText rather than using a control we can't bind to it.
 //Also we want to keep the original verison anyway.
 
 //TODO - Handle Dates
 function formValueChange(event) {
-  
+
   const element = event.target
   const fieldName = element.id
   let value = ""
   //If it'a a DIV take the text, if not take the value
-  if(element.nodeName == "INPUT") {
+  if (element.nodeName == "INPUT") {
     value = element.value
   } else {
     value = element.innerText
     //If this is not acceptable (letters in a number for example)
     //Set it back to the previous value and place the cursor at the end
 
-    if (['number','int32','int64','decimal128'].includes(element.getAttribute('data-bsontype'))) {
-      if(isNaN(Number(value))) {
-        element.innerText = vueApp.fieldEdits[fieldName]?vueApp.fieldEdits[fieldName]:"";
+    if (['number', 'int32', 'int64', 'decimal128'].includes(element.getAttribute('data-bsontype'))) {
+      if (isNaN(Number(value))) {
+        element.innerText = vueApp.fieldEdits[fieldName] ? vueApp.fieldEdits[fieldName] : "";
         let range = document.createRange();
         let sel = window.getSelection();
-        range.setStart(element,1);
+        range.setStart(element, 1);
         range.collapse(true);
         sel.removeAllRanges();
         sel.addRange(range);
@@ -146,7 +185,7 @@ function formValueChange(event) {
     }
   }
 
-   
+
   vueApp.fieldEdits[fieldName] = value;
 
 }
@@ -157,10 +196,26 @@ async function runQuery() {
   try {
     //Send the fieldEdits to the server, we will process to the correct data type there
     //Avoid any injection also all will be strings at this point.
-    const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType,vueApp.fieldEdits);
-    vueApp.results = results;
+    let projection = {}
+   
+    for (const fieldname of vueApp.listViewFields) {
+      projection[fieldname] = 1
+    }
+
+    const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
+      , vueApp.fieldEdits, projection);
+
+    //Wrap this in something to say if we have decoded it
+    let wrappedResults = []
+    let downloaded = false
+    for(const doc of results)
+    {
+      wrappedResults.push({downloaded,doc})
+    }
+
+    vueApp.results = wrappedResults;
     vueApp.editing = false; //No implicit editing
-    if( results.length == 0) {
+    if (results.length == 0) {
       formAlert(appStrings.AF_NO_RESULTS_FOUND);
       vueApp.editing = true;
     }
@@ -174,15 +229,15 @@ async function runQuery() {
 //User has changed the dropdown for the document type
 async function selectDocType() {
   vueApp.columnResizeObserver.disconnect()
-  console.log(`Disconnected Observer`)
+
   try {
     // It would be simple to cache this info client end if we want to
-    const docTypeSchemaInfo = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType);
+    const docTypeSchemaInfo = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
     vueApp.selectedDocTypeSchema = docTypeSchemaInfo
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
     vueApp.results = Array(20).fill({}) //Empty and show columnheaders
     vueApp.currentDoc = {}
-   
+
   }
   catch (e) {
     console.error(e)
@@ -203,9 +258,10 @@ async function formsOnLoad() {
     methods: {
       //Method we call from  HTML
       log: console.log,
-      logOut,  selectDocType, formValueChange, runQuery, clearForm, 
+      logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
-       getFieldValue, formatFieldname, sortListviewColumn, cancelEdit
+      getFieldValue, formatFieldname, sortListviewColumn, cancelEdit, commitEdit,
+      resultClick
 
     },
     data() {

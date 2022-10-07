@@ -15,9 +15,9 @@ function getBsonType(obj) {
   //This deals with dotted fieldnames 
 //Also formatting for things like dates
 function getFieldValue(result, fieldname) {
-    if(result == null) return;
+    if(result == null || result?.doc == null) return;
     const [a,b] = fieldname.split('.')
-    if (b && result[a]) { return result[a][b] }
-    else { return result[a]; }
+    if (b && result.doc[a]) { return result.doc[a][b] }
+    else { return result.doc[a]; }
   }
   
