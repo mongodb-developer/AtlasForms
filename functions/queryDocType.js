@@ -5,7 +5,7 @@
 // Them all to the correct data type for the field as the form
 // Thinks the numbers are strings
 
-exports = async function(docType,query){
+exports = async function(docType,query,projection){
   
   /*Dynamically load some shared code*/
   
@@ -48,6 +48,7 @@ exports = async function(docType,query){
     let results
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
+
       const cursor = await collection.find(newQuery).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
       return results;
