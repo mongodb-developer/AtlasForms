@@ -4,19 +4,21 @@
 // Them all to the correct data type for the field as the form
 // Thinks the numbers are strings
 
-exports = async function(docType,_id,untypedUpdates){
-  rval = { commitSuccess: false }
+exports = async function(namespace,_id,untypedUpdates){
+  let rval = { commitSuccess: false }
   
-  const utilityFunctions =  await context.functions.execute("utility_functions")
-    
-  if(_id == undefined) {
-     //If we don't have and _id we cannot edit
+    if(_id == undefined) {
       return rval;   
   }
+
+  const utilityFunctions =  await context.functions.execute("utility_functions")
+  const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
+
+
     
   if (untypedUpdates == null || untypedUpdates == {} ) { return rval; }
     
-    const [databaseName,collectionName] = docType.namespace.split('.');
+    const [databaseName,collectionName] = namespace.split('.');
     //TODO - verify we have permission to write to this
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
       
@@ -27,8 +29,7 @@ exports = async function(docType,_id,untypedUpdates){
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType)
+
 
     let updates = {}
     for( let field of Object.keys(untypedUpdates) )

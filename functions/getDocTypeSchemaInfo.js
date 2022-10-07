@@ -8,10 +8,10 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 /* This will be extended to include lots more metadata like jsonSchema or similar*/
 
-exports = async function (docType) {
+exports = async function (namespace) {
 
     //docType = { namespace: "sample_airbnb.listingsAndReviews" }
-    const [databaseName, collectionName] = docType.namespace.split('.');
+    const [databaseName, collectionName] = namespace.split('.');
     if (!databaseName || !collectionName) { return {} }
 
 

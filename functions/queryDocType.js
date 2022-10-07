@@ -5,7 +5,7 @@
 // Them all to the correct data type for the field as the form
 // Thinks the numbers are strings
 
-exports = async function(docType,query){
+exports = async function(namespace,query,projection){
   
   /*Dynamically load some shared code*/
   
@@ -13,7 +13,7 @@ exports = async function(docType,query){
   
 
     if (query == null) { query = {} }
-    const [databaseName,collectionName] = docType.namespace.split('.');
+    const [databaseName,collectionName] = namespace.split('.');
     if(!databaseName || !collectionName) { return {}}
     
   
@@ -21,7 +21,7 @@ exports = async function(docType,query){
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
     
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",docType)
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
    
     let newQuery = {}
@@ -48,7 +48,8 @@ exports = async function(docType,query){
     let results
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
-      const cursor = await collection.find(newQuery).limit(30); //Temp limit when testing
+  
+      const cursor = await collection.find(newQuery,projection).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
       return results;
     } catch(e) {
