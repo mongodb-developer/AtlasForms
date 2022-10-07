@@ -49,7 +49,7 @@ exports = async function(namespace,query,projection){
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
       projection = {}
-      const cursor = await collection.find(newQuery).limit(30); //Temp limit when testing
+      const cursor = await collection.find(newQuery,projection).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
       return results;
     } catch(e) {
