@@ -1,8 +1,12 @@
 /*Call this on a documentyou are editing to cancel the changes and revert*/
 
 exports = async function(namespace,_id){
-    let lockState = { lockReleased: false }
+    let lockState = { commitSuccess: false }
     
+    if(_id == undefined) {
+      return rval;   
+  }
+
     const [databaseName,collectionName] = namespace.split('.');
     if(databaseName == null || collectionName ==null  )
     {
