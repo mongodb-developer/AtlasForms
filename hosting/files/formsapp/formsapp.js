@@ -68,18 +68,22 @@ async function editRecord() {
     //Tell them Why not
     //TODO - Perhaps offer a 'Steal Lock' option in future depending
     //How long it's been locked for
-    formAlert(appStrings, appStrings.AF_DOC_ALREADY_LOCKED(lockResult.currentDoc.doc.__lockedBy))
+    formAlert(appStrings.AF_DOC_ALREADY_LOCKED(lockResult.currentDoc.doc.__lockedBy))
   }
 
 }
 
 //TODO - combine commit and Cancel client and server end for clarity
 
-async function commitEdit() {
+async function commitEdit(cancel) {
   if (vueApp.currentDoc == {} || vueApp.currentDoc == null ||
     vueApp.currentDoc == undefined || vueApp.currentDoc.doc._id == null || !vueApp.currentDocLocked) {
     formAlert(appStrings.AF_NOT_LOCKED)
     return;
+  }
+
+  if(cancel == true) {
+    vueApp.fieldEdits = {}; 
   }
   let commitResult = await vueApp.realmApp.currentUser.functions.commitEdit(vueApp.selectedDocType.namespace,
     vueApp.currentDoc.doc._id, vueApp.fieldEdits);
@@ -87,6 +91,7 @@ async function commitEdit() {
 
 
   vueApp.currentDocLocked = false;
+  vueApp.fieldEdits = {}; 
   //If we change current Doc to a different Doc but with the same values
   //Vue thinks it doesnt need to update anything, but we want to overwrite
   //The things we edited manually that aren't in the model
@@ -95,30 +100,6 @@ async function commitEdit() {
 
   vueApp.currentDoc.doc = commitResult.currentDoc; //Revert to latest server version
   vueApp.editing = false;
-  vueApp.fieldEdits = {};
-}
-
-async function cancelEdit() {
-  if (vueApp.currentDoc == {} || vueApp.currentDoc == null ||
-    vueApp.currentDoc == undefined || vueApp.currentDoc.doc._id == null || !vueApp.currentDocLocked) {
-    formAlert(appStrings.AF_NOT_LOCKED)
-    return;
-  }
-  let unlockResult = await vueApp.realmApp.currentUser.functions.cancelEdit(vueApp.selectedDocType.namespace,
-    vueApp.currentDoc.doc._id);
-  //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
-
-
-  vueApp.currentDocLocked = false;
-  //If we change current Doc to a different Doc but with the same values
-  //Vue thinks it doesnt need to update anything, but we want to overwrite
-  //The things we edited manually that aren't in the model
-  vueApp.currentDoc = {}; //This forces Vue to rerender divs we edited manually
-  await Vue.nextTick(); // As the valuses change from nothing to the same value.
-
-  vueApp.currentDoc.doc = unlockResult.currentDoc; //Revert to latest server version
-  vueApp.editing = false;
-  vueApp.fieldEdits = {};
 
 }
 
@@ -147,7 +128,6 @@ async function resultClick(result) {
     const [wholeDoc] =  await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType.namespace
       , {_id:result.doc._id}, {});
-    
       result.doc = wholeDoc
       result.downloaded = true
   }
@@ -190,6 +170,21 @@ function formValueChange(event) {
 
 }
 
+function deleteArrayElement(name,index) {
+  //Record the rquested deletion in our changes
+  //We need to remove any existing edits inside this as we cannot
+  //set a.b=null and a.b.c=1 - MongoDB won't like that
+  //$$REMOVE isn't actually supported in this context but we can make it so
+  //on the server
+  const elname = `${name}.${index}`
+  vueApp.fieldEdits[elname]="$$REMOVE"
+  for( const entry of Object.keys(vueApp.fieldEdits)) {
+    if(entry.startsWith(elname+'.')) {
+      delete vueApp.fieldEdits[entry]
+    }
+  }
+  console.log(vueApp.fieldEdits)
+}
 // User has clicked the button to query for data
 
 async function runQuery() {
@@ -260,8 +255,8 @@ async function formsOnLoad() {
       log: console.log,
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
-      getFieldValue, formatFieldname, sortListviewColumn, cancelEdit, commitEdit,
-      resultClick
+      getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
+      resultClick,deleteArrayElement
 
     },
     data() {

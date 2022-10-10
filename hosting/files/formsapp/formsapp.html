@@ -33,18 +33,19 @@
                 <div class="left">
                     <!-- odd binding as we do work on change to lookup details-->
                     Document Type:
-                    <select v-show="!currentDocLocked"  name="docType" @change="selectDocType" v-model="selectedDocType">
+                    <select v-show="!currentDocLocked" name="docType" @change="selectDocType" v-model="selectedDocType">
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
-                    <button v-show="!currentDocLocked"  class="headerbutton" @click="runQuery()"> Search </button>
+                    <button v-show="!currentDocLocked" class="headerbutton" @click="runQuery()"> Search </button>
                     <button v-show="!currentDocLocked" class="headerbutton" @click="clearForm()"> Clear </button>
                     <button v-show="!currentDocLocked" class="headerbutton" @click="editRecord()"> Edit </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit()"> Save Edits </button>
-                    <button v-show="currentDocLocked" class="headerbutton" @click="cancelEdit()"> Cancel Edits </button>
+                    <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit(true)"> Cancel Edits
+                    </button>
                     <button v-show="!currentDocLocked" class="headerbutton" @click="newRecord()"> Create </button>
                 </div>
                 <div class="right">
-                    <button  v-show="!currentDocLocked" class="headerbutton" @click="logOut()"> Logout </button>
+                    <button v-show="!currentDocLocked" class="headerbutton" @click="logOut()"> Logout </button>
                 </div>
             </div>
 
@@ -92,47 +93,72 @@
                                         <div> {{getBsonType(value)}} </div>
                                     </template>
                                     <template v-else>
-                                        <input  v-on:input="formValueChange" :id=`${name}.${innername}`  v-if="valtype == 'date'"  :data-bsontype="valtype"  class="dynamicformvaluedate"
-                                            :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
-                                        <div  v-on:input="formValueChange" v-else :id=`${name}.${innername}`  :data-bsontype="valtype"  :contenteditable="editing?true:null" class="dynamicformvalue">
+                                        <input v-on:input="formValueChange" :id=`${name}.${innername}`
+                                            v-if="valtype == 'date'" :data-bsontype="valtype"
+                                            class="dynamicformvaluedate" :disabled="editing == false"
+                                            type="datetime-local" :value="toDateTime(value)">
+                                        <div v-on:input="formValueChange" v-else :id=`${name}.${innername}`
+                                            :data-bsontype="valtype" :contenteditable="editing?true:null"
+                                            class="dynamicformvalue">
                                             {{value}} </div>
                                         <br />
-                                    </template> 
+                                    </template>
                                 </div>
                             </div>
                         </template>
 
                         <!-- Array -->
-                       
+
                         <template v-else-if="getBsonType(valtype) == 'array'">
                             <div class=" dynamicformlabel">{{formatFieldname(name)}}:
                             </div>
                             <div class="dynamicformitem arrayscroller">
-                                    <!-- If the Array is Empty we still need to show at least one member-->
-                                    <!-- to allow for searching or adding a first element -->
+                                <!-- If the Array is Empty we still need to show at least one member-->
+                                <!-- to allow for searching or adding a first element -->
                                 <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
-                                         (typeof selectedDocTypeSchema[name][0] == 'string' ? [''] : [{a:1}] )" class='form_container nested'>
+                                         (typeof selectedDocTypeSchema[name][0] == 'string' ? [''] : [{a:1}] )"
+                                    class='form_container nested'>
                                     <!-- With an Array, for each array memeber we repeat the top level code-->
                                     <!-- Not adding code for nested arrays but will support arrays of objects-->
-                                    <!-- Object in Array-->
-                                    <template v-if="getBsonType(arrayElement) == 'document'">
-                                        <div class="dynamicformitem"
-                                            v-for="(innervaltype,innername) in selectedDocTypeSchema[name][0]"
-                                            :set="value = getFieldValue(arrayElement,innername)">
-                                            <div class="dynamicformlabel"> {{formatFieldname(innername)}}:</div>
-                                            <input  v-if="innervaltype == 'date'"  v-on:input="formValueChange" :id=`${name}.${arrayidx}.${innername}`  :data-bsontype="innervaltype"  class="dynamicformvaluedate"
-                                                :disabled="editing == false" type="datetime-local" :value="toDateTime(value)">
-                                            <div v-else  v-on:input="formValueChange" :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype" :contenteditable="editing?true:null" class="dynamicformvalue">
-                                                {{value}}
-                                            </div>
-                                    </template>
-                                    <!-- Scalar in an Array-->
-                                    <template v-else>
-                                        <input  v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-if="valtype == 'Date'"  :data-bsontype="valtype"  class="dynamicformvaluedate"
-                                            :disabled="editing == false" type="datetime-local"
-                                            :value="toDateTime(arrayElement)">
-                                        <div  v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-else :contenteditable="editing?true:null"  :data-bsontype="valtype"  class="dynamicformvalue">
-                                            {{arrayElement}} </div>
+
+                                    <!-- Hide the Elelement if its been deleted in edits-->
+                                    <template v-if="!(fieldEdits[`${name}.${arrayidx}`] == `$$REMOVE`)">
+                                        <!-- Object in Array-->
+                                        <template v-if="getBsonType(arrayElement) == 'document'">
+
+                                            <div class="dynamicformitem"
+                                                v-for="(innervaltype,innername) in selectedDocTypeSchema[name][0]"
+                                                :set="innervalue = getFieldValue({doc:arrayElement},innername)">
+
+                                                <div class="dynamicformlabel"> {{formatFieldname(innername)}}:</div>
+                                                <input v-if="innervaltype == 'date'" v-on:input="formValueChange"
+                                                    :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
+                                                    class="dynamicformvaluedate" :disabled="editing == false"
+                                                    type="datetime-local" :value="toDateTime(innervalue)">
+                                                <div v-else v-on:input="formValueChange"
+                                                    :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
+                                                    :contenteditable="editing?true:null" class="dynamicformvalue">
+                                                    {{innervalue}}
+                                                </div>
+                                        </template>
+                                        <!-- Scalar in an Array-->
+                                        <template v-else>
+                                            <input v-on:input="formValueChange" :id=`${name}.${arrayidx}`
+                                                v-if="valtype == 'Date'" :data-bsontype="valtype"
+                                                class="dynamicformvaluedate" :disabled="editing == false"
+                                                type="datetime-local" :value="toDateTime(arrayElement)">
+                                            <div v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-else
+                                                :contenteditable="editing?true:null" :data-bsontype="valtype"
+                                                class="dynamicformvalue">
+                                                {{arrayElement}} </div>
+                                        </template>
+                                        <!-- Delete button if not first-->
+                                        <div v-if="editing">
+                                            <span class="smallbutton"
+                                                v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                            <span v-on:click="deleteArrayElement(name,arrayidx)"
+                                                class="smallbutton">&otimes;</span>
+                                        </div>
                                     </template>
                                 </div>
                             </div>
@@ -141,11 +167,12 @@
                         <!-- Scalar value, formatting and control based on type -->
                         <template v-else>
                             <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
-                            <input  :data-bsontype="valtype"  v-if="valtype == 'date'"  v-on:input="formValueChange"  class="dynamicformvaluedate"
-                                :disabled="editing == false" type="datetime-local" :value="toDateTime(value)" :id="name">
+                            <input :data-bsontype="valtype" v-if="valtype == 'date'" v-on:input="formValueChange"
+                                class="dynamicformvaluedate" :disabled="editing == false" type="datetime-local"
+                                :value="toDateTime(value)" :id="name">
 
-                            <div v-else v-on:input="formValueChange" :id="name"  :data-bsontype="valtype"   :contenteditable="editing ? true : null" 
-                            class="dynamicformvalue">{{value}} </div>
+                            <div v-else v-on:input="formValueChange" :id="name" :data-bsontype="valtype"
+                                :contenteditable="editing ? true : null" class="dynamicformvalue">{{value}} </div>
                             <br />
                         </template>
                     </div>
@@ -153,16 +180,16 @@
             </div>
 
         </div>
-        <div v-show="show_modal" id="myModal" class="modal" >
+        <div v-show="show_modal" id="myModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
-              <span v-on:click="show_modal=false" class="close">&times;</span>
-              <p> {{modal_content}} </p>
+                <span v-on:click="show_modal=false" class="close">&times;</span>
+                <p> {{modal_content}} </p>
             </div>
-          
-          </div>
+
+        </div>
     </div>
-    
+
 </body>
 
 </html>

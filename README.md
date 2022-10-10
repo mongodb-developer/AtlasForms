@@ -64,9 +64,10 @@ _Here we note anything we made an explicit decision about in the design and why_
   - ~~Locking~~
   - ~~Cancel~~
   - ~~Commit~~
-  - Download hitlist only
-  - Update hitlist on edit
-  - Move Loging Fieldnmes to config - no hard coding strings apart from "_id"
+  - ~~Download hitlist only~~
+  - ~~Update hitlist on edit~~
+  -  ~~Combine Cancel Edit and Commit Edit into one function each end~~
+  - Move Locking Fieldnmes to config - no hard coding strings apart from "_id" (? Do we NEED this?)
   - Array Editing (Add and Remove elements as needed)
 
 
@@ -76,7 +77,7 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 - *Make it look nicer*
 - Mobile Layout CSS/swipes
-- Combine Cancel Edit and Commit Edit into one function each end
+
 
 - Error Handling review, Refactor, lint,tidy code
 
@@ -89,10 +90,10 @@ _Here we note anything we made an explicit decision about in the design and why_
 - FormView
     - Better Layout (Will be an ongoing battle)
     - Controls
-      - Numbers
+      - ~~Numbers~~
       - Constraints & Validation 
         - On submit and on Change (Download JS to client??)
-      - Picklist
+      - *Picklists* (Key feature)
           - Picklist Config?
           - Picklist Determination
     - Date Only Chooser
