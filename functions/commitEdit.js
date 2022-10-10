@@ -1,8 +1,5 @@
-
-
-// This just and's the values together - what it does do it cast
-// Them all to the correct data type for the field as the form
-// Thinks the numbers are strings
+/* This is used to commit or cancel an edit - if untypedupdates is
+not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates){
   let rval = { commitSuccess: false }
@@ -15,9 +12,6 @@ exports = async function(namespace,_id,untypedUpdates){
   const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
 
-    
-  if (untypedUpdates == null || untypedUpdates == {} ) { return rval; }
-    
     const [databaseName,collectionName] = namespace.split('.');
     //TODO - verify we have permission to write to this
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
@@ -32,23 +26,25 @@ exports = async function(namespace,_id,untypedUpdates){
 
 
     let updates = {}
-    for( let field of Object.keys(untypedUpdates) )
-    {
-      let parts = field.split('.')
-      let subobj = objSchema
-      for(const part of parts) {
-        subobj = subobj[part]
+    if(untypedUpdates != null) {
+      for( let field of Object.keys(untypedUpdates) )
+      {
+        let parts = field.split('.')
+        let subobj = objSchema
+        for(const part of parts) {
+          subobj = subobj[part]
+        }
+        //Now based on that convert value and add to our new query
+        let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
+        if(correctlyTypedValue == null) {
+          console.error("Bad Record Summitted")
+          //Check here and if we cannot cast the value sent to the correct data type
+          //When inserting or updating - so they types yes in a numeric field for example
+          //We should raise an error
+          return rval;
+        }
+        updates[field] = correctlyTypedValue
       }
-      //Now based on that convert value and add to our new query
-      let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
-      if(correctlyTypedValue == null) {
-        console.error("Bad Record Summitted")
-        //Check here and if we cannot cast the value sent to the correct data type
-        //When inserting or updating - so they types yes in a numeric field for example
-        //We should raise an error
-        return rval;
-      }
-      updates[field] = correctlyTypedValue
     }
 
     let user = context.user;
