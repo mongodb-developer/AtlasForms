@@ -48,7 +48,7 @@ exports = async function(namespace,_id,untypedUpdates){
       }
       
       let markForDelete = { $set: arraydeletes };
-      await collection.updateOne(checkLock,arraydeletes);
+      await collection.updateOne(checkLock,{$set:arraydeletes});
     
     } catch(e) {
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
