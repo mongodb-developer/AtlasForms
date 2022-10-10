@@ -27,14 +27,14 @@ exports = async function(namespace,_id,untypedUpdates){
     //Cannot unlock it if it's not mine  
     let isLockedByMe = { __lockedby : email };
     let checkLock = { _id, $or : [ isLockedByMe] };
-    
+    let deletepulls = {}
     try {
        //MongoDB doesn't have a way of removing array elements by position - and with multiple editing processes
       //That could cause a race condition anyway, normally we would remove by value
       //As we are explicitly locking we are going to first update them to "$$REMOVE" is we have any then $pull them
       //in the unlocking update  
       let arraydeletes = {}
-      let deletepulls = {}
+
       
       for( let field of Object.keys(untypedUpdates) )
       {
