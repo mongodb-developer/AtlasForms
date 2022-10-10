@@ -20,10 +20,46 @@ exports = async function(namespace,_id,untypedUpdates){
     
     if(!databaseName || !collectionName) { return rval;}
     
+    
+    let user = context.user;
+    let email = user.data.email;
+    
+    //Cannot unlock it if it's not mine  
+    let isLockedByMe = { __lockedby : email };
+    let checkLock = { _id, $or : [ isLockedByMe] };
+    
+    try {
+       //MongoDB doesn't have a way of removing array elements by position - and with multiple editing processes
+      //That could cause a race condition anyway, normally we would remove by value
+      //As we are explicitly locking we are going to first update them to "$$REMOVE" is we have any then $pull them
+      //in the unlocking update  
+      let arraydeletes = {}
+      let deletepulls = {}
+      
+      for( let field of Object.keys(untypedUpdates) )
+      {
+        if(untypedUpdates[field] == "$$REMOVE") {
+          arraydeletes[field] = "$$REMOVE"
+          delete untypedUpdates[field]
+          //Get the field name without the index
+          const basename = field.split('.')[0]
+          deletepulls[basename] = "$$REMOVE"
+        }
+      }
+      
+      let markForDelete = { $set: arraydeletes };
+      await collection.updateOne(checkLock,arraydeletes);
+    
+    } catch(e) {
+      //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
+       postCommit = await collection.findOne({_id},{__locked,__lockedby,__locktime});
+       rval.currentDoc = postCommit;
+    } 
+    
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-
+      
 
     let updates = {}
     if(untypedUpdates != null) {
@@ -47,17 +83,15 @@ exports = async function(namespace,_id,untypedUpdates){
       }
     }
 
-    let user = context.user;
-    let email = user.data.email;
-    
-    //Cannot unlock it if it's not mine  
-    let isLockedByMe = { __lockedby : email };
-    let checkLock = { _id, $or : [ isLockedByMe] };
-    let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}, $set: updates};
+    let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}, $set: updates, $pull: deletepulls};
     
     let postCommit;
     
     try {
+   
+      
+      
+      
       postCommit = await collection.findOneAndUpdate(checkLock,unlockRecord,{returnNewDocument: true});
       rval.commitSuccess = true;
       rval.currentDoc = postCommit;
