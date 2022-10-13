@@ -29,5 +29,5 @@ exports = async function(authEvent) {
     }
     
     newuser  = { _id: authEvent.user.id, user: authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [] }
-    await userData.insertOne(newuser)
+    await userdata.insertOne(newuser)
 };
