@@ -3,7 +3,8 @@ not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates){
   let rval = { commitSuccess: false }
-  
+  let postCommit;
+    
     if(_id == undefined) {
       return rval;   
   }
@@ -88,13 +89,8 @@ exports = async function(namespace,_id,untypedUpdates){
 
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}, $set: updates, $pull: deletepulls};
     
-    let postCommit;
-    
+
     try {
-   
-      
-      
-      
       postCommit = await collection.findOneAndUpdate(checkLock,unlockRecord,{returnNewDocument: true});
       rval.commitSuccess = true;
       rval.currentDoc = postCommit;
