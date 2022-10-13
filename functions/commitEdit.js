@@ -130,7 +130,7 @@ exports = async function(namespace,_id,untypedUpdates){
         rval.currentDoc = postCommit;
       } else {
         await collection.updateOne(checkLock,sets,{returnNewDocument: true});
-        const removeElementsAndUnlock = { ...deletepulls,...unlockRecord};
+        const removeElementsAndUnlock = { ...pulls,...unlockRecord};
         console.log(JSON.stringify(removeElementsAndUnlock))
         postCommit = await collection.findOneAndUpdate(checkLock,removeElementsAndUnlock,{returnNewDocument: true});
         rval.commitSuccess = true;
