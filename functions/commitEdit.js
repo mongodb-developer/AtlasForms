@@ -60,15 +60,22 @@ exports = async function(namespace,_id,untypedUpdates){
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-      
-
     let updates = {}
     if(untypedUpdates != null) {
       for( let field of Object.keys(untypedUpdates) )
       {
         let parts = field.split('.')
         let subobj = objSchema
+        
+
+        
         for(const part of parts) {
+          //This could be field objectfield.member arrayfield.index or arrayfield.index.member
+          //In the schema it's always field or field.0.member
+          if(!isNaN(part) ) {
+            //!isNaN == isNumber
+            part='0'
+          }
           subobj = subobj[part]
         }
         //Now based on that convert value and add to our new query
@@ -77,7 +84,7 @@ exports = async function(namespace,_id,untypedUpdates){
           console.log(EJSON.stringify(untypedUpdates))
           console.error(`Bad Record Summitted - cannot convert ${field}`)
           
-          
+    
           //Check here and if we cannot cast the value sent to the correct data type
           //When inserting or updating - so they types yes in a numeric field for example
           //We should raise an error
