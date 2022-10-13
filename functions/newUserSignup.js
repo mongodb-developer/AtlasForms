@@ -25,7 +25,7 @@ exports = async function(authEvent) {
     let isSuperUser = false;
     const superuser = await userdata.findOne({}); //Should we check if there is a superuser?
     if(superuser == null) {
-      isSuperUser = trie;
+      isSuperUser = true;
     }
     
     newuser  = { _id: authEvent.user.id, user: authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [] }
