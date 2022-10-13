@@ -73,7 +73,9 @@ exports = async function(namespace,_id,untypedUpdates){
         //Now based on that convert value and add to our new query
         let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
         if(correctlyTypedValue == null) {
-          console.error("Bad Record Summitted")
+          console.error(`Bad Record Summitted - cannot convert ${field}`)
+          console.error(EJSON.stringify(untypedUpdates))
+          
           //Check here and if we cannot cast the value sent to the correct data type
           //When inserting or updating - so they types yes in a numeric field for example
           //We should raise an error

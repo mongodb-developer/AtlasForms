@@ -26,7 +26,7 @@ function correctValueType(value,type) {
         rval = new Date(value)
         break;
       default: 
-        
+        console.error(`Nothing definedfor  converting ${value} to ${type}`)
     }
   }
   catch(e) {
