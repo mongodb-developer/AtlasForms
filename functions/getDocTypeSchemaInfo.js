@@ -16,9 +16,9 @@ exports = async function (namespace) {
 
 
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-    const removeLockingFields = { __locked: 0, __lockedby: 0, __lockedtime: 0 }
-
-    const exampleDocs = await collection.find({}, removeLockingFields).limit(10).toArray();
+    const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0}
+    
+    const exampleDocs = await collection.find({},removeLockingFields).limit(10).toArray();
 
     if (exampleDocs.length == null) {
         console.error("No example doc");
@@ -90,7 +90,7 @@ function addDocumentToTemplate(doc, templateDoc) {
                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key])
                 }
         } else {
-            templateDoc[key] = typeof doc[key]
+            templateDoc[key] = typeof doc[key] 
         }
     }
     return templateDoc
