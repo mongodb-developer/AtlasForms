@@ -50,7 +50,7 @@ async function clearForm() {
 
 async function editRecord() {
 
-  if (vueApp.currentDoc == {} || vueApp.currentDoc == null || vueApp.currentDoc == undefined || vueApp.currentDoc.doc._id == null) {
+  if ( vueApp.currentDoc?.doc?._id == null) {
     formAlert(appStrings.AF_NO_OPEN_FOR_EDIT)
     return;
   }
@@ -87,8 +87,11 @@ async function commitEdit(cancel) {
   }
   let commitResult = await vueApp.realmApp.currentUser.functions.commitEdit(vueApp.selectedDocType.namespace,
     vueApp.currentDoc.doc._id, vueApp.fieldEdits);
-  //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
 
+  //TODO: Error handling if edit fails
+
+  //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
+  console.log(commitResult)
 
   vueApp.currentDocLocked = false;
   vueApp.fieldEdits = {}; 
@@ -170,6 +173,19 @@ function formValueChange(event) {
 
 }
 
+function addArrayElement(name) {
+  //Add a blank item at the end of the list
+  //Oddly if we delete it - we will add a delete to send to the server
+  //Which works because a delete on the setver is a $set then $pull
+  //We either add and emptyp string or dummy object based on the type
+  const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+  if(elementBsonType == "object") {
+    vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+  } else {
+    vueApp.currentDoc.doc[name].push('')
+  }
+  
+}
 function deleteArrayElement(name,index) {
   //Record the rquested deletion in our changes
   //We need to remove any existing edits inside this as we cannot
@@ -256,7 +272,7 @@ async function formsOnLoad() {
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
       getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
-      resultClick,deleteArrayElement
+      resultClick,deleteArrayElement,addArrayElement
 
     },
     data() {

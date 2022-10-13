@@ -1,6 +1,6 @@
-exports = async function(arg){
+exports = async function (arg) {
   /* Can we see who it's running as? */
- const userCalling  = context.user
+  const userCalling = context.user
 
   /*Here we are explicty, programatically choosing which document types to expose to the frontend*/
   /*We have the user details so wee can factor in authorization too */
@@ -10,20 +10,20 @@ exports = async function(arg){
    REST Admin API */
 
   const docTypes = []
-  
+
   /*Add Logic here to decide who sees what*/
-  const sample_airbnb = { title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews"}
-  sample_airbnb.listViewFields = ["name","property_type","room_type","address.market","address.country"]
+  const sample_airbnb = { title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews" }
+  sample_airbnb.listViewFields = ["name", "property_type", "room_type", "address.market", "address.country"]
   docTypes.push(sample_airbnb);
-  
-  const sample_restaurants = { title: "Restaurants", namespace: "sample_restaurants.restaurants"}
-  sample_restaurants.listViewFields = ["name","cuisine","bouroush","address.building","address.street"]
+
+  const sample_restaurants = { title: "Restaurants", namespace: "sample_restaurants.restaurants" }
+  sample_restaurants.listViewFields = ["name", "cuisine", "bouroush", "address.building", "address.street"]
   docTypes.push(sample_restaurants);
-  
-  
-  const sample_mflix = { title: "Movies", namespace: "sample_mflix.movies"}
-  sample_mflix.listViewFields = ["title","year"] 
+
+
+  const sample_mflix = { title: "Movies", namespace: "sample_mflix.movies" }
+  sample_mflix.listViewFields = ["title", "year"]
   docTypes.push(sample_mflix);
-  
+
   return docTypes;
 };

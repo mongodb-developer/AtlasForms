@@ -2,10 +2,10 @@
 have the overhead of calling them as a context.function so we have one that
 returns an object with all the defined functions - can also do this returning a class*/
 
-function correctValueType(value,type) {
+function correctValueType(value, type) {
   let rval = null;
   try {
-    switch(type) {
+    switch (type) {
       case "string":
         rval = `${value}`
         break;
@@ -15,7 +15,7 @@ function correctValueType(value,type) {
       case "decimal128":
         rval = Number(value)
         console.log(`rval = ${rval}`)
-        if(isNaN(rval)) { rval = null}
+        if (isNaN(rval)) { rval = null }
         console.log(`rval = ${rval}`)
         break;
       case "objectid":
@@ -25,17 +25,17 @@ function correctValueType(value,type) {
         console.log(`Converting Date: ${value}`)
         rval = new Date(value)
         break;
-      default: 
+      default:
         console.log(`Nothing defined for converting ${value} to ${type}`)
     }
   }
-  catch(e) {
+  catch (e) {
     console.error(`Error converting "${value}" to a ${type}`)
     console.error(e)
   }
   return rval;
 }
 
-exports = function(arg){
+exports = function (arg) {
   return { correctValueType }
 };

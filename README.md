@@ -27,6 +27,12 @@ _Here we note anything we made an explicit decision about in the design and why_
   - Will we add support for Range queries? If so how >5 in a text box
   - How *critical* are dropdown picklists
    
+## Known BUGS to fix
+   - You can delete the first element in an array removing it form the GUI - this is a little complex to fix.
+   We need to be able to remove all data but must always have something we can type in.
+   - Also do we handle arrays of non string scalarrs?
+   - If you Edit one and delete another  array element at the same time I think that breaks. as we cannot $pull and $set on the array - to test.
+
 ## Work in Progress / TODO / Ideas
 
 - Listview
@@ -82,6 +88,7 @@ _Here we note anything we made an explicit decision about in the design and why_
 - Error Handling review, Refactor, lint,tidy code
 
 *** MVP  ish at this point ***
+
 
 
 - Listview
