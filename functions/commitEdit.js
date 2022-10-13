@@ -52,8 +52,9 @@ exports = async function(namespace,_id,untypedUpdates){
       await collection.updateOne(checkLock,{$set:arraydeletes});
     
     } catch(e) {
+       console.log(e);
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
-       postCommit = await collection.findOne({_id},{__locked,__lockedby,__locktime});
+       postCommit = await collection.findOne({_id},{__locked:0,__lockedby:0,__locktime:0});
        rval.currentDoc = postCommit;
     } 
     
@@ -102,8 +103,9 @@ exports = async function(namespace,_id,untypedUpdates){
       rval.commitSuccess = true;
       rval.currentDoc = postCommit;
     } catch(e) {
+      console.log(e);
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
-       postCommit = await collection.findOne({_id},{__locked,__lockedby,__locktime});
+       postCommit = await collection.findOne({_id},{__locked:0,__lockedby:0,__locktime:0});
        rval.currentDoc = postCommit;
     } 
     return rval;
