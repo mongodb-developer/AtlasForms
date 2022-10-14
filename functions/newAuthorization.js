@@ -19,6 +19,7 @@ class Authorization {
   /* Return True is the user may do this , False if they may not*/
   
   authorize(type,docType,targetRecord,...args) {
+    
     let permission = { granted: false, message: ""}
        
     if(this.userRecord == null) { 
