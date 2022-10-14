@@ -28,7 +28,7 @@ _Here we note anything we made an explicit decision about in the design and why_
   - How *critical* are dropdown picklists
    
 ## Known BUGS to fix
-   - You can delete the first element in an array removing it form the GUI when editing - this is a little complex to fix.
+   - You can delete the first element in an array removing it form the GUI when editing - this is a little complex to fix. (john to Fix)
    We need to be able to remove all data but must always have something we can type in.
    - Do we handle arrays of non string scalarrs? - test that and fix as required
    - We do not support arrays in Objects and we probably should... Not critical right now
