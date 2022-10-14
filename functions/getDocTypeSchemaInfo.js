@@ -2,7 +2,7 @@
 /* Return Schema info for the built in doc types - User and SchemaInfo */
 
 function getSystemDocTypeSchemaInfo(namespace) {
-  if(namespace == "__atlas.doctypes") {
+  if(namespace == "__atlasforms.doctypes") {
     return { namespace: "string" , title: "string", listViewFields: ["string"]
     }
   }
@@ -20,7 +20,7 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 
 exports = async function (namespace) {
-  
+    console.log(namespace)
     if(namespace == "__atlasforms.doctypes" )
     {
       return getSystemDocTypeSchemaInfo(namespace);
