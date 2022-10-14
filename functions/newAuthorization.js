@@ -10,9 +10,9 @@ class Authorization {
     this.USER_MANAGER = "USER_MANAGER";   
   }
   
-  lookupUser(user) {
+  async lookupUser(user) {
     const userCollection = context.services.get("mongodb-atlas").db('__atlasforms').collection('users');
-    this.userRecord = userCollection.findOne({_id:user})
+    this.userRecord = await userCollection.findOne({_id:user})
     
   }
   
