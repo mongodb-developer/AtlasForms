@@ -11,5 +11,7 @@ exports = async function(authEvent) {
     }
     
     newuser  = { _id: authEvent.user.id, ...authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [] }
+    delete newuser.id; //Moved into _id
+    
     await userdata.insertOne(newuser)
 };
