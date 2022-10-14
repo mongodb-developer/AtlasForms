@@ -28,10 +28,11 @@ _Here we note anything we made an explicit decision about in the design and why_
   - How *critical* are dropdown picklists
    
 ## Known BUGS to fix
-   - You can delete the first element in an array removing it form the GUI - this is a little complex to fix.
+   - You can delete the first element in an array removing it form the GUI when editing - this is a little complex to fix.
    We need to be able to remove all data but must always have something we can type in.
-   - Also do we handle arrays of non string scalarrs?
-   - If you Edit one and delete another  array element at the same time I think that breaks. as we cannot $pull and $set on the array - to test.
+   - Do we handle arrays of non string scalarrs? - test that and fix as required
+   - We do not support arrays in Objects and we probably should... Not critical right now
+
 
 ## Work in Progress / TODO / Ideas
 
@@ -50,7 +51,7 @@ _Here we note anything we made an explicit decision about in the design and why_
   - Use Template Form
     - ~~Simple~~
     - ~~Nested~~
-    - Arrays (Add, Remove)
+    - ~~Arrays (Add, Remove)~~
       - ~~On an Empty form display a Single Empty array element~~
       
   - Query By Form
@@ -73,11 +74,12 @@ _Here we note anything we made an explicit decision about in the design and why_
   - ~~Download hitlist only~~
   - ~~Update hitlist on edit~~
   -  ~~Combine Cancel Edit and Commit Edit into one function each end~~
-  - Move Locking Fieldnmes to config - no hard coding strings apart from "_id" (? Do we NEED this?)
-  - Array Editing (Add and Remove elements as needed)
+  - ~~Array Editing (Add and Remove elements as needed)~~
 
 
-- Authorization
+- Authorization [John Working on This now]
+  - User Details (and user editing?)
+  - Concepts of 'UserAdmin'
   - Read (Field Based)
   - Update (Field Based)
 
@@ -89,15 +91,17 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 *** MVP  ish at this point ***
 
-
+- Basic Import
 
 - Listview
-  - Choose Columns
+  - Choose Columns from Cient
 
 - FormView
     - Better Layout (Will be an ongoing battle)
+    - Formview rememeber personal layout changes
     - Controls
       - ~~Numbers~~
+      - boolean support (button/box)
       - Constraints & Validation 
         - On submit and on Change (Download JS to client??)
       - *Picklists* (Key feature)
@@ -108,7 +112,7 @@ _Here we note anything we made an explicit decision about in the design and why_
 - Range Queries
 - Fuzzy (Atlas) Search
 - Printing (Stylesheet)
-- Basic Import
+
 - Linking andd following links
 
 *** V1 at this point for reInvent ***
