@@ -1,6 +1,5 @@
 exports = async function(arg){
   /* Can we see who it's running as? */
- const userCalling  = context.user
 
   /*Here we are explicty, programatically choosing which document types to expose to the frontend*/
   /*We have the user details so wee can factor in authorization too */
@@ -11,7 +10,15 @@ exports = async function(arg){
 
   const docTypes = []
   
-  /*Add Logic here to decide who sees what*/
+  /* This is a hard coded list for now */
+  /* But plan to move to a collection */
+  
+  /*Get an Authorization object*/
+  const authorization = context.functions.execute("newAuthorization",context.user);
+  
+  const atlasFormsUsers = { title: "AF_Users", namespace: "__atlasforms.users"}
+  
+  
   const sample_airbnb = { title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews"}
   sample_airbnb.listViewFields = ["name","property_type","room_type","address.market","address.country"]
   docTypes.push(sample_airbnb);
