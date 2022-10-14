@@ -25,7 +25,14 @@ exports = async function(arg){
   }
   
   const canManageDoctypes = authorization.authorize(authorization.DOCTYPE_MANAGER);
-    
+  
+   if(canManageDoctypes.granted) {
+    const altasFormsDoctypes = { title: "AF_Doctypes", namespace: "__atlasforms.doctypes"}
+    atlasFormsUsers.listViewFields = ['title','namespace','listViewFields']; 
+    docTypes.push(altasFormsDoctypes);  
+  }
+  
+  
   const sample_airbnb = { title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews"}
   sample_airbnb.listViewFields = ["name","property_type","room_type","address.market","address.country"]
   docTypes.push(sample_airbnb);
