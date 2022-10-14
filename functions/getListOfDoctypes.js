@@ -14,10 +14,13 @@ exports = async function(arg){
   /* But plan to move to a collection */
   
   /*Get an Authorization object*/
-  const authorization = context.functions.execute("newAuthorization",context.user);
+  const authorization = context.functions.execute("newAuthorization",context.user.id);
   
-  const atlasFormsUsers = { title: "AF_Users", namespace: "__atlasforms.users"}
-  
+  if(authorization.authorize(authorization.USER_MANAGER)) {
+    const atlasFormsUsers = { title: "AF_Users", namespace: "__atlasforms.users"}
+    atlasFormsUsers.listViewFields = ['_id'];
+    docTypes.push(atlasFormsUsers); 
+  }
   
   const sample_airbnb = { title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews"}
   sample_airbnb.listViewFields = ["name","property_type","room_type","address.market","address.country"]
