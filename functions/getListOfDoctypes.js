@@ -21,7 +21,7 @@ exports = async function(arg){
   
   if(canManageUsers.granted) {
     const atlasFormsUsers = { title: "AF_Users", namespace: "__atlasforms.users"}
-    atlasFormsUsers.listViewFields = ['_id','data.email','createdDate'];
+    atlasFormsUsers.listViewFields = ['_id','data.email','createdate']; 
     docTypes.push(atlasFormsUsers);  
   }
   
