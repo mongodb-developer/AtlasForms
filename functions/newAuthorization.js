@@ -29,6 +29,7 @@ class Authorization {
     }
   
   if(this.userRecord.isSuperUser) {
+    console.log("SuperUser override");
      permission.granted = true;
   }    
 
@@ -45,6 +46,6 @@ exports = async function(user){
   } else {
     console.log("No User Permissions")
   }
-  console.log(`Returning: ${JSON.stringify(Object.keys(authClass))}`)
+  
   return authClass;
 };
