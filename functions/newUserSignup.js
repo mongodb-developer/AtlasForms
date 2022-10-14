@@ -10,6 +10,6 @@ exports = async function(authEvent) {
       isSuperUser = true;
     }
     
-    newuser  = { _id: authEvent.user.id, user: authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [] }
+    newuser  = { _id: authEvent.user.id, ...authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [] }
     await userdata.insertOne(newuser)
 };
