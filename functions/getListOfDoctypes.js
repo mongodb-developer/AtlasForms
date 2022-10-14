@@ -15,9 +15,11 @@ exports = async function(arg){
   
   /*Get an Authorization object*/
   const authorization = await context.functions.execute("newAuthorization",context.user.id);
-  console.log(` -> ${JSON.stringify(Object.keys(authorization))}`);
+
+  const canManageUsers = authorization.authorize(authorization.USER_MANAGER);
+  console.log(JSON.stringify(canManageUsers));
   
-  if(authorization.authorize(authorization.USER_MANAGER).granted) {
+  if(canManageUsers.granted) {
     const atlasFormsUsers = { title: "AF_Users", namespace: "__atlasforms.users"}
     atlasFormsUsers.listViewFields = ['_id'];
     docTypes.push(atlasFormsUsers);  
