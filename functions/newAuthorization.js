@@ -43,5 +43,6 @@ exports = async function(user){
   } else {
     console.log("No User Permissions")
   }
+  console.log(`Returning: ${JSON.stringify(Object.keys(authClass))}`)
   return authClass;
 };
