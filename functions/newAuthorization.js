@@ -21,7 +21,7 @@ class Authorization {
   authorize(type,docType,targetRecord,...args) {
     
     let permission = { granted: false, message: ""}
-       
+    console.log(JSON.stringify(this.userRecord))
     if(this.userRecord == null) { 
       permission.granted = false;
       permission.message = 'Unknown User';
