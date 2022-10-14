@@ -15,6 +15,7 @@ exports = async function(arg){
   
   /*Get an Authorization object*/
   const authorization = context.functions.execute("newAuthorization",context.user.id);
+  console.log(authorization);
   
   if(authorization.authorize(authorization.USER_MANAGER)) {
     const atlasFormsUsers = { title: "AF_Users", namespace: "__atlasforms.users"}
