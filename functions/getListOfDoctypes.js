@@ -45,7 +45,7 @@ exports = async function(arg){
   for (const docType of nonSystemDocTypes) {
     if(!docType.namespace.startsWith("__atlasforms"))
     {
-      doctypes.push(docType)
+      docTypes.push(docType)
     }
   }
   return docTypes;
