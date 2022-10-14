@@ -8,7 +8,7 @@ class Authorization {
  
   constructor() {
     this.USER_MANAGER = "USER_MANAGER";   
-    this.DOCTYPE_MANAGER = "DOICTYPE_MANAGER";   
+    this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER";   
   }
   
   async lookupUser(user) {
