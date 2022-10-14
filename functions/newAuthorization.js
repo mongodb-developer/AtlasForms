@@ -38,5 +38,10 @@ class Authorization {
 exports = async function(user){
   const authClass = new Authorization()
   await authClass.lookupUser(user); /* Cannot use await in a constructor*/
+  if(authClass.useRecord) {
+    console.log("User Permissions Loaded")
+  } else {
+    console.log("No User Permissions")
+  }
   return authClass;
 };
