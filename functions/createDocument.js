@@ -2,8 +2,8 @@
 function getNewIdValue(objSchema) {
   /* We want the ID values ot be the same type */
   const type = objSchema._id;
-  console.log(type);
-  
+  console.log(`Existing _id is of type ${type}`);
+
 }
 
 // This just and's the values together - what it does do it cast
@@ -11,8 +11,7 @@ function getNewIdValue(objSchema) {
 // Thinks the numbers are strings
 
 exports = async function(namespace,untypedUpdates){
-     console.log(namespace);
-     console.log(JSON.stringify(untypedUpdates))
+    
     //We don't allow _id to be specified here but will accept an empty
     //String as unspecificed
     
@@ -60,7 +59,6 @@ exports = async function(namespace,untypedUpdates){
       }
       //Now based on that convert value and add to our new query
       let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
-      console.log(correctlyTypedValue)
       if(correctlyTypedValue == null) {
         console.error("Bad Record Summitted")
         //Check here and if we cannot cast the value sent to the correct data type
@@ -73,7 +71,6 @@ exports = async function(namespace,untypedUpdates){
       
     }
 
-    console.log(JSON.stringify(updates))
     let results
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
@@ -91,7 +88,7 @@ exports = async function(namespace,untypedUpdates){
       
       //The only thing we can do is work out which array fields we are updating then insert a record with those already set 
       //Or in the case of an edit update to set them to an array
-      console.log(`Arrays being modified: ${JSON.stringify(arrayPaths)}`)
+
       
       //This is a create so we just need to insert the document with all the arrays in place
       
@@ -118,10 +115,10 @@ exports = async function(namespace,untypedUpdates){
               newDoc[pathParts[0]][pathParts[1]] = []
           }
         }
-        console.log("Creating required Arrays")
+ 
         rval = await collection.insertOne(newDoc); //Insert the one with empty arrays as needed
       }
-      console.log(JSON.stringify(updates))
+
       rval = collection.findOneAndUpdate({_id:updates._id},{$set:updates},{upsert:true, returnNewDocument: true})
       return {ok: true, newDoc:rval}
     } catch(e) {
