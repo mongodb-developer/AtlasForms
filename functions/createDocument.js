@@ -3,8 +3,6 @@
 
 function getNewIdValue(objSchema) {
   /* We want the ID values ot be the same type */
-  const type = objSchema._id;
-  console.log(`Existing _id is of type ${type}`);
   const objid = new BSON.ObjectId();
   switch(type) {
       case "string":
