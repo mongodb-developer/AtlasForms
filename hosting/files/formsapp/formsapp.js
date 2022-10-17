@@ -179,7 +179,9 @@ function addArrayElement(name) {
   //Which works because a delete on the setver is a $set then $pull
   //We either add and emptyp string or dummy object based on the type
   const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-  if(elementBsonType == "object") {
+  console.log(vueApp.selectedDocTypeSchema[name][0])
+  console.log(elementBsonType)
+  if(elementBsonType == "document") {
     vueApp.currentDoc.doc[name].push({__xyxxy__:1})
   } else {
     vueApp.currentDoc.doc[name].push('')
