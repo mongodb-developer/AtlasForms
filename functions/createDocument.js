@@ -5,7 +5,8 @@
 // Thinks the numbers are strings
 
 exports = async function(namespace,untypedUpdates){
-
+     console.log(namespace);
+     console.log(JSON.stringify(untypedUpdates))
     //We don't allow _id to be specified here but will accept an empty
     //String as unspecificed
     
@@ -114,7 +115,7 @@ exports = async function(namespace,untypedUpdates){
       rval = collection.findOneAndUpdate({_id:updates._id},updates,{upsert:true, returnNewDocument: true})
       return {ok: true, newDoc:rval}
     } catch(e) {
-      console.error(error);
+      console.error(e);
       return [];
     }
 
