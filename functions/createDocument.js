@@ -99,14 +99,14 @@ exports = async function(namespace,untypedUpdates){
           const pathParts = arrayPath.split('.');
           switch(pathParts.length) {
             case 1:
-              newDoc[pathparts[0]] = []; //Top level aray si easy
+              newDoc[pathParts[0]] = []; //Top level array is easy
               break;
             case 2:
               //Array in a subdocument - we may have >1 array in our subdocument
-              if( newDoc[pathparts[0]] == undefined) {
-                newDoc[pathparts[0]] = {}
+              if( newDoc[pathParts[0]] == undefined) {
+                newDoc[pathParts[0]] = {}
               }
-              newDoc[pathparts[0]][pathparts[1]] = []
+              newDoc[pathParts[0]][pathParts[1]] = []
           }
         }
         rval = collection.insertOne(newDoc); //Insert the one with empty arrays as needed
