@@ -115,10 +115,14 @@
 
                                                             <div class="dynamicformlabel">
                                                                 {{formatFieldname(innername)}}:</div>
-                                                            <div class="dynamicformvalue">
-
+                                                                <input v-if="arrayElement == 'date'" v-on:input="formValueChange"
+                                                                :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
+                                                                class="dynamicformvaluedate" :disabled="editing == false"
+                                                                type="datetime-local" :value="toDateTime(innervalue)">
+                                                            <div v-else v-on:input="formValueChange"
+                                                                :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
+                                                                :contenteditable="editing?true:null" class="dynamicformvalue">
                                                                 {{arrayElement}}
-
                                                             </div>
                                                         </div>
                                                     </template>
