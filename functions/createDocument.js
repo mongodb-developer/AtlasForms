@@ -109,7 +109,8 @@ exports = async function(namespace,untypedUpdates){
               newDoc[pathParts[0]][pathParts[1]] = []
           }
         }
-        rval = collection.insertOne(newDoc); //Insert the one with empty arrays as needed
+        console.log("Creating required Arrays")
+        rval = await collection.insertOne(newDoc); //Insert the one with empty arrays as needed
       }
       console.log(JSON.stringify(updates))
       rval = collection.findOneAndUpdate({_id:updates._id},{$set:updates},{upsert:true, returnNewDocument: true})
