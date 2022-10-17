@@ -106,7 +106,7 @@ exports = async function(namespace,_id,untypedUpdates){
     let ensureArray = {}
     //For each field, if it's null then set it to square brackets
     for( let arrayField of arrayFields) {
-      ensureArray[arrayField] = { $ifNull : [ `\$${arrayfield}`,[] ]}
+      ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
     }
     //Now apply that updateOne
         await collection.updateOne(checkLock,[{$set:ensureArray}]);
