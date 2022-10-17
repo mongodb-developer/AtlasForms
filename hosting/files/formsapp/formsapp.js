@@ -115,9 +115,9 @@ async function newRecord() {
 
   let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
   if (rval.ok) {
-
-    vueApp.results = [rval.newDoc]
-    vueApp.currentDoc = rval.newDoc
+    const wrappedDoc = { downloaded: true, doc: rval.newDoc }
+    vueApp.results = [wrappedDoc]
+    vueApp.currentDoc = wrappedDoc
     vueApp.editing = false
   } else {
     formAlert(appStrings.AF_BAD_FIELD_TYPE(rval.errorField, rval.errorType));
