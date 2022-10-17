@@ -112,7 +112,7 @@ exports = async function(namespace,untypedUpdates){
         rval = collection.insertOne(newDoc); //Insert the one with empty arrays as needed
       }
       console.log(JSON.stringify(updates))
-      rval = collection.findOneAndUpdate({_id:updates._id},updates,{upsert:true, returnNewDocument: true})
+      rval = collection.findOneAndUpdate({_id:updates._id},{$set:updates},{upsert:true, returnNewDocument: true})
       return {ok: true, newDoc:rval}
     } catch(e) {
       console.error(e);
