@@ -1,9 +1,17 @@
+//This provides a default ID if needed, you can and 
+// probably should override In the preinsert function
 
 function getNewIdValue(objSchema) {
   /* We want the ID values ot be the same type */
   const type = objSchema._id;
   console.log(`Existing _id is of type ${type}`);
-
+  const objid = new BSON.ObjectId();
+  switch(type) {
+      case "string":
+        return objid.toString();
+     default:
+        return objid;
+  }
 }
 
 // This just and's the values together - what it does do it cast
@@ -93,8 +101,8 @@ exports = async function(namespace,untypedUpdates){
       //This is a create so we just need to insert the document with all the arrays in place
       
       if(updates._id == null) { 
-        const newId =  getNewIdValue(objSchema) 
-        updates._id = new BSON.ObjectId()
+          const newId =  getNewIdValue(objSchema) 
+          updates._id = newId
         } //TODO - Change this to something better
       
       //Do we have arrays being modified
