@@ -2,6 +2,7 @@
 // probably should override In the preinsert function
 
 function getNewIdValue(objSchema) {
+  const type = objSchema._id;
   /* We want the ID values ot be the same type */
   const objid = new BSON.ObjectId();
   switch(type) {
@@ -61,7 +62,7 @@ exports = async function(namespace,untypedUpdates){
           //A Numeric key means an Array for use
           arrayPaths[arrayPath.join(".")] = true;
         }
-        arrayPath.push(part)
+        arrayPath.push(part);
       }
       //Now based on that convert value and add to our new query
       let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
