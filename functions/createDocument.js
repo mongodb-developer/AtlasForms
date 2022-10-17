@@ -99,7 +99,7 @@ exports = async function(namespace,untypedUpdates){
           const pathParts = arrayPath.split('.');
           switch(pathParts.length) {
             case 1:
-              newdoc[pathparts[0]] = []; //Top level aray si easy
+              newDoc[pathparts[0]] = []; //Top level aray si easy
               break;
             case 2:
               //Array in a subdocument - we may have >1 array in our subdocument
