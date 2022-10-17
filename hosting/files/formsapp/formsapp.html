@@ -118,7 +118,7 @@
                                 <!-- BUG? What about an array of non string types-->
                                 <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
                                          (typeof selectedDocTypeSchema[name][0] == 'string' ? [''] : [{__xyzzy__:1}] )"
-                                    class='form_container nested'>
+                                    class='form_container arrayelement'>
                                     <!-- With an Array, for each array memeber we repeat the top level code-->
                                     <!-- Not adding code for nested arrays but will support arrays of objects-->
 

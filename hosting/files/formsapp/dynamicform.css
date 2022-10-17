@@ -74,6 +74,12 @@ input[type="datetime-local"] {
 
 }
 
+.arrayelement {
+   /* Per element - including hidden ones*/
+
+}
+
+
 .newline {
     clear: both;
 }

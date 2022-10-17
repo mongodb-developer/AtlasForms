@@ -1,3 +1,13 @@
+
+/* Return Schema info for the built in doc types - User and SchemaInfo */
+
+function getSystemDocTypeSchemaInfo(namespace) {
+  if(namespace == "__atlasforms.doctypes") {
+    return { namespace: "string" , title: "string", listViewFields: ["string"]
+    }
+  }
+}
+
 /* This returns a template document for a given type with information about the fields ,
 data types AND the arrangement/order of those fields. This is needed to provide an empty
 form for Query or data entry  */
@@ -8,7 +18,13 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 /* This will be extended to include lots more metadata like jsonSchema or similar*/
 
+
 exports = async function (namespace) {
+    console.log(namespace)
+    if(namespace == "__atlasforms.doctypes" )
+    {
+      return getSystemDocTypeSchemaInfo(namespace);
+    }
 
     //docType = { namespace: "sample_airbnb.listingsAndReviews" }
     const [databaseName, collectionName] = namespace.split('.');

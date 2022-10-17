@@ -199,7 +199,18 @@ function deleteArrayElement(name,index) {
       delete vueApp.fieldEdits[entry]
     }
   }
-  console.log(vueApp.fieldEdits)
+  //If we have removed all elements we need to add an empty one on the end
+  //So users can type new data in - count how many we are removing
+  let removed=0;
+  let arrayLength = vueApp.currentDoc.doc[name].length
+  for(let idx=0;idx<arrayLength;idx++) {
+    if(vueApp.fieldEdits[`${name}.${idx}`] == "$$REMOVE") {
+      removed++;
+    }
+  }
+  if(removed == arrayLength) {
+    vueApp.addArrayElement(name);
+  }
 }
 // User has clicked the button to query for data
 
