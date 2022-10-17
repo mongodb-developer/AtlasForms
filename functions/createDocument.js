@@ -93,7 +93,7 @@ exports = async function(namespace,untypedUpdates){
       
       //Do we have arrays being modified
       if(Object.keys(arrayPaths).length > 0) {
-        const newDoc = {_id:update._id} //Use our new ID
+        const newDoc = {_id:updates._id} //Use our new ID
         for(let arrayPath of Object.keys(arrayPaths))
         {
           const pathParts = arrayPath.split('.');
