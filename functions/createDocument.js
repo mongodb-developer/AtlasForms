@@ -86,8 +86,31 @@ exports = async function(namespace,untypedUpdates){
       //Or in the case of an edit update to set them to an array
       console.log(`Arrays being modified: ${JSON.stringify(arrayPaths)}`)
       
+      //This is a create so we just need to insert the document with all the arrays in place
       
       if(updates._id == null) { updates._id = new BSON.ObjectId() } //TODO - Change this to something better
+      
+      //Do we have arrays being modified
+      if(Object.keys(arrayPaths).length > 0) {
+        const newDoc = {_id:update._id} //Use our new ID
+        for(let arrayPath of Object.keys(arrayPaths))
+        {
+          const pathParts = arrayPath.split('.');
+          switch(pathParts.length) {
+            case 1:
+              newdoc[pathparts[0]] = []; //Top level aray si easy
+              break;
+            case 2:
+              //Array in a subdocument - we may have >1 array in our subdocument
+              if( newDoc[pathparts[0]] == undefined) {
+                newDoc[pathparts[0]] = {}
+              }
+              newDoc[pathparts[0]][pathparts[1]] = []
+          }
+        }
+        rval = collection.insertOne(newDoc); //Insert the one with empty arrays as needed
+      }
+      
       rval = collection.findOneAndUpdate({_id:updates._id},updates,{upsert:true, returnNewDocument: true})
       return {ok: true, newDoc:rval}
     } catch(e) {
