@@ -92,6 +92,31 @@
                                     <template v-if="getBsonType(value) == 'document'">
                                         <div> {{getBsonType(value)}} </div>
                                     </template>
+                                     <!-- Is this a nested array? -->
+                                     <template v-else-if="getBsonType(valtype) == 'array'">
+                                        <div class='dynamicformitem arrayscroller'> 
+                                            <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
+                                                (typeof selectedDocTypeSchema[name][0] == 'string' ? [''] : [{__xyzzy__:1}] )"
+                                           class="form_container nested">
+                                           <template v-if="getBsonType(arrayElement) == 'string'">
+                                                <div class="dynamicformvalue">
+                                                    {{arrayElement}}
+                                                </div>
+                                            </template>
+                                            <template v-else="getBsonType(arrayElement) == 'document'">
+                                                <div class="dynamicformitem" v-for="(arrayElement,innername) in arrayElement "
+                                                :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
+                                                   
+                                                        <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
+                                                        <div class="dynamicformvalue">
+                                                            {{arrayElement}}
+                                                        
+                                                    </div>
+                                                </div>
+                                            </template>
+                                           </div>
+                                        </div>
+                                    </template> 
                                     <template v-else>
                                         <input v-on:input="formValueChange" :id=`${name}.${innername}`
                                             v-if="valtype == 'date'" :data-bsontype="valtype"
