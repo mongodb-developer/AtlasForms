@@ -1,4 +1,10 @@
 
+function getNewIdValue(objSchema) {
+  /* We want the ID values ot be the same type */
+  const type = objSchema._id;
+  console.log(type);
+  
+}
 
 // This just and's the values together - what it does do it cast
 // Them all to the correct data type for the field as the form
@@ -89,7 +95,10 @@ exports = async function(namespace,untypedUpdates){
       
       //This is a create so we just need to insert the document with all the arrays in place
       
-      if(updates._id == null) { updates._id = new BSON.ObjectId() } //TODO - Change this to something better
+      if(updates._id == null) { 
+        const newId =  getNewIdValue(objSchema) 
+        updates._id = new BSON.ObjectId()
+        } //TODO - Change this to something better
       
       //Do we have arrays being modified
       if(Object.keys(arrayPaths).length > 0) {
