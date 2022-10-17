@@ -37,11 +37,13 @@ exports = async function(namespace,_id,untypedUpdates){
     // also sanitises any Javascript injection
     let updates = {}
     let deletepulls = {}
-    
+    let arrayPaths = {} ; /* note any arrays we are editing*/
     if(untypedUpdates != null) {
-      
+   
       for( let field of Object.keys(untypedUpdates) )
       {
+        let arrayPath = []
+        
           // MongoDB doesn't have a way of removing array elements by position - and with multiple editing processes
           // That could cause a race condition anyway, normally we would remove by value
           // As we are explicitly locking we are going to first update them to "$$REMOVE" is we have any then $pull them
@@ -60,9 +62,11 @@ exports = async function(namespace,_id,untypedUpdates){
             //This could be field objectfield.member arrayfield.index or arrayfield.index.member
             //In the schema it's always field or field.0.member
             if(!isNaN(part) ) {
+              arrayPaths[arrayPath.join(".")] = true; //Record we found an array
               //!isNaN == isNumber
               part='0';
             }
+            arrayPath.push(part)
             subobj = subobj[part]
           }
           //Now based on that convert value and add to our new query
@@ -88,8 +92,27 @@ exports = async function(namespace,_id,untypedUpdates){
     let sets = {$set: updates}
     let pulls = {$pull: deletepulls};
     
+    
+    
 
     try {
+      
+    //If we have any edits to arrays - we first, unfortunately need to ensure that in the document
+    //Those are arrays as is we do {$set:{"a.0":1}} and a is not an array (i.e null) then we get {a:{"0":1}}
+    //we push this down as a pipeline update usin the $ifNull expresssion
+    
+    let arrayFields = Object.keys(arrayPaths);
+    if(arrayFields.length > 0) {
+    let ensureArray = {}
+    //For each field, if it's null then set it to square brackets
+    for( let arrayField of arrayFields) {
+      ensureArray[arrayField] = { $ifNull : [ `\$${arrayfield}`,[] ]}
+    }
+    //Now apply that updateOne
+        await collection.updateOne(checkLock,[{$set:ensureArray}]);
+    }
+    
+      
       if(deletepulls.length == 0 )
       {
         const setAndUnlock = { ...sets,...unlockRecord};
