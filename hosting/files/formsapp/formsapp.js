@@ -188,13 +188,12 @@ function addArrayElement(name) {
     const schemaElement = vueApp.selectedDocTypeSchema[arrayname][name];
 
     elementBsonType = getBsonType(schemaElement);
-    if(elementBsonType == "array") {
-      console.log(JSON.stringify(vueApp.currentDoc));
+    if(elementBsonType == "array") {   
    
-      //vueApp.currentDoc.doc[schemaElement].push('')
+      vueApp.currentDoc.doc[arrayname][name].push('')
     }
     else {
-      vueApp.currentDoc.doc[schemaElement].push({__xyxxy__:1})
+      vueApp.currentDoc.doc[arrayname][name].push({__xyxxy__:1})
     }
   }
   else {
