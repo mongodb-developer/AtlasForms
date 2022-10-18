@@ -68,7 +68,10 @@ exports = async function(namespace,query,projection){
     {
       let parts = fieldName.split('.')
       let subobj = objSchema
-      for(const part of parts) {
+      for(let part of parts) {
+        if(!isNaN(part)) {
+          part='0'; /*When comparing to schema always check against element 0*/
+        }
         subobj = subobj[part]
       }
       //Now based on that convert value and add to our new query
