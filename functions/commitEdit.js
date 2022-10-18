@@ -27,7 +27,7 @@ exports = async function(namespace,_id,untypedUpdates){
     let email = user.data.email;
     
     //Cannot unlock it if it's not mine  
-    let checkLock = { _id, __lockedby : email };
+    let checkLock = { _id, __lockedby : email , __locked: true};
     console.log(JSON.stringify(checkLock))
     
     // Convert everything to the correct Javascript/BSON type 
