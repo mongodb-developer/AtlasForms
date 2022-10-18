@@ -76,7 +76,7 @@ function addDocumentToTemplate(doc, templateDoc) {
                     if (firstItem != null) { //Ignore empties
                         const existing = templateDoc[key][0]
                         if (existing) {
-                            if (typeof exising == "object") {
+                            if (typeof existing == "object") {
                                 templateDoc[key][0] = addDocumentToTemplate(firstItem, existing)
                             } //Not an object ignore further values
                         } else {

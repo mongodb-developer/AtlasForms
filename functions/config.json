@@ -1,46 +1,12 @@
 [
     {
-        "name": "newUserSignup",
-        "private": true
-    },
-    {
-        "name": "createDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getListOfDoctypes",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "newAuthorization",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "queryDocType",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "utility_functions",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "getDocTypeSchemaInfo",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "tmpTestFn",
+        "name": "queryDocType",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -52,7 +18,41 @@
         "disable_arg_logs": true
     },
     {
+        "name": "newUserSignup",
+        "private": true
+    },
+    {
+        "name": "tmpTestFn",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "newAuthorization",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
         "name": "commitEdit",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "createDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "utility_functions",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getListOfDoctypes",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
