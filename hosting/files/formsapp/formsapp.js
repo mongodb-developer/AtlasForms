@@ -181,7 +181,7 @@ function addArrayElement(name) {
   
   if(vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null)
   {
-    const [arrayname, subfield] = name.split('.');
+    const [arrayname, subfield] = name.split('_');
     const schemaElement = vueApp.selectedDocTypeSchema[arrayname];
     console.log(schemaElement);
   }
