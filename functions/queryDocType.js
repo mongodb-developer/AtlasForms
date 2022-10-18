@@ -49,6 +49,7 @@ function rewriteArrayQuery(typedQuery) {
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
       for(let arrayElement of elementsToMatch[arrayName]) {
+        console.log(`Array Element is type ${utilityFunctions.getBsonType(arrayElement)}`)
         if( utilityFunctions.getBsonType(arrayElement) == "document" )
         {
           arrayQueryClauses.push( { [arrayName] : { $elemMatch : arrayElement}})
