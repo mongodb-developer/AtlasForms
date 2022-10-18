@@ -41,9 +41,16 @@ function rewriteArrayQuery(typedQuery) {
           if(!elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]) {elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]={};}
           elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index][arrayIdx.elementFieldName] = typedQuery[fieldName];
         }
+        /* Remove this from the query */
+        typedQuery.delete(fieldName);
       }
     }
-    console.log(JSON.stringify(elementsToMatch))
+    console.log(JSON.stringify(elementsToMatch));
+    //Add the Elemeatches back index
+    for(let arrayName of elementsToMatch) {
+      const addElemMatch = elementsToMatch[arrayName].map((x) => { return {$elemMatch:x};});
+      typedQuery[arrayName] = { $and : addElemMatch};
+    }
     return typedQuery;
 }
 
@@ -55,12 +62,12 @@ exports = async function(namespace,query,projection){
  
   /*Dynamically load some shared code*/
   
-  const utilityFunctions =  await context.functions.execute("utility_functions")
+  const utilityFunctions =  await context.functions.execute("utility_functions");
   
 
-    if (query == null) { query = {} }
+    if (query == null) { query = {}; }
     const [databaseName,collectionName] = namespace.split('.');
-    if(!databaseName || !collectionName) { return {}}
+    if(!databaseName || !collectionName) { return {}; }
     
   
     // Convert everything to the correct Javascript/BSON type 
