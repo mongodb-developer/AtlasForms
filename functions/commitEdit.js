@@ -28,8 +28,7 @@ exports = async function(namespace,_id,untypedUpdates){
     let email = user.data.email;
     
     //Cannot unlock it if it's not mine  
-    let isLockedByMe = { __lockedby : email };
-    let checkLock = { _id, $or : [ isLockedByMe] };
+    let checkLock = { _id, __lockedby : email };
     console.log(JSON.stringify(checkLock))
     
     // Convert everything to the correct Javascript/BSON type 
@@ -117,8 +116,7 @@ exports = async function(namespace,_id,untypedUpdates){
       console.log(matchedcount,modifiedcount)
     }
     
-      
-      if(deletepulls.length == 0 )
+      if(Object.keys(deletepulls).length == 0 )
       {
         console.log("No Array Deletes")
         const setAndUnlock = { ...sets,...unlockRecord};
