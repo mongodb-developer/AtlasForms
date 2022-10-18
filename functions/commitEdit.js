@@ -4,7 +4,7 @@ not supplied or empty , then no changes are made except the unlock*/
 exports = async function(namespace,_id,untypedUpdates){
   let rval = { commitSuccess: false }
   
-  console.log(`Commit Edit` )
+
   let postCommit;
     
     if(_id == undefined) {
@@ -26,8 +26,7 @@ exports = async function(namespace,_id,untypedUpdates){
     
     //Cannot unlock it if it's not mine  
     let checkLock = { _id, __lockedby : email };
-    console.log(JSON.stringify(checkLock))
-    
+
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
@@ -71,7 +70,7 @@ exports = async function(namespace,_id,untypedUpdates){
           //Now based on that convert value and add to our new query
           let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
           if(correctlyTypedValue == null) {
-            console.log(EJSON.stringify(untypedUpdates))
+    
             console.error(`Bad Record Summitted - cannot convert ${field}`)
             
       
@@ -107,39 +106,22 @@ exports = async function(namespace,_id,untypedUpdates){
         ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
       }
       //Now apply that updateOne
-      console.log(`ensuring arrays where needed`)
-      console.log(JSON.stringify(checkLock))
+
       const { matchedCount, modifiedCount }= await collection.updateOne(checkLock,[{$set:ensureArray}]);
-      console.log(matchedCount,modifiedCount)
+     
     }
     
       if(Object.keys(deletepulls).length == 0 )
       {
-        console.log("No Array Deletes")
+      
         const setAndUnlock = { ...sets,...unlockRecord};
-        console.log("Before Update");
-        console.log(JSON.stringify(checkLock));
-        console.log(JSON.stringify(setAndUnlock));
-         
-         
         postCommit = await collection.findOneAndUpdate(checkLock,setAndUnlock,{returnNewDocument: true});
-        console.log("After Update")
-        console.log(`pc:${JSON.stringify(postCommit)}`)
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       } else {
-        console.log("Has Array Deletes")
-         console.log("Before Update");
-        console.log(JSON.stringify(checkLock));
-        console.log(JSON.stringify(sets));
         await collection.updateOne(checkLock,sets,{returnNewDocument: true});
         const removeElementsAndUnlock = { ...pulls,...unlockRecord};
-           console.log(JSON.stringify(checkLock));
-        console.log(JSON.stringify(removeElementsAndUnlock));
-         
         postCommit = await collection.findOneAndUpdate(checkLock,removeElementsAndUnlock,{returnNewDocument: true});
-        console.log("After Update")
-        console.log(`pc:${JSON.stringify(postCommit)}`)
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       }
