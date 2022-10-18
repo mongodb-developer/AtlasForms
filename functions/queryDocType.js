@@ -42,7 +42,7 @@ function rewriteArrayQuery(typedQuery) {
           elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index][arrayIdx.elementFieldName] = typedQuery[fieldName];
         }
         /* Remove this from the query */
-        typedQuery.delete(fieldName);
+        delete typedQuery[fieldName];
       }
     }
     console.log(JSON.stringify(elementsToMatch));
