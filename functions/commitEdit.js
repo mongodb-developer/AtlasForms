@@ -3,6 +3,8 @@ not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates){
   let rval = { commitSuccess: false }
+  
+  console.log(`Commit Edit` )
   let postCommit;
     
     if(_id == undefined) {
@@ -28,9 +30,6 @@ exports = async function(namespace,_id,untypedUpdates){
     //Cannot unlock it if it's not mine  
     let isLockedByMe = { __lockedby : email };
     let checkLock = { _id, $or : [ isLockedByMe] };
-    
-   
-    
     
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
@@ -94,10 +93,7 @@ exports = async function(namespace,_id,untypedUpdates){
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}};
     let sets = {$set: updates}
     let pulls = {$pull: deletepulls};
-    
-    
-    
-
+  
     try {
       
     //If we have any edits to arrays - we first, unfortunately need to ensure that in the document
@@ -130,7 +126,7 @@ exports = async function(namespace,_id,untypedUpdates){
         rval.currentDoc = postCommit;
       }
     } catch(e) {
-      console.log(e);
+      console.log(`Error in commitEdit: ${e}`);
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
        postCommit = await collection.findOne({_id},{__locked:0,__lockedby:0,__locktime:0});
        rval.currentDoc = postCommit;
