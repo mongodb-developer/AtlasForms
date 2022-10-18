@@ -3,10 +3,17 @@
 
 function refersToArrayElement(fieldName)
 {
+    
     const parts = fieldName.split('.');
     //Is anything in here a number if so return the index
     const locationOfIndex = parts.reduce((val,el,idx)=>{ return isNaN(el) ? val : idx ;}  ,-1);
-    return locationOfIndex;
+    const rval = { locationOfIndex }
+    if(locationOfIndex != -1) 
+    {
+      rval.arrayFieldName = parts.slice(0,locationOfIndex).join('.');
+      rval.elementFieldName = parts.slice(locationOfIndex+1).join('.');
+    }  
+    return rval;
 }
 
 // This just and's the values together - what it does do it cast
@@ -57,12 +64,8 @@ exports = async function(namespace,query,projection){
      for( let fieldName of Object.keys(query) )
     {
       const arrayIdx = refersToArrayElement(fieldName);
-      if( arrayIdx != -1 ) {
-        const parts = fieldName.split('.');
-        //ArrayName
-        const arrayFieldName = parts.slice(0,arrayIdx);
-        const elementFieldName = parts.slice(arrayidx+1);
-        console.log(`arrayFieldName: ${arrayFieldName} elementFieldName: ${elementFieldName}`)
+      if( arrayIdx.locationOfIndex != -1 ) {
+        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} elementFieldName: ${arrayIdx.elementFieldName}`)
       }
     }
     
