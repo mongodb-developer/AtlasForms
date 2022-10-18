@@ -105,7 +105,15 @@
                                                 <template v-if="!(fieldEdits[`${name}.${arrayidx}`] == `$$REMOVE`)">
                                                     <template v-if="getBsonType(arrayElement) == 'string'">
                                                         <div class="dynamicformvalue">
-                                                            {{arrayElement}}
+                                                            <input v-on:input="formValueChange" :id=`${name}.${innername}`
+                                                            v-if="valtype == 'date'" :data-bsontype="valtype"
+                                                            class="dynamicformvaluedate" :disabled="editing == false"
+                                                            type="datetime-local" :value="toDateTime(value)">
+                                                        <div v-on:input="formValueChange" v-else :id=`${name}.${innername}`
+                                                            :data-bsontype="valtype" :contenteditable="editing?true:null"
+                                                            class="dynamicformvalue">
+                                                            {{arrayElement}} </div>
+                                                        <br />                                                           
                                                         </div>
                                                     </template>
                                                     <template v-else="getBsonType(arrayElement) == 'document'">
