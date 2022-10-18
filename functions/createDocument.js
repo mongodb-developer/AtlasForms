@@ -58,37 +58,7 @@ exports = async function(namespace,untypedUpdates){
      }
     }
   
-    
-    commentout=`
-    for( let field of Object.keys(untypedUpdates) )
-    {
-      let arrayPath = []
-      let parts = field.split('.')
-      let subobj = objSchema
-      for(let part of parts) {
-      
-        //Record if this is in an array (see IMPORTANT comment below)
-        if(!isNaN(part)) {
-          //A Numeric key means an Array for use
-          arrayPaths[arrayPath.join(".")] = true;
-          part='0'; /*When comparing to schema always check against element 0*/
-        }
-        subobj = subobj[part]
-        arrayPath.push(part);
-      }
-      //Now based on that convert value and add to our new query
-      let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
-      if(correctlyTypedValue == null) {
-        console.error("Bad Record Summitted")
-        //Check here and if we cannot cast the value sent to the correct data type
-        //When inserting or updating - so they typed yes in a numeric field for example
-        //We should raise an error - the GUI should prevent this though.
-        return { ok: false, errorField: field, errorType: subobj};   
-      }
-  
-      updates[field] = correctlyTypedValue
-      
-    }`
+
     
 
     let results

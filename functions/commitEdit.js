@@ -36,10 +36,13 @@ exports = async function(namespace,_id,untypedUpdates){
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
     let updates = {}
+    
+    
     let deletepulls = {}
     let arrayPaths = {} ; /* note any arrays we are editing*/
+    
+    
     if(untypedUpdates != null) {
-   
       for( let field of Object.keys(untypedUpdates) )
       {
         let arrayPath = []
