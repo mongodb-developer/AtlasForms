@@ -33,6 +33,9 @@ exports = async function (namespace,untypedValues) {
     
     if(!databaseName || !collectionName) { return {ok: false}}
     
+    
+    const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+    
     //Most of the work will be done in commitEdit - we will insert a 
     //placeholder here with arrays where we need them,
     //IMPORTANT: This highlights a Bug/Feature  in MongoDB. If you do update { $set : { "a.0" : 5 } }
