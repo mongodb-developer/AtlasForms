@@ -71,7 +71,7 @@ function addDocumentToTemplate(doc, templateDoc) {
 
             let bsonType = utilityFunctions.getBsonType(doc[key])
             if (['array','document'].includes(bsonType) == false) {
-                templateDoc[key] = scalarType
+                templateDoc[key] = bsonType
             } else
                 if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
