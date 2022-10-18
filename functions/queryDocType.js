@@ -31,7 +31,7 @@ function rewriteArrayQuery(typedQuery) {
     
     for( let fieldName of Object.keys(typedQuery) )
     {
-      const arrayIdx = refersToArrayElement(fieldName);
+      const arrayIdx = refersToArrayElement(fieldName); //TODO - Deconstruct
       if( arrayIdx.locationOfIndex != -1 ) {
         console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`);
         if(!elementsToMatch[arrayIdx.arrayFieldName]) { elementsToMatch[arrayIdx.arrayFieldName] = []; }
