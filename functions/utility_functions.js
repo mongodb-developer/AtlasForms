@@ -51,5 +51,5 @@ function correctValueType(value,type) {
 }
 
 exports = function(arg){
-  return { correctValueType }
+  return { correctValueType,getBsonType }
 };
