@@ -91,7 +91,7 @@ async function commitEdit(cancel) {
   //TODO: Error handling if edit fails
 
   //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
-  console.log(commitResult)
+   console.log(commitResult)
 
   vueApp.currentDocLocked = false;
   vueApp.fieldEdits = {}; 
@@ -189,7 +189,8 @@ function addArrayElement(name) {
 
     elementBsonType = getBsonType(schemaElement);
     if(elementBsonType == "array") {
-      vueApp.currentDoc.doc[schemaElement].push('')
+      console.log(JSON.stringify(vueApp.currentDoc));
+      //vueApp.currentDoc.doc[schemaElement].push('')
     }
     else {
       vueApp.currentDoc.doc[schemaElement].push({__xyxxy__:1})
