@@ -179,8 +179,17 @@ function addArrayElement(name) {
   //Which works because a delete on the setver is a $set then $pull
   //We either add and emptyp string or dummy object based on the type
   const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-  console.log(vueApp.selectedDocTypeSchema[name][0])
-  console.log(elementBsonType)
+  //If empty add the one we already are showing first
+  if(vueApp.currentDoc.doc[name] == undefined)
+  {
+    vueApp.currentDoc.doc[name] = []; 
+    if(elementBsonType == "document") {
+      vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+    } else {
+      vueApp.currentDoc.doc[name].push('')
+    }
+  }
+
   if(elementBsonType == "document") {
     vueApp.currentDoc.doc[name].push({__xyxxy__:1})
   } else {
@@ -189,11 +198,28 @@ function addArrayElement(name) {
   
 }
 function deleteArrayElement(name,index) {
+  //Make sure we have a  real element to delete
+  
+  if(vueApp.currentDoc.doc[name] == undefined)
+  {
+    const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+    vueApp.currentDoc.doc[name] = []; 
+    if(elementBsonType == "document") {
+      vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+    } else {
+      vueApp.currentDoc.doc[name].push('')
+    }
+  }
+  
+  
   //Record the rquested deletion in our changes
   //We need to remove any existing edits inside this as we cannot
   //set a.b=null and a.b.c=1 - MongoDB won't like that
   //$$REMOVE isn't actually supported in this context but we can make it so
   //on the server
+
+
+
   const elname = `${name}.${index}`
   vueApp.fieldEdits[elname]="$$REMOVE"
   for( const entry of Object.keys(vueApp.fieldEdits)) {
@@ -260,7 +286,7 @@ async function selectDocType() {
     vueApp.selectedDocTypeSchema = docTypeSchemaInfo
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
     vueApp.results = Array(20).fill({}) //Empty and show columnheaders
-    vueApp.currentDoc = {}
+    vueApp.currentDoc = {doc:{}}
 
   }
   catch (e) {
@@ -295,7 +321,7 @@ async function formsOnLoad() {
         docTypes: [],
         selectedDocType: {},
         selectedDocTypeSchema: {},
-        currentDoc: {},
+        currentDoc: {doc:{}},
         listViewFields: [],
         editing: false,
         currentDocLocked: false,

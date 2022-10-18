@@ -2,9 +2,8 @@
     padding: 3px;
    
     overflow-x: hidden;
-    overflow-y: scroll;
-    /* display: grid; 
-     grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); */
+    overflow-y: auto;
+
 }
 
 .dynamicformlabel {
@@ -15,11 +14,12 @@
     float: left;
    /*min-width: 150px;*/
     vertical-align: middle;
-
+    font-size: small;
 }
 
 
 .dynamicformvalue {
+    
     white-space: pre-wrap;
     border: 1px solid black;
     border-radius: 2px;
@@ -27,9 +27,10 @@
     resize: both;
     /* Remove line below for labels above boxes*/
     float: left;
+    clear: left;
     display:block;
     padding: 3px;
-    min-width: 150px;
+   width: 90%;
     padding: 3px;
     margin-left: 5px;
     max-height: 100px;
@@ -41,7 +42,7 @@
     border: 1px solid black;
     border-radius: 2px;
     background-color: white;
-   
+    clear: left;
     /* Remove line below for labels above boxes*/
     float: left;
     padding: 3px;
@@ -61,7 +62,12 @@
 
 .dynamicformitem {
     margin: 5px;
+    padding: 5px;
     float: left;
+    border: 1px solid gray;
+    min-width: 20vw;
+    min-height: 45px;
+    background-color: lightgrey;
 }
 
 input[type="datetime-local"] {
@@ -71,8 +77,10 @@ input[type="datetime-local"] {
 
 .nested {
     border: 1px solid black;
-
-}
+    background-color: navajowhite;
+    min-height: 20px;
+    width: 90%;
+  }
 
 .arrayelement {
    /* Per element - including hidden ones*/
@@ -89,6 +97,8 @@ input[type="datetime-local"] {
     resize: vertical;
     overflow: auto;
     padding: 5px;
+    background-color: lightskyblue;
+    clear: left;
 }
 
 .arrayscroller[style*="height"] {

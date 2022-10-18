@@ -74,13 +74,17 @@ _Here we note anything we made an explicit decision about in the design and why_
   - ~~Update hitlist on edit~~
   -  ~~Combine Cancel Edit and Commit Edit into one function each end~~
   - ~~Array Editing (Add and Remove elements as needed)~~
+  - Need to be able to add Array Elements when Creating a Document (and Querying?)
+    - Needs to handle Query when sending multiepl array elements ... Implicit AND $elemMAtch
 
 
 - Authorization [John Working on This now]
-  - User Details (and user editing?)
-  - Concepts of 'UserAdmin'
+  - ~~User Details (and user editing?)~~
+  - ~~Concepts of 'UserAdmin'~~
+  - Pre Operation Trigger - allows cancellation or modification.
   - Read (Field Based)
   - Update (Field Based)
+  
 
 - *Make it look nicer*
 - Mobile Layout CSS/swipes
