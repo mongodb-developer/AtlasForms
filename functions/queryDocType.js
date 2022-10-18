@@ -33,7 +33,7 @@ function rewriteArrayQuery(typedQuery) {
     {
       const arrayIdx = refersToArrayElement(fieldName); //TODO - Deconstruct
       if( arrayIdx.locationOfIndex != -1 ) {
-        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`);
+        //console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`);
         if(!elementsToMatch[arrayIdx.arrayFieldName]) { elementsToMatch[arrayIdx.arrayFieldName] = []; }
         if(!arrayIdx.elementFieldName) {
           elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index] = typedQuery[fieldName];
@@ -45,12 +45,13 @@ function rewriteArrayQuery(typedQuery) {
         delete typedQuery[fieldName];
       }
     }
-    console.log(JSON.stringify(elementsToMatch));
+    //console.log(JSON.stringify(elementsToMatch));
     //Add the Elemeatches back index
     for(let arrayName of Object.keys(elementsToMatch)) {
       const addElemMatch = elementsToMatch[arrayName].map((x) => { return {$elemMatch:x};});
       typedQuery[arrayName] = { $and : addElemMatch};
     }
+    console.log(JSON.stringify(typedQuery));
     return typedQuery;
 }
 
@@ -107,7 +108,7 @@ exports = async function(namespace,query,projection){
       const results = await cursor.toArray(); 
       return results;
     } catch(e) {
-      console.error(error);
+      console.error(e);
       return [];
     }
 
