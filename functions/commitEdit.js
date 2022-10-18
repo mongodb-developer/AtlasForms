@@ -14,20 +14,18 @@ exports = async function(namespace,_id,untypedUpdates){
   const utilityFunctions =  await context.functions.execute("utility_functions")
   const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
-
+  const [databaseName,collectionName] = namespace.split('.');
+    if(!databaseName || !collectionName) { return rval;}
+    
     //TODO - verify we have permission to write to this
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
       
-    //TODO - any server side change like a 'last update date'
-    
-    if(!databaseName || !collectionName) { return rval;}
-    
-    
+ 
     let user = context.user;
     let email = user.data.email;
     
     //Cannot unlock it if it's not mine  
-    let checkLock = { _id, __lockedby : email , __locked: true};
+    let checkLock = { _id, __lockedby : email };
     console.log(JSON.stringify(checkLock))
     
     // Convert everything to the correct Javascript/BSON type 
