@@ -182,11 +182,12 @@ function addArrayElement(name) {
   if(vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null)
   {
     const [arrayname, subfield] = name.split('_');
-    const schemaElement = vueApp.selectedDocTypeSchema[arrayname][subfield];
+    const schemaElement = vueApp.selectedDocTypeSchema[arrayname].subfield;
     console.log(schemaElement);
   }
-  const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-
+  else {
+    const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+  } 
   
   if(elementBsonType == "document") {
     vueApp.currentDoc.doc[name].push({__xyxxy__:1})
