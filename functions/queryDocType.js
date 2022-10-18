@@ -47,7 +47,7 @@ function rewriteArrayQuery(typedQuery) {
     }
     console.log(JSON.stringify(elementsToMatch));
     //Add the Elemeatches back index
-    for(let arrayName of elementsToMatch) {
+    for(let arrayName of Object.keys(elementsToMatch)) {
       const addElemMatch = elementsToMatch[arrayName].map((x) => { return {$elemMatch:x};});
       typedQuery[arrayName] = { $and : addElemMatch};
     }
