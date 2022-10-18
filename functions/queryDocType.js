@@ -45,8 +45,6 @@ function rewriteArrayQuery(typedQuery) {
         delete typedQuery[fieldName];
       }
     }
-    //console.log(JSON.stringify(elementsToMatch));
-    //Add the Elemeatches back index
     
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
@@ -66,9 +64,9 @@ function rewriteArrayQuery(typedQuery) {
     return typedQuery;
 }
 
-// This just and's the values together - what it does do it cast
+// This just ANDs the values together - first though it casts
 // Them all to the correct data type for the field as the form
-// Thinks the numbers are strings
+// returns everything as a string
 
 exports = async function(namespace,query,projection){
  
