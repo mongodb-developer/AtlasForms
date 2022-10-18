@@ -124,14 +124,22 @@ exports = async function(namespace,_id,untypedUpdates){
          
         postCommit = await collection.findOneAndUpdate(checkLock,setAndUnlock,{returnNewDocument: true});
         console.log("After Update")
-        console.log(`pc:${postCommit}`)
+        console.log(`pc:${JSON.stringify(postCommit)}`)
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       } else {
         console.log("Has Array Deletes")
+         console.log("Before Update");
+        console.log(JSON.stringify(checkLock));
+        console.log(JSON.stringify(sets));
         await collection.updateOne(checkLock,sets,{returnNewDocument: true});
         const removeElementsAndUnlock = { ...pulls,...unlockRecord};
+           console.log(JSON.stringify(checkLock));
+        console.log(JSON.stringify(removeElementsAndUnlock));
+         
         postCommit = await collection.findOneAndUpdate(checkLock,removeElementsAndUnlock,{returnNewDocument: true});
+        console.log("After Update")
+        console.log(`pc:${JSON.stringify(postCommit)}`)
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       }
