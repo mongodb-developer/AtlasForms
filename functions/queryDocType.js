@@ -18,13 +18,18 @@ function refersToArrayElement(fieldName)
 }
 
 function rewriteArrayQuery(typedQuery) {
-   /* Wherever we are querying against array elements we need to rewrite */
+    /* Wherever we are querying against array elements we need to rewrite */
     /* If we have {skills.1: "archery"} and { skills.2: "weaving" } */
-    /* We want ot find them at any location in the array not just at 1 and 2 */
+    /* We want to find them at any location in the array not just at positions 1 and 2 */
     /* Also if we have { skills.1.skill: "archery", skills.1.level: 3 } we */
-    /* are looking for level3 archery, not level 1 archery and level3 in something else*/
+    /* are looking for level3 archery, not any level archery and level=3 in something else*/
     /* To do this we rewrite the query using $elemMatch */
-     for( let fieldName of Object.keys(typedQuery) )
+    
+    // { skills : { $elemMatch: { skill: "archery", level: 3}}}
+    // We use $and for multiples
+    const elementsToMatch = {}
+    
+    for( let fieldName of Object.keys(typedQuery) )
     {
       const arrayIdx = refersToArrayElement(fieldName);
       if( arrayIdx.locationOfIndex != -1 ) {
