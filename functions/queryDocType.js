@@ -47,10 +47,18 @@ function rewriteArrayQuery(typedQuery) {
     }
     //console.log(JSON.stringify(elementsToMatch));
     //Add the Elemeatches back index
+    const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
-      const addElemMatch = elementsToMatch[arrayName].map((x) => { return {$elemMatch:x};});
-      typedQuery[arrayName] = { $and : addElemMatch};
+      for(let arrayElement of elementsToMatch[arrayName]) {
+        if( utilityFunctions.getBsonType(arrayElement) == "document" )
+        {
+          arrayQueryClauses.push( { [arrayName] : { $elemMatch : arrayElement}})
+        } else {
+           arrayQueryClauses.push( { [arrayName] : { $elemMatch : {$eq : arrayElement}}})
+        }
+      }
     }
+    typesQuery['$and'] = arrayQueryClauses;
     console.log(JSON.stringify(typedQuery));
     return typedQuery;
 }
@@ -61,9 +69,8 @@ function rewriteArrayQuery(typedQuery) {
 
 exports = async function(namespace,query,projection){
  
-  /*Dynamically load some shared code*/
-  
-  const utilityFunctions =  await context.functions.execute("utility_functions");
+    /*Dynamically load some shared code*/
+    utilityFunctions =  await context.functions.execute("utility_functions");
   
 
     if (query == null) { query = {}; }
