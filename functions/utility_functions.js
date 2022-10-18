@@ -99,5 +99,5 @@ function correctValueType(value,type) {
 }
 
 exports = function(arg){
-  return { correctValueType,getBsonType ,castDocToType }
+  return { correctValueType,getBsonType ,castDocToType ,refersToArrayElement}
 };
