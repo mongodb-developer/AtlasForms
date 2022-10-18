@@ -189,10 +189,10 @@ function addArrayElement(name) {
 
     elementBsonType = getBsonType(schemaElement);
     if(elementBsonType == "array") {
-      vueApp.currentDoc.doc[name].push('')
+      vueApp.currentDoc.doc[schemaElement].push('')
     }
     else {
-      vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+      vueApp.currentDoc.doc[schemaElement].push({__xyxxy__:1})
     }
   }
   else {
