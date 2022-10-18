@@ -179,7 +179,7 @@ function addArrayElement(name) {
   //Which works because a delete on the setver is a $set then $pull
   //We either add and emptyp string or dummy object based on the type
   
-  if(vueApp.selectedDocTypeSchema[name][0] == null)
+  if(vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null)
   {
     const [arrayname, subfield] = name.split('.');
     const schemaElement = vueApp.selectedDocTypeSchema[arrayname];
