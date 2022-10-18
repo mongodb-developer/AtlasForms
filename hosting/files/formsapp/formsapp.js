@@ -178,23 +178,22 @@ function addArrayElement(name) {
   //Oddly if we delete it - we will add a delete to send to the server
   //Which works because a delete on the setver is a $set then $pull
   //We either add and emptyp string or dummy object based on the type
+  const elementBsonType;
   
   if(vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null)
   {
-    const [arrayname, subfield] = name.split('_');
-    console.log(`Sub Schema:  ${JSON.stringify(vueApp.selectedDocTypeSchema[arrayname])}`);
+    const [arrayname, subfield] = name.split('_'); 
     const schemaElement = vueApp.selectedDocTypeSchema[arrayname][name];
-    console.log(schemaElement);
+    console.log(JSON.stringify(schemaElement));
   }
   else {
-    const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+    elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+    if(elementBsonType == "document") {
+      vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+    } else {
+      vueApp.currentDoc.doc[name].push('')
+    }
   } 
-  
-  if(elementBsonType == "document") {
-    vueApp.currentDoc.doc[name].push({__xyxxy__:1})
-  } else {
-    vueApp.currentDoc.doc[name].push('')
-  }
   
 }
 function deleteArrayElement(name,index) {
