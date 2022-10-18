@@ -181,6 +181,7 @@ function addArrayElement(name) {
   const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
   console.log(vueApp.selectedDocTypeSchema[name][0])
   console.log(elementBsonType)
+  
   if(elementBsonType == "document") {
     vueApp.currentDoc.doc[name].push({__xyxxy__:1})
   } else {
