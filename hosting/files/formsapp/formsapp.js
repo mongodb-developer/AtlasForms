@@ -189,7 +189,7 @@ function addArrayElement(name) {
 
     elementBsonType = getBsonType(schemaElement);
     if(elementBsonType == "array") {
-      console.log(JSON.stringify(vueApp.currentDoc[schemaElement]));
+      console.log(JSON.stringify(vueApp.currentDoc));
    
       //vueApp.currentDoc.doc[schemaElement].push('')
     }
