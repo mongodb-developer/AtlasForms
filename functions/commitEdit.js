@@ -120,8 +120,10 @@ exports = async function(namespace,_id,untypedUpdates){
       {
         console.log("No Array Deletes")
         const setAndUnlock = { ...sets,...unlockRecord};
+        console.log("Before Update");
         postCommit = await collection.findOneAndUpdate(checkLock,setAndUnlock,{returnNewDocument: true});
-        console.log(postCommit)
+        console.log("After Update")
+        console.log(`pc:${postCommit}`)
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       } else {
