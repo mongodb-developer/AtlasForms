@@ -69,11 +69,11 @@ function addDocumentToTemplate(doc, templateDoc) {
     for (let key of Object.keys(doc)) {
         if (typeof doc[key] == "object") {
 
-            let scalarType = utilityFunctions.getBsonType(doc[key])
-            if (scalarType != null) {
+            let bsonType = utilityFunctions.getBsonType(doc[key])
+            if (['array','document'].includes(bsonType) == false) {
                 templateDoc[key] = scalarType
             } else
-                if (Array.isArray(doc[key])) {
+                if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
                     const firstItem = doc[key][0]
                     //It's goign to be an array so add one if we don't have it

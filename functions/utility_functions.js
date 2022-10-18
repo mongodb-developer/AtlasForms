@@ -2,6 +2,8 @@
 //Like Binary, Date, Decimal128 etc.
 
 function  getBsonType(obj) {
+  if (typeof obj != "object") return typeof obj;
+    if (Array.isArray(obj)) return "array"
     if (obj instanceof Date) return "date"
     if (obj instanceof BSON.ObjectId) return "objectid"
     if (obj instanceof BSON.Binary) return "binary"
@@ -9,7 +11,7 @@ function  getBsonType(obj) {
     if (obj instanceof BSON.Long) return "int64"
     if (obj instanceof BSON.Double) return "number"
     if (obj instanceof BSON.Decimal128) return "decimal128"
-    return null;
+    return "document";
 }
 
 /* Code/Function used in multiple other functions, we we don't want to
