@@ -180,7 +180,7 @@ function addArrayElement(name) {
   //We either add and emptyp string or dummy object based on the type
 
   // Initialise here for scope
-  const elementBsonType = null;
+  let elementBsonType = null;
   
   if(vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null)
   {
