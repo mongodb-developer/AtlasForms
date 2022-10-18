@@ -91,7 +91,7 @@ exports = async function (namespace,untypedValues) {
     try {
       await collection.insertOne(newDocument);
       /* Now edit it */
-      await context.functions.execute("commitEdit",nameSpace,newId,untypedValues)
+      await context.functions.execute("commitEdit",namespace,newId,untypedValues)
     }
     catch(e) {
       console.error(e);
