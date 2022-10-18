@@ -121,8 +121,8 @@ exports = async function(namespace,_id,untypedUpdates){
         console.log("No Array Deletes")
         const setAndUnlock = { ...sets,...unlockRecord};
         console.log("Before Update");
-         console.log(JSON.stringify(checkLock));
-         console.log(JSON.stringify(setAndUnlock));
+        console.log(JSON.stringify(checkLock));
+        console.log(JSON.stringify(setAndUnlock));
          
          
         postCommit = await collection.findOneAndUpdate(checkLock,setAndUnlock,{returnNewDocument: true});
