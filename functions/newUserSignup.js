@@ -9,8 +9,8 @@ exports = async function(authEvent) {
     if(superuser == null) {
       isSuperUser = true;
     }
-    
-    newuser  = { _id: authEvent.user.id, ...authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [] }
+    //TODO - figure out what those permissions look like 
+    newuser  = { _id: authEvent.user.id, ...authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [{item:"",permissions:""}] }
     delete newuser.id; //Moved into _id
     
     await userdata.insertOne(newuser)
