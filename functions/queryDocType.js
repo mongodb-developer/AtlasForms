@@ -47,6 +47,7 @@ function rewriteArrayQuery(typedQuery) {
     }
     //console.log(JSON.stringify(elementsToMatch));
     //Add the Elemeatches back index
+    
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
       for(let arrayElement of elementsToMatch[arrayName]) {
@@ -58,7 +59,9 @@ function rewriteArrayQuery(typedQuery) {
         }
       }
     }
-    typedQuery['$and'] = arrayQueryClauses;
+    if(arrayQueryClauses.length > 0) {
+      typedQuery['$and'] = arrayQueryClauses;
+    }
     console.log(JSON.stringify(typedQuery));
     return typedQuery;
 }
