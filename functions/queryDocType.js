@@ -27,16 +27,23 @@ function rewriteArrayQuery(typedQuery) {
     
     // { skills : { $elemMatch: { skill: "archery", level: 3}}}
     // We use $and for multiples
-    const elementsToMatch = {}
+    const elementsToMatch = {};
     
     for( let fieldName of Object.keys(typedQuery) )
     {
       const arrayIdx = refersToArrayElement(fieldName);
       if( arrayIdx.locationOfIndex != -1 ) {
-        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`)
+        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`);
+        if(!elementsToMatch[arrayIdx.arrayFieldName]) { elementsToMatch[arrayIdx.arrayFieldName] = []; }
+        if(!arrayIdx.elementFieldName) {
+          elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index] = typedQuery[fieldName];
+        } else {
+          if(!elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]) {elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]={};}
+          elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index][arrayIdx.elementFieldName] = typedQuery[fieldName];
+        }
       }
     }
-    
+    console.log(JSON.stringify(elementsToMatch))
     return typedQuery;
 }
 
@@ -76,7 +83,6 @@ exports = async function(namespace,query,projection){
       }
       //Now based on that convert value and add to our new query
       let correctlyTypedValue = utilityFunctions.correctValueType(query[fieldName],subobj)
-      
       if(correctlyTypedValue != null && correctlyTypedValue!="") {
         typedQuery[fieldName] = correctlyTypedValue
       }
