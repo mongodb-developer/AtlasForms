@@ -2,6 +2,8 @@
 not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates){
+
+  console.log(`Useful Info: ${namespace} ${untypedUpdates}`);
   let rval = { commitSuccess: false }
   let postCommit;
     

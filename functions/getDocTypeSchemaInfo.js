@@ -1,13 +1,3 @@
-
-/* Return Schema info for the built in doc types - User and SchemaInfo */
-
-function getSystemDocTypeSchemaInfo(namespace) {
-  if(namespace == "__atlasforms.doctypes") {
-    return { namespace: "string" , title: "string", listViewFields: ["string"]
-    }
-  }
-}
-
 /* This returns a template document for a given type with information about the fields ,
 data types AND the arrangement/order of those fields. This is needed to provide an empty
 form for Query or data entry  */
@@ -18,8 +8,8 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 /* This will be extended to include lots more metadata like jsonSchema or similar*/
 
-
 exports = async function (namespace) {
+
     /*Dynamically load some shared code*/
     utilityFunctions =  await context.functions.execute("utility_functions");
     
@@ -35,9 +25,9 @@ exports = async function (namespace) {
 
 
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-    const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0}
-    
-    const exampleDocs = await collection.find({},removeLockingFields).limit(10).toArray();
+    const removeLockingFields = { __locked: 0, __lockedby: 0, __lockedtime: 0 }
+
+    const exampleDocs = await collection.find({}, removeLockingFields).limit(10).toArray();
 
     if (exampleDocs.length == null) {
         console.error("No example doc");
@@ -97,7 +87,7 @@ function addDocumentToTemplate(doc, templateDoc) {
                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key])
                 }
         } else {
-            templateDoc[key] = typeof doc[key] 
+            templateDoc[key] = typeof doc[key]
         }
     }
     return templateDoc
