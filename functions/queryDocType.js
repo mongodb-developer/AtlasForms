@@ -6,14 +6,33 @@ function refersToArrayElement(fieldName)
     
     const parts = fieldName.split('.');
     //Is anything in here a number if so return the index
-    const locationOfIndex = parts.reduce((val,el,idx)=>{ return isNaN(el) ? val : idx ;}  ,-1);
+    const locationOfIndex = parts.reduce((val,el,idx)=>{ return isNaN(el) ? val : idx ;}  , -1);
     const rval = { locationOfIndex }
     if(locationOfIndex != -1) 
     {
       rval.arrayFieldName = parts.slice(0,locationOfIndex).join('.');
       rval.elementFieldName = parts.slice(locationOfIndex+1).join('.');
+      rval.index = parts[locationOfIndex];
     }  
     return rval;
+}
+
+function rewriteArrayQuery(typedQuery) {
+   /* Wherever we are querying against array elements we need to rewrite */
+    /* If we have {skills.1: "archery"} and { skills.2: "weaving" } */
+    /* We want ot find them at any location in the array not just at 1 and 2 */
+    /* Also if we have { skills.1.skill: "archery", skills.1.level: 3 } we */
+    /* are looking for level3 archery, not level 1 archery and level3 in something else*/
+    /* To do this we rewrite the query using $elemMatch */
+     for( let fieldName of Object.keys(typedQuery) )
+    {
+      const arrayIdx = refersToArrayElement(fieldName);
+      if( arrayIdx.locationOfIndex != -1 ) {
+        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`)
+      }
+    }
+    
+    return typedQuery;
 }
 
 // This just and's the values together - what it does do it cast
@@ -55,20 +74,8 @@ exports = async function(namespace,query,projection){
       }
     }
     
-    /* Wherever we are querying against array elements we need to rewrite */
-    /* If we have {skills.1: "archery"} and { skills.2: "weaving" } */
-    /* We want ot find them at any location in the array not just at 1 and 2 */
-    /* Also if we have { skills.1.skill: "archery", skills.1.level: 3 } we */
-    /* are looking for level3 archery, not level 1 archery and level3 in something else*/
-    /* To do this we rewrite the query using $elemMatch */
-     for( let fieldName of Object.keys(query) )
-    {
-      const arrayIdx = refersToArrayElement(fieldName);
-      if( arrayIdx.locationOfIndex != -1 ) {
-        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.locationOfIndex} elementFieldName: ${arrayIdx.elementFieldName}`)
-      }
-    }
-    
+    /* Handle Arrays correctly*/
+    typedQuery = rewriteArrayQuery(typedQuery);
  
 
     let results
