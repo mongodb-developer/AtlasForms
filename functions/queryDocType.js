@@ -1,6 +1,6 @@
 
 //Todo - in utility_fns?
-
+/*
 function refersToArrayElement(fieldName)
 {
     
@@ -15,7 +15,7 @@ function refersToArrayElement(fieldName)
       rval.index = parts[locationOfIndex];
     }  
     return rval;
-}
+}*/
 
 function rewriteArrayQuery(typedQuery) {
     /* Wherever we are querying against array elements we need to rewrite */
@@ -31,7 +31,7 @@ function rewriteArrayQuery(typedQuery) {
     
     for( let fieldName of Object.keys(typedQuery) )
     {
-      const {arrayFieldName,index,elementFieldName,locationOfIndex} = refersToArrayElement(fieldName); 
+      const {arrayFieldName,index,elementFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
       if( locationOfIndex != -1 ) {
          if(!elementsToMatch[arrayFieldName]) { elementsToMatch[arrayFieldName] = []; }
         if(!elementFieldName) {
@@ -66,7 +66,7 @@ function rewriteArrayQuery(typedQuery) {
     return typedQuery;
 }
 
-
+comment=`
 function castDocToType(doc,objSchema){
      
   const typedQuery={}
@@ -87,7 +87,7 @@ function castDocToType(doc,objSchema){
     }
   }
   return typedQuery
-}
+}`
 
 // This just ANDs the values together - first though it casts
 // Them all to the correct data type for the field as the form
@@ -107,7 +107,7 @@ exports = async function(namespace,query,projection){
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    let typedQuery = castDocToType(query,objSchema);
+    let typedQuery = utility_functions.castDocToType(query,objSchema);
 
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);

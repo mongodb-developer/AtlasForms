@@ -1,3 +1,49 @@
+//Given a field name, let us know if it's an arrayFieldName
+//And if do get the bit before and after the number
+
+function refersToArrayElement(fieldName)
+{
+    
+    const parts = fieldName.split('.');
+    //Is anything in here a number if so return the index
+    const locationOfIndex = parts.reduce((val,el,idx)=>{ return isNaN(el) ? val : idx ;}  , -1);
+    const rval = { locationOfIndex }
+    if(locationOfIndex != -1) 
+    {
+      rval.arrayFieldName = parts.slice(0,locationOfIndex).join('.');
+      rval.elementFieldName = parts.slice(locationOfIndex+1).join('.');
+      rval.index = parts[locationOfIndex];
+    }  
+    return rval;
+}
+
+
+//Take a Document where everything is a string and make it all 
+//be the correct data type according to the schema
+
+function castDocToType(doc,objSchema){
+     
+  const typedDoc={}
+  for( let fieldName of Object.keys(doc) )
+  {
+    let parts = fieldName.split('.')
+    let subobj = objSchema
+    for(let part of parts) {
+      if(!isNaN(part)) {
+        part='0'; /*When comparing to schema always check against element 0*/
+      }
+      subobj = subobj[part]
+    }
+    //Now based on that convert value and add to our new query
+    let correctlyTypedValue = correctValueType(doc[fieldName],subobj)
+    if(correctlyTypedValue != null && correctlyTypedValue!="") {
+      typedDoc[fieldName] = correctlyTypedValue
+    }
+  }
+  return typedDoc
+}
+
+
 //Deal with data types which are objects but specific types
 //Like Binary, Date, Decimal128 etc.
 
@@ -53,5 +99,5 @@ function correctValueType(value,type) {
 }
 
 exports = function(arg){
-  return { correctValueType,getBsonType }
+  return { correctValueType,getBsonType ,castToDocType }
 };

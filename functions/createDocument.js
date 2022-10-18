@@ -18,7 +18,9 @@ function getNewIdValue(objSchema) {
 // Thinks the numbers are strings
 
 exports = async function(namespace,untypedUpdates){
-    
+  
+    const utilityFunctions =  await context.functions.execute("utility_functions")
+  
     //We don't allow _id to be specified here but will accept an empty
     //String as unspecificed
     
@@ -27,13 +29,12 @@ exports = async function(namespace,untypedUpdates){
     }
     
     if(untypedUpdates._id != undefined) {
-      //Providng an _id is not allowed *Design decision* 
+      //Providng an _id is not allowed from the frontend *Design decision* 
       //Icky hack on error message reuse
       return { ok: false, errorField: "_id", errorType: "supplied"};     
     }
     
-    const utilityFunctions =  await context.functions.execute("utility_functions")
-  
+    
     if (untypedUpdates == null || untypedUpdates == {} ) { return {}; }
     
     const [databaseName,collectionName] = namespace.split('.');
@@ -48,8 +49,17 @@ exports = async function(namespace,untypedUpdates){
     const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
    
-    let updates = {}
-    let arrayPaths = {}
+    const updates = utilityFunctions.castDocToType(untypedUpdates,objSchema)
+    const arrayPaths = {}
+    for(const fieldName of Object.keys(updates)) {
+       const {arrayFieldName,index,elementFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
+       if(locationOfIndex != -1) {
+       arrayPaths[arrayFieldName] = true;
+     }
+    }
+  
+    
+    commentout=`
     for( let field of Object.keys(untypedUpdates) )
     {
       let arrayPath = []
@@ -78,7 +88,8 @@ exports = async function(namespace,untypedUpdates){
   
       updates[field] = correctlyTypedValue
       
-    }
+    }`
+    
 
     let results
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
