@@ -15,7 +15,6 @@ exports = async function(namespace,_id,untypedUpdates){
   const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
 
-    const [databaseName,collectionName] = namespace.split('.');
     //TODO - verify we have permission to write to this
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
       
@@ -111,7 +110,7 @@ exports = async function(namespace,_id,untypedUpdates){
       }
       //Now apply that updateOne
       console.log(`ensuring arrays where needed`)
-      consol.log(JSON.stringify(checkLock))
+      console.log(JSON.stringify(checkLock))
       const { matchedCount, modifiedCount }= await collection.updateOne(checkLock,[{$set:ensureArray}]);
       console.log(matchedcount,modifiedcount)
     }
