@@ -110,7 +110,7 @@ exports = async function(namespace,_id,untypedUpdates){
       console.log(`ensuring arrays where needed`)
       console.log(JSON.stringify(checkLock))
       const { matchedCount, modifiedCount }= await collection.updateOne(checkLock,[{$set:ensureArray}]);
-      console.log(matchedcount,modifiedcount)
+      console.log(matchedCount,modifiedcount)
     }
     
       if(Object.keys(deletepulls).length == 0 )
