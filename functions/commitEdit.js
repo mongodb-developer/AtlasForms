@@ -30,6 +30,7 @@ exports = async function(namespace,_id,untypedUpdates){
     //Cannot unlock it if it's not mine  
     let isLockedByMe = { __lockedby : email };
     let checkLock = { _id, $or : [ isLockedByMe] };
+    console.log(JSON.stringify(checkLock))
     
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
@@ -104,16 +105,16 @@ exports = async function(namespace,_id,untypedUpdates){
     
     let arrayFields = Object.keys(arrayPaths);
     if(arrayFields.length > 0) {
-    let ensureArray = {}
-    //For each field, if it's null then set it to square brackets
-    for( let arrayField of arrayFields) {
-      ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
-    }
-    //Now apply that updateOne
-    console.log(`ensuring arrays where needed`)
-    consol.log(JSON.stringify(checkLock))
-    const { matchedCount, modifiedCount }= await collection.updateOne(checkLock,[{$set:ensureArray}]);
-    console.log(matchedcount,modifiedcount)
+      let ensureArray = {}
+      //For each field, if it's null then set it to square brackets
+      for( let arrayField of arrayFields) {
+        ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
+      }
+      //Now apply that updateOne
+      console.log(`ensuring arrays where needed`)
+      consol.log(JSON.stringify(checkLock))
+      const { matchedCount, modifiedCount }= await collection.updateOne(checkLock,[{$set:ensureArray}]);
+      console.log(matchedcount,modifiedcount)
     }
     
       
@@ -126,6 +127,7 @@ exports = async function(namespace,_id,untypedUpdates){
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       } else {
+        console.log("Has Array Deletes")
         await collection.updateOne(checkLock,sets,{returnNewDocument: true});
         const removeElementsAndUnlock = { ...pulls,...unlockRecord};
         postCommit = await collection.findOneAndUpdate(checkLock,removeElementsAndUnlock,{returnNewDocument: true});
