@@ -186,7 +186,7 @@ function addArrayElement(name) {
   {
     const [arrayname, subfield] = name.split('_'); 
     const schemaElement = vueApp.selectedDocTypeSchema[arrayname][name];
-    console.log(JSON.stringify(schemaElement));
+    elementBsonType = getBsonType(schemaElement);
   }
   else {
     elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
