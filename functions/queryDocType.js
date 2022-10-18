@@ -49,12 +49,14 @@ function rewriteArrayQuery(typedQuery) {
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
       for(let arrayElement of elementsToMatch[arrayName]) {
-        console.log(`Array Element is type ${utilityFunctions.getBsonType(arrayElement)}`)
-        if( utilityFunctions.getBsonType(arrayElement) == "document" )
-        {
-          arrayQueryClauses.push( { [arrayName] : { $elemMatch : arrayElement}})
-        } else {
-           arrayQueryClauses.push( { [arrayName] : { $elemMatch : {$eq : arrayElement}}})
+        //console.log(`Array Element is type ${utilityFunctions.getBsonType(arrayElement)}`)
+        if(arrayElement != "$$REMOVE" && arrayElement != "") {
+          if( utilityFunctions.getBsonType(arrayElement) == "document" )
+          {
+            arrayQueryClauses.push( { [arrayName] : { $elemMatch : arrayElement}})
+          } else {
+             arrayQueryClauses.push( { [arrayName] : { $elemMatch : {$eq : arrayElement}}})
+          }
         }
       }
     }
@@ -65,30 +67,12 @@ function rewriteArrayQuery(typedQuery) {
     return typedQuery;
 }
 
-// This just ANDs the values together - first though it casts
-// Them all to the correct data type for the field as the form
-// returns everything as a string
 
-exports = async function(namespace,query,projection){
- 
-    /*Dynamically load some shared code*/
-    utilityFunctions =  await context.functions.execute("utility_functions");
-  
-
-    if (query == null) { query = {}; }
-    const [databaseName,collectionName] = namespace.split('.');
-    if(!databaseName || !collectionName) { return {}; }
-    
-  
-    // Convert everything to the correct Javascript/BSON type 
-    // As it's all sent as strings from the form, 
-    // also sanitises any Javascript injection
-    
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
-
-   
-    let typedQuery = {}
-    for( let fieldName of Object.keys(query) )
+function castDocToType(doc){
+     
+       
+  const typedQuery={}
+      for( let fieldName of Object.keys(doc) )
     {
       let parts = fieldName.split('.')
       let subobj = objSchema
@@ -99,17 +83,37 @@ exports = async function(namespace,query,projection){
         subobj = subobj[part]
       }
       //Now based on that convert value and add to our new query
-      let correctlyTypedValue = utilityFunctions.correctValueType(query[fieldName],subobj)
+      let correctlyTypedValue = utilityFunctions.correctValueType(doc[fieldName],subobj)
       if(correctlyTypedValue != null && correctlyTypedValue!="") {
         typedQuery[fieldName] = correctlyTypedValue
       }
     }
-    
+    return typedQuery
+}
+
+// This just ANDs the values together - first though it casts
+// Them all to the correct data type for the field as the form
+// returns everything as a string
+
+exports = async function(namespace,query,projection){
+ 
+    /*Dynamically load some shared code*/
+    var utilityFunctions =  await context.functions.execute("utility_functions");
+
+
+    if (query == null) { query = {}; }
+    const [databaseName,collectionName] = namespace.split('.');
+    if(!databaseName || !collectionName) { return {}; }
+
+    var objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    // Convert everything to the correct Javascript/BSON type 
+    // As it's all sent as strings from the form, 
+    // also sanitises any Javascript injection
+    let typedQuery = castDocToType(query);
+
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);
  
-
-    let results
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
   
