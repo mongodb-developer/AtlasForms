@@ -31,21 +31,20 @@ function rewriteArrayQuery(typedQuery) {
     
     for( let fieldName of Object.keys(typedQuery) )
     {
-      const arrayIdx = refersToArrayElement(fieldName); //TODO - Deconstruct
-      if( arrayIdx.locationOfIndex != -1 ) {
-        //console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`);
-        if(!elementsToMatch[arrayIdx.arrayFieldName]) { elementsToMatch[arrayIdx.arrayFieldName] = []; }
-        if(!arrayIdx.elementFieldName) {
-          elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index] = typedQuery[fieldName];
+      const {arrayFieldName,ind,elementFieldName,locationOfIndex} = refersToArrayElement(fieldName); 
+      if( locationOfIndex != -1 ) {
+         if(!elementsToMatch[arrayFieldName]) { elementsToMatch[arrayFieldName] = []; }
+        if(!elementFieldName) {
+          elementsToMatch[arrayFieldName][index] = typedQuery[fieldName];
         } else {
-          if(!elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]) {elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]={};}
-          elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index][arrayIdx.elementFieldName] = typedQuery[fieldName];
+          if(!elementsToMatch[arrayFieldName][index]) {elementsToMatch[arrayFieldName][index]={};}
+          elementsToMatch[arrayFieldName][index][elementFieldName] = typedQuery[fieldName];
         }
         /* Remove this from the query */
         delete typedQuery[fieldName];
       }
     }
-    
+    //Rewrite as an $and of $elemMatches
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
       for(let arrayElement of elementsToMatch[arrayName]) {
