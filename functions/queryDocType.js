@@ -68,27 +68,26 @@ function rewriteArrayQuery(typedQuery) {
 }
 
 
-function castDocToType(doc){
+function castDocToType(doc,objSchema){
      
-       
   const typedQuery={}
-      for( let fieldName of Object.keys(doc) )
-    {
-      let parts = fieldName.split('.')
-      let subobj = objSchema
-      for(let part of parts) {
-        if(!isNaN(part)) {
-          part='0'; /*When comparing to schema always check against element 0*/
-        }
-        subobj = subobj[part]
+  for( let fieldName of Object.keys(doc) )
+  {
+    let parts = fieldName.split('.')
+    let subobj = objSchema
+    for(let part of parts) {
+      if(!isNaN(part)) {
+        part='0'; /*When comparing to schema always check against element 0*/
       }
-      //Now based on that convert value and add to our new query
-      let correctlyTypedValue = utilityFunctions.correctValueType(doc[fieldName],subobj)
-      if(correctlyTypedValue != null && correctlyTypedValue!="") {
-        typedQuery[fieldName] = correctlyTypedValue
-      }
+      subobj = subobj[part]
     }
-    return typedQuery
+    //Now based on that convert value and add to our new query
+    let correctlyTypedValue = utilityFunctions.correctValueType(doc[fieldName],subobj)
+    if(correctlyTypedValue != null && correctlyTypedValue!="") {
+      typedQuery[fieldName] = correctlyTypedValue
+    }
+  }
+  return typedQuery
 }
 
 // This just ANDs the values together - first though it casts
@@ -105,11 +104,11 @@ exports = async function(namespace,query,projection){
     const [databaseName,collectionName] = namespace.split('.');
     if(!databaseName || !collectionName) { return {}; }
 
-    var objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    let typedQuery = castDocToType(query);
+    let typedQuery = castDocToType(query,objSchema);
 
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);
