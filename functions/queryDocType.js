@@ -65,7 +65,7 @@ exports = async function(namespace,query,projection){
     {
       const arrayIdx = refersToArrayElement(fieldName);
       if( arrayIdx.locationOfIndex != -1 ) {
-        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} elementFieldName: ${arrayIdx.elementFieldName}`)
+        console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.locationOfIndex} elementFieldName: ${arrayIdx.elementFieldName}`)
       }
     }
     
