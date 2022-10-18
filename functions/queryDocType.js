@@ -58,7 +58,7 @@ function rewriteArrayQuery(typedQuery) {
         }
       }
     }
-    typesQuery['$and'] = arrayQueryClauses;
+    typedQuery['$and'] = arrayQueryClauses;
     console.log(JSON.stringify(typedQuery));
     return typedQuery;
 }
