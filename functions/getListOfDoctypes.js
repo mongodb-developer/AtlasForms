@@ -1,4 +1,11 @@
 exports = async function(arg){
+  
+    
+  /*Get an Authorization object - shoudl be standard in any non private function*/
+  const authorization = await context.functions.execute("newAuthorization",context.user.id);
+  if( authorization == null ) { return { message: "Not Authorized" }; }
+  
+
   /* Can we see who it's running as? */
 
   /*Here we are explicty, programatically choosing which document types to expose to the frontend*/
@@ -12,9 +19,6 @@ exports = async function(arg){
   
   /* This is a hard coded list for now */
   /* But plan to move to a collection */
-  
-  /*Get an Authorization object*/
-  const authorization = await context.functions.execute("newAuthorization",context.user.id);
 
   const canManageUsers = authorization.authorize(authorization.USER_MANAGER);
 
@@ -45,6 +49,7 @@ exports = async function(arg){
   for (const docType of nonSystemDocTypes) {
     if(!docType.namespace.startsWith("__atlasforms"))
     {
+      const canSeeDoctype = authorization.authorize(authorization.DOCTYPE_MANAGER);
       docTypes.push(docType)
     }
   }
