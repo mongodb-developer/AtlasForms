@@ -183,7 +183,7 @@ function addArrayElement(name) {
   {
     const [arrayname, subfield] = name.split('_');
     console.log(`Sub Schema:  ${JSON.stringify(vueApp.selectedDocTypeSchema[arrayname])}`);
-    const schemaElement = vueApp.selectedDocTypeSchema[arrayname].subfield;
+    const schemaElement = vueApp.selectedDocTypeSchema[arrayname].name;
     console.log(schemaElement);
   }
   else {
