@@ -5,6 +5,8 @@ exports = async function(namespace,_id,untypedUpdates){
 
   console.log(`Useful Info: ${namespace} ${untypedUpdates}`);
   let rval = { commitSuccess: false }
+  
+  console.log(`Commit Edit` )
   let postCommit;
     
     if(_id == undefined) {
@@ -15,7 +17,6 @@ exports = async function(namespace,_id,untypedUpdates){
   const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
 
 
-    const [databaseName,collectionName] = namespace.split('.');
     //TODO - verify we have permission to write to this
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
       
@@ -28,20 +29,20 @@ exports = async function(namespace,_id,untypedUpdates){
     let email = user.data.email;
     
     //Cannot unlock it if it's not mine  
-    let isLockedByMe = { __lockedby : email };
-    let checkLock = { _id, $or : [ isLockedByMe] };
-    
-   
-    
+    let checkLock = { _id, __lockedby : email , __locked: true};
+    console.log(JSON.stringify(checkLock))
     
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
     let updates = {}
+    
+    
     let deletepulls = {}
     let arrayPaths = {} ; /* note any arrays we are editing*/
+    
+    
     if(untypedUpdates != null) {
-   
       for( let field of Object.keys(untypedUpdates) )
       {
         let arrayPath = []
@@ -93,35 +94,45 @@ exports = async function(namespace,_id,untypedUpdates){
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}};
     let sets = {$set: updates}
     let pulls = {$pull: deletepulls};
-    
-    
-    
-
+  
     try {
       
     //If we have any edits to arrays - we first, unfortunately need to ensure that in the document
     //Those are arrays as is we do {$set:{"a.0":1}} and a is not an array (i.e null) then we get {a:{"0":1}}
     //we push this down as a pipeline update usin the $ifNull expresssion
     
+    //TODO - we can ignore this for an insert
+    
     let arrayFields = Object.keys(arrayPaths);
     if(arrayFields.length > 0) {
-    let ensureArray = {}
-    //For each field, if it's null then set it to square brackets
-    for( let arrayField of arrayFields) {
-      ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
-    }
-    //Now apply that updateOne
-        await collection.updateOne(checkLock,[{$set:ensureArray}]);
+      let ensureArray = {}
+      //For each field, if it's null then set it to square brackets
+      for( let arrayField of arrayFields) {
+        ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
+      }
+      //Now apply that updateOne
+      console.log(`ensuring arrays where needed`)
+      console.log(JSON.stringify(checkLock))
+      const { matchedCount, modifiedCount }= await collection.updateOne(checkLock,[{$set:ensureArray}]);
+      console.log(matchedcount,modifiedcount)
     }
     
-      
-      if(deletepulls.length == 0 )
+      if(Object.keys(deletepulls).length == 0 )
       {
+        console.log("No Array Deletes")
         const setAndUnlock = { ...sets,...unlockRecord};
+        console.log("Before Update");
+        console.log(JSON.stringify(checkLock));
+        console.log(JSON.stringify(setAndUnlock));
+         
+         
         postCommit = await collection.findOneAndUpdate(checkLock,setAndUnlock,{returnNewDocument: true});
+        console.log("After Update")
+        console.log(`pc:${postCommit}`)
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       } else {
+        console.log("Has Array Deletes")
         await collection.updateOne(checkLock,sets,{returnNewDocument: true});
         const removeElementsAndUnlock = { ...pulls,...unlockRecord};
         postCommit = await collection.findOneAndUpdate(checkLock,removeElementsAndUnlock,{returnNewDocument: true});
@@ -129,7 +140,7 @@ exports = async function(namespace,_id,untypedUpdates){
         rval.currentDoc = postCommit;
       }
     } catch(e) {
-      console.log(e);
+      console.log(`Error in commitEdit: ${e}`);
       //We couldn't find it or we weren't editing it that's OK - maybe it was stolen
        postCommit = await collection.findOne({_id},{__locked:0,__lockedby:0,__locktime:0});
        rval.currentDoc = postCommit;

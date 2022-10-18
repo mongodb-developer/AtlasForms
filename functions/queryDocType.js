@@ -1,22 +1,4 @@
 
-//Todo - in utility_fns?
-
-function refersToArrayElement(fieldName)
-{
-    
-    const parts = fieldName.split('.');
-    //Is anything in here a number if so return the index
-    const locationOfIndex = parts.reduce((val,el,idx)=>{ return isNaN(el) ? val : idx ;}  , -1);
-    const rval = { locationOfIndex }
-    if(locationOfIndex != -1) 
-    {
-      rval.arrayFieldName = parts.slice(0,locationOfIndex).join('.');
-      rval.elementFieldName = parts.slice(locationOfIndex+1).join('.');
-      rval.index = parts[locationOfIndex];
-    }  
-    return rval;
-}
-
 function rewriteArrayQuery(typedQuery) {
     /* Wherever we are querying against array elements we need to rewrite */
     /* If we have {skills.1: "archery"} and { skills.2: "weaving" } */
@@ -31,21 +13,20 @@ function rewriteArrayQuery(typedQuery) {
     
     for( let fieldName of Object.keys(typedQuery) )
     {
-      const arrayIdx = refersToArrayElement(fieldName); //TODO - Deconstruct
-      if( arrayIdx.locationOfIndex != -1 ) {
-        //console.log(`arrayFieldName: ${arrayIdx.arrayFieldName} locationOfIndex: ${arrayIdx.index} elementFieldName: ${arrayIdx.elementFieldName}  Value: ${typedQuery[fieldName]}`);
-        if(!elementsToMatch[arrayIdx.arrayFieldName]) { elementsToMatch[arrayIdx.arrayFieldName] = []; }
-        if(!arrayIdx.elementFieldName) {
-          elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index] = typedQuery[fieldName];
+      const {arrayFieldName,index,elementFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
+      if( locationOfIndex != -1 ) {
+         if(!elementsToMatch[arrayFieldName]) { elementsToMatch[arrayFieldName] = []; }
+        if(!elementFieldName) {
+          elementsToMatch[arrayFieldName][index] = typedQuery[fieldName];
         } else {
-          if(!elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]) {elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index]={};}
-          elementsToMatch[arrayIdx.arrayFieldName][arrayIdx.index][arrayIdx.elementFieldName] = typedQuery[fieldName];
+          if(!elementsToMatch[arrayFieldName][index]) {elementsToMatch[arrayFieldName][index]={};}
+          elementsToMatch[arrayFieldName][index][elementFieldName] = typedQuery[fieldName];
         }
         /* Remove this from the query */
         delete typedQuery[fieldName];
       }
     }
-    
+    //Rewrite as an $and of $elemMatches
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
       for(let arrayElement of elementsToMatch[arrayName]) {
@@ -68,27 +49,6 @@ function rewriteArrayQuery(typedQuery) {
 }
 
 
-function castDocToType(doc,objSchema){
-     
-  const typedQuery={}
-  for( let fieldName of Object.keys(doc) )
-  {
-    let parts = fieldName.split('.')
-    let subobj = objSchema
-    for(let part of parts) {
-      if(!isNaN(part)) {
-        part='0'; /*When comparing to schema always check against element 0*/
-      }
-      subobj = subobj[part]
-    }
-    //Now based on that convert value and add to our new query
-    let correctlyTypedValue = utilityFunctions.correctValueType(doc[fieldName],subobj)
-    if(correctlyTypedValue != null && correctlyTypedValue!="") {
-      typedQuery[fieldName] = correctlyTypedValue
-    }
-  }
-  return typedQuery
-}
 
 // This just ANDs the values together - first though it casts
 // Them all to the correct data type for the field as the form
@@ -108,7 +68,7 @@ exports = async function(namespace,query,projection){
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    let typedQuery = castDocToType(query,objSchema);
+    let typedQuery = utilityFunctions.castDocToType(query,objSchema);
 
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);
