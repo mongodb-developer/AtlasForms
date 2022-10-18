@@ -100,6 +100,8 @@ exports = async function(namespace,_id,untypedUpdates){
     //Those are arrays as is we do {$set:{"a.0":1}} and a is not an array (i.e null) then we get {a:{"0":1}}
     //we push this down as a pipeline update usin the $ifNull expresssion
     
+    //TODO - we can ignore this for an insert
+    
     let arrayFields = Object.keys(arrayPaths);
     if(arrayFields.length > 0) {
     let ensureArray = {}
@@ -108,14 +110,19 @@ exports = async function(namespace,_id,untypedUpdates){
       ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
     }
     //Now apply that updateOne
-        await collection.updateOne(checkLock,[{$set:ensureArray}]);
+    console.log(`ensuring arrays where needed`)
+    consol.log(JSON.stringify(checkLock))
+    const { matchedCount, modifiedCount }= await collection.updateOne(checkLock,[{$set:ensureArray}]);
+    console.log(matchedcount,modifiedcount)
     }
     
       
       if(deletepulls.length == 0 )
       {
+        console.log("No Array Deletes")
         const setAndUnlock = { ...sets,...unlockRecord};
         postCommit = await collection.findOneAndUpdate(checkLock,setAndUnlock,{returnNewDocument: true});
+        console.log(postCommit)
         rval.commitSuccess = true;
         rval.currentDoc = postCommit;
       } else {
