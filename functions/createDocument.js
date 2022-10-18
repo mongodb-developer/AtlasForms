@@ -86,13 +86,12 @@ exports = async function (namespace,untypedValues) {
     /* Add fields to lock it for us on insert */
 
     newDocument.__locked = true;
-    newDocument.__lockedBy = context.user.data.email
+    newDocument.__lockedby = context.user.data.email
     newDocument.__locktime = new Date();
     try {
       await collection.insertOne(newDocument);
       /* Now edit it */
-      await context.functions.execute("commitEdit",namespace,newId,untypedValues)
-      return {ok:true};
+      return await context.functions.execute("commitEdit",namespace,newId,untypedValues)
     }
     catch(e) {
       console.error(e);
