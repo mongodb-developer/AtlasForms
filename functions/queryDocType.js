@@ -107,7 +107,7 @@ exports = async function(namespace,query,projection){
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    let typedQuery = utility_functions.castDocToType(query,objSchema);
+    let typedQuery = utilityFunctions.castDocToType(query,objSchema);
 
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);
