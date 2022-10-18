@@ -26,18 +26,25 @@ function castDocToType(doc,objSchema){
   const typedDoc={}
   for( let fieldName of Object.keys(doc) )
   {
-    let parts = fieldName.split('.')
-    let subobj = objSchema
-    for(let part of parts) {
-      if(!isNaN(part)) {
-        part='0'; /*When comparing to schema always check against element 0*/
+    /* Special value we put in to remove array elements
+       when editing - copy over unchanged*/
+       
+    if(doc[fieldName] == "$$REMOVE") {
+      typedDoc[fieldName] = "$$REMOVE"
+    } else {
+      let parts = fieldName.split('.')
+      let subobj = objSchema
+      for(let part of parts) {
+        if(!isNaN(part)) {
+          part='0'; /*When comparing to schema always check against element 0*/
+        }
+        subobj = subobj[part]
       }
-      subobj = subobj[part]
-    }
-    //Now based on that convert value and add to our new query
-    let correctlyTypedValue = correctValueType(doc[fieldName],subobj)
-    if(correctlyTypedValue != null && correctlyTypedValue!="") {
-      typedDoc[fieldName] = correctlyTypedValue
+      //Now based on that convert value and add to our new query
+      let correctlyTypedValue = correctValueType(doc[fieldName],subobj)
+      if(correctlyTypedValue != null && correctlyTypedValue!="") {
+        typedDoc[fieldName] = correctlyTypedValue
+      }
     }
   }
   return typedDoc
