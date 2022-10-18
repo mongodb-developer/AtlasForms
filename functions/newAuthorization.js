@@ -7,8 +7,9 @@ class Authorization {
   
  
   constructor() {
-    this.USER_MANAGER = "USER_MANAGER";   
-    this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER";   
+    this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
+    this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
+    this.ACCESS_DOCTYPE = "ACCESS_DOCTYPE"; /* User can see a given doctype */
   }
   
   async lookupUser(user) {
@@ -22,7 +23,7 @@ class Authorization {
   authorize(type,docType,targetRecord,...args) {
     
     let permission = { granted: false, message: ""}
-    console.log(JSON.stringify(this.userRecord))
+    //console.log(JSON.stringify(this.userRecord))
     if(this.userRecord == null) { 
       permission.granted = false;
       permission.message = 'Unknown User';
@@ -30,7 +31,7 @@ class Authorization {
     }
   
   if(this.userRecord.isSuperUser) {
-     console.log("SuperUser override");
+     console.log("Caller is SuperUser");
      permission.granted = true;
   }    
 
@@ -39,11 +40,11 @@ class Authorization {
 }
 
 exports = async function(user){
-  console.log(`Fetching permission for ${user}`)
+  //console.log(`Fetching permission for ${user}`)
   const authClass = new Authorization()
   await authClass.lookupUser(user); /* Cannot use await in a constructor*/
   if(authClass.userRecord) {
-    console.log("User Permissions Loaded")
+    //console.log("User Permissions Loaded")
   } else {
     console.log("No User Permissions")
   }

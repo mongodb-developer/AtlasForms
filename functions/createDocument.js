@@ -55,13 +55,15 @@ exports = async function(namespace,untypedUpdates){
       let arrayPath = []
       let parts = field.split('.')
       let subobj = objSchema
-      for(const part of parts) {
-        subobj = subobj[part]
+      for(let part of parts) {
+      
         //Record if this is in an array (see IMPORTANT comment below)
         if(!isNaN(part)) {
           //A Numeric key means an Array for use
           arrayPaths[arrayPath.join(".")] = true;
+          part='0'; /*When comparing to schema always check against element 0*/
         }
+        subobj = subobj[part]
         arrayPath.push(part);
       }
       //Now based on that convert value and add to our new query

@@ -10,6 +10,15 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 exports = async function (namespace) {
 
+    /*Dynamically load some shared code*/
+    utilityFunctions =  await context.functions.execute("utility_functions");
+    
+    //console.log(namespace)
+    if(namespace == "__atlasforms.doctypes" )
+    {
+      return getSystemDocTypeSchemaInfo(namespace);
+    }
+
     //docType = { namespace: "sample_airbnb.listingsAndReviews" }
     const [databaseName, collectionName] = namespace.split('.');
     if (!databaseName || !collectionName) { return {} }
@@ -31,19 +40,7 @@ exports = async function (namespace) {
     return templateDoc;
 };
 
-//Deal with data types which are objects but specific types
-//Like Binary, Date, Decimal128 etc.
 
-function getScalarType(obj) {
-    if (obj instanceof Date) return "date"
-    if (obj instanceof BSON.ObjectId) return "objectid"
-    if (obj instanceof BSON.Binary) return "binary"
-    if (obj instanceof BSON.Int32) return "int32"
-    if (obj instanceof BSON.Long) return "int64"
-    if (obj instanceof BSON.Double) return "number"
-    if (obj instanceof BSON.Decimal128) return "decimal128"
-    return null;
-}
 
 //This isn't easy to read but it converts object keys to their types
 //as Strings and does a deep merge at the same time to create a schema from
@@ -62,11 +59,11 @@ function addDocumentToTemplate(doc, templateDoc) {
     for (let key of Object.keys(doc)) {
         if (typeof doc[key] == "object") {
 
-            let scalarType = getScalarType(doc[key])
-            if (scalarType != null) {
-                templateDoc[key] = scalarType
+            let bsonType = utilityFunctions.getBsonType(doc[key])
+            if (['array','document'].includes(bsonType) == false) {
+                templateDoc[key] = bsonType
             } else
-                if (Array.isArray(doc[key])) {
+                if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
                     const firstItem = doc[key][0]
                     //It's goign to be an array so add one if we don't have it
