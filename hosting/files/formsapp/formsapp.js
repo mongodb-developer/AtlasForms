@@ -178,11 +178,15 @@ function addArrayElement(name) {
   //Oddly if we delete it - we will add a delete to send to the server
   //Which works because a delete on the setver is a $set then $pull
   //We either add and emptyp string or dummy object based on the type
-  console.log(JSON.stringify(vueApp.selectedDocTypeSchema));
-
+  
+  if(vueApp.selectedDocTypeSchema[name][0] == null)
+  {
+    const [arrayname, subfield] = name.split('.');
+    const schemaElement = vueApp.selectedDocTypeSchema[arrayname];
+    console.log(schemaElement);
+  }
   const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-  console.log(vueApp.selectedDocTypeSchema[name][0])
-  console.log(elementBsonType)
+
   
   if(elementBsonType == "document") {
     vueApp.currentDoc.doc[name].push({__xyxxy__:1})
