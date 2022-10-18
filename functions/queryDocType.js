@@ -63,7 +63,7 @@ function rewriteArrayQuery(typedQuery) {
     if(arrayQueryClauses.length > 0) {
       typedQuery['$and'] = arrayQueryClauses;
     }
-    console.log(JSON.stringify(typedQuery));
+    //console.log(JSON.stringify(typedQuery));
     return typedQuery;
 }
 

@@ -21,9 +21,9 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 exports = async function (namespace) {
     /*Dynamically load some shared code*/
-    utilityFunctions =  await context.functions.execute("utility_functions");
+    var utilityFunctions =  await context.functions.execute("utility_functions");
     
-    console.log(namespace)
+    //console.log(namespace)
     if(namespace == "__atlasforms.doctypes" )
     {
       return getSystemDocTypeSchemaInfo(namespace);
