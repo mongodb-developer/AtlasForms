@@ -48,7 +48,7 @@ exports = async function (namespace) {
 }
 
 async function generateDefaultSchemaInfo(namespace) {
-
+    console.log(`Generating New Scheme for ${namespace}`)
     const [databaseName, collectionName] = namespace.split('.');
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
 
