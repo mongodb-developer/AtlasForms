@@ -53,7 +53,7 @@ exports = async function(namespace,_id,untypedUpdates){
     }
     
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}};
-    let sets = {$set: updates}
+    let sets = {$set: typedUpdates}
     let pulls = {$pull: deletepulls};
   
     try {
