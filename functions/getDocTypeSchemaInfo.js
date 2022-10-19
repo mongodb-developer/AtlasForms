@@ -71,7 +71,7 @@ async function generateDefaultSchemaInfo(namespace) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
   
-    console.log(templatedoc);
+    console.log(JSON.stringify(templatedoc,null,2));
     return templateDoc;
 
 }
