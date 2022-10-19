@@ -25,10 +25,10 @@ exports = async function (namespace) {
         if (docTypeInfo == null) {
             return { ok: false, message: `Cannot find doctype description for ${namespace}` };
         }
-        if (docTypeInfo.schema == null) {
+        if (docTypeInfo.schema == null || docTypeInfo.schema.length < 3) {
             /* Create a Schema and store it in the record */
             const schema = await generateDefaultSchemaInfo(namespace);
-            schemaAsText = JSON.stringify(schema);
+            schemaAsText = JSON.stringify(schema,null,2);
             await docTypeCollection.updateOne({ _id: docTypeInfo._id }, { $set: { schema: schemaAsText } });
             docTypeInfo.schema = schemaAsText;
         }
