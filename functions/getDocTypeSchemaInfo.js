@@ -66,11 +66,11 @@ async function generateDefaultSchemaInfo(namespace) {
     }
 
     const templateDoc = {};
-    const sizeInfo = {}; //Info on typical string sizes for form layout
+   
     for (let exampleDoc of exampleDocs) {
-        addDocumentToTemplate(exampleDoc, templateDoc,sizeInfo);
+        addDocumentToTemplate(exampleDoc, templateDoc);
     }
-    console.log(JSON.stringify(sizeInfo,null,2))
+  
 
     return templateDoc;
 
@@ -83,7 +83,7 @@ async function generateDefaultSchemaInfo(namespace) {
 //multiple docs - turns out the $mergeObjects or ... operator won't play
 //due to shallow copying
 
-function addDocumentToTemplate(doc, templateDoc,sizeInfo) {
+function addDocumentToTemplate(doc, templateDoc) {
 
     //If doc is a simple scalar return the type
 
@@ -99,38 +99,36 @@ function addDocumentToTemplate(doc, templateDoc,sizeInfo) {
             let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array', 'document'].includes(bsonType) == false) {
                 templateDoc[key] = bsonType;
-                sizeInfo[key] = 0;
+                
             } else
                 if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
                     const firstItem = doc[key][0];
                     //It's goign to be an array so add one if we don't have it
                     if (templateDoc[key] == null) { templateDoc[key] = []; }
-                    if (sizeInfo[key] == null) { sizeInfo[key] = []; }
+                    
                     
                     if (firstItem != null) { //Ignore empties
                         const existing = templateDoc[key][0];
-                        const existingSizeinfo = sizeInfo[key][0];
+                       
                         if (existing) {
                             if (typeof existing == "object") {
-                                sizeInfo[key][0] = templateDoc[key][0] = addDocumentToTemplate(firstItem, existing,existingSizeinfo);
+                                templateDoc[key][0] = addDocumentToTemplate(firstItem, existing);
                             } //Not an object ignore further values
                         } else {
                             //Not existing Merge with empty obejct
-                            sizeInfo[key][0] = templateDoc[key][0] = addDocumentToTemplate(firstItem, {},{});
+                            templateDoc[key][0] = addDocumentToTemplate(firstItem, {});
                         }
                     }
                 } else {
                     //Basic Objects
                     if (templateDoc[key] == null) { templateDoc[key] = {}; } 
-                    if (sizeInfo[key] == null) { sizeInfo[key] = {}; }
-                    sizeInfo[key] = templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key],sizeInfo[key]);
+                   
+                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
             templateDoc[key] = typeof doc[key];
-            if(typeof doc[key] == 'string') {
-              sizeInfo[key] = ++sizeInfo[key] + doc[key].length
-            }
+        
         }
     }
     return templateDoc;
