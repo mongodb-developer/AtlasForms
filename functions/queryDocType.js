@@ -75,7 +75,7 @@ exports = async function(namespace,query,projection){
  
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
-  
+      console.log(`Query: ${JSON.stringify(typedQuery,null,2)}`)
       const cursor = await collection.find(typedQuery,projection).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
       return results;
