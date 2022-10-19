@@ -29,7 +29,7 @@ exports = async function (namespace) {
             /* Create a Schema and store it in the record */
             console.log(JSON.stringify(docTypeInfo))
             const schema = await generateDefaultSchemaInfo(namespace);
-            schemaAsText = JSON.stringify(schema,null,2);
+            schemaAsText = JSON.stringify(schema, null, 2);
             console.log('here')
             await docTypeCollection.updateOne({ _id: docTypeInfo._id }, { $set: { schema: schemaAsText } });
             console.log('here')
@@ -66,12 +66,12 @@ async function generateDefaultSchemaInfo(namespace) {
     }
 
     const templateDoc = {};
-   
+    console.log("Merging Sample Documents")
     for (let exampleDoc of exampleDocs) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
-  
-    console.log(JSON.stringify(templatedoc,null,2));
+
+    console.log(JSON.stringify(templatedoc, null, 2));
     return templateDoc;
 
 }
@@ -88,10 +88,11 @@ function addDocumentToTemplate(doc, templateDoc) {
     //If doc is a simple scalar return the type
 
     if (typeof doc != 'object') {
-        let doctype = typeof(doc)
+        let doctype = typeof (doc)
         //Add length to strings
-        if(doctype == "string") {
-          doctype += "." + doc.length;
+        if (doctype == "string") {
+            console.log("String")
+            doctype = doctype + ":" + doc.length;
         }
         return doctype;
     }
@@ -104,18 +105,18 @@ function addDocumentToTemplate(doc, templateDoc) {
             let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array', 'document'].includes(bsonType) == false) {
                 templateDoc[key] = bsonType;
-                
+
             } else
                 if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
                     const firstItem = doc[key][0];
                     //It's goign to be an array so add one if we don't have it
                     if (templateDoc[key] == null) { templateDoc[key] = []; }
-                    
-                    
+
+
                     if (firstItem != null) { //Ignore empties
                         const existing = templateDoc[key][0];
-                       
+
                         if (existing) {
                             if (typeof existing == "object") {
                                 templateDoc[key][0] = addDocumentToTemplate(firstItem, existing);
@@ -127,19 +128,19 @@ function addDocumentToTemplate(doc, templateDoc) {
                     }
                 } else {
                     //Basic Objects
-                    if (templateDoc[key] == null) { templateDoc[key] = {}; } 
-                   
-                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
+                    if (templateDoc[key] == null) { templateDoc[key] = {}; }
+
+                    templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
-           const doctype = typeof(templateDoc[key] )
-        //Add length to strings
-        if(doctype == "string") {
-          doctype += "."+templateDoc[key].length;
-        }
-        
+            const doctype = typeof (templateDoc[key])
+            //Add length to strings
+            if (doctype == "string") {
+                doctype = doctype + ":" + templateDoc[key].length;
+            }
+
             templateDoc[key] = doctype
-        
+
         }
     }
     return templateDoc;
