@@ -25,10 +25,11 @@ exports = async function (namespace) {
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0};
     
+    //TODO - Add try/catch
     const exampleDocs = await collection.find({},removeLockingFields).limit(10).toArray();
 
-    if (exampleDocs.length == null) {
-        console.error("No example doc");
+    if (exampleDocs.length == 0) {
+        console.log("No example doc");
         return {ok: false, message: `No example document for namespace ${namespace}`};
     }
     
