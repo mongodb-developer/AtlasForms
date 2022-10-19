@@ -38,6 +38,8 @@ exports = async function (namespace) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
     
+    console.log(JSON.stringify(templateDoc,null,2));
+    
     return {ok: true, docTypeSchemaInfo: templateDoc};
 };
 
