@@ -101,6 +101,7 @@ function addDocumentToTemplate(doc, templateDoc) {
             let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array', 'document'].includes(bsonType) == false) {
                 templateDoc[key] = bsonType;
+                console.log(`4> ${key} ${bsonType} `)
 
             } else
                 if (bsonType == 'array') {
@@ -130,11 +131,11 @@ function addDocumentToTemplate(doc, templateDoc) {
                 }
         } else {
             let doctype = typeof (doc[key])
-            console.log(`1> ${key} = ${doctype} `)
+            //console.log(`1> ${key} = ${doctype} `)
             //Add length to strings - take largest we find
             if (doctype == "string") {
                 const len =  doc[key].length;
-                console.log(`2> String ${len}  -> ${doc[key]} `)
+                //console.log(`2> String ${len}  -> ${doc[key]} `)
                 const oldType =  templateDoc[key] 
                 if(oldType) {
                   console.log(`oldtype = ${oldType}`)
