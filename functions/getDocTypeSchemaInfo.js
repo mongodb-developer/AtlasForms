@@ -40,8 +40,6 @@ exports = async function (namespace) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
     
-    console.log(JSON.stringify(templateDoc,null,2));
-    
     return {ok: true, docTypeSchemaInfo: templateDoc};
 };
 
@@ -53,9 +51,8 @@ exports = async function (namespace) {
 //due to shallow copying
 
 function addDocumentToTemplate(doc, templateDoc) {
-    console.log("addDocumentToTemplate")
+   
     //If doc is a simple scalar return the type
-    console.log(JSON.stringify(doc));
     
     if (typeof doc != 'object') {
         console.log(`Not an Object`)
