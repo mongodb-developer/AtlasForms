@@ -24,11 +24,14 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 ## Coding Standards
 
-  - All Server Side non private functions return ok(boolena) and message(string) which should be an end user
+  - All Server Side non private functions return ok(boolean) and message(string) which should be an end user
 appropriate message.
   - variuable and function nameing are camelCase
   - Things that can fail are wrapped in try catch
   - ES6 syntax wherever possible
+  - Multiline comments should be in a single multiline-comment
+  - Use TODO: for things we need to get back to
+  - 
   
 ## Questions
   - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters
@@ -102,6 +105,8 @@ appropriate message.
 
 
 - Error Handling review, Refactor, lint,tidy code
+  - All Strings in a consts class, inc errors and fieldnames
+  - DocTypeSchema shoudl be in doctype record
 
 *** MVP  ish at this point ***
 

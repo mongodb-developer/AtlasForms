@@ -16,8 +16,7 @@ async function logOut(email, password) {
 
 async function getListOfDocTypes() {
   try {
-    const docTypes = await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
-    return docTypes;
+    return  await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
   }
   catch (e) {
     console.error(e)
@@ -33,7 +32,6 @@ function formAlert(message) {
 
 async function clearForm() {
   //TODO maybe - add an Are you sure? if they have been entering data
-
   vueApp.results = [];
   vueApp.currentDoc = { doc: {} };
   vueApp.editing = true;
@@ -54,11 +52,10 @@ async function editRecord() {
     return;
   }
 
-
   /* We need to Lock it before they can edit it, and fetch the latest version */
   let lockResult = await vueApp.realmApp.currentUser.functions.lockDocument(vueApp.selectedDocType, vueApp.currentDoc.doc._id);
 
-  if (lockResult.lockObtained) {
+  if (lockResult.ok) {
     //We got the lock
     vueApp.editing = true;
     vueApp.currentDocLocked = true;
@@ -112,16 +109,15 @@ async function newRecord() {
     return;
   }
 
-  let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
-  if (rval.currentDoc) {
-    const wrappedDoc = { downloaded: true, doc: rval.currentDoc }
+  let {ok,message,currentDoc} = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
+  if (ok && currentDoc) {
+    const wrappedDoc = { downloaded: true, doc: currentDoc }
     vueApp.results = [wrappedDoc]
     vueApp.currentDoc = wrappedDoc
-    vueApp.editing = false
+    vueApp.editing = false;
     vueApp.fieldEdits = {};
   } else {
-    //TODO - redo this error
-    formAlert(appStrings.AF_BAD_FIELD_TYPE(rval.errorField, rval.errorType));
+    formAlert(appStrings.AF_SERVER_ERROR(message));
   }
 }
 
@@ -129,11 +125,15 @@ async function resultClick(result) {
   if (result.downloaded == false) {
 
     /* Download the full doc when we select it*/
-    const [wholeDoc] = await vueApp.realmApp.currentUser.functions.queryDocType(
+    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType.namespace
       , { _id: result.doc._id }, {});
-    result.doc = wholeDoc
-    result.downloaded = true
+    if(ok) {
+      result.doc = results[0];
+      result.downloaded = true
+    } else {
+      formAlert(appStrings.AF_SERVER_ERROR(message));
+    }
   }
   vueApp.currentDoc = result;
 }
@@ -249,8 +249,15 @@ async function runQuery() {
       projection[fieldname] = 1
     }
 
-    const results = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
+    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
       , vueApp.fieldEdits, projection);
+
+    if(!ok) {
+      formAlert(appStrings.AF_SERVER_ERROR(message));
+      vueApp.wrappedResults=[];
+      vueApp.editing=true;
+      return;
+    } 
 
     //Wrap this in something to say if we have decoded it
     let wrappedResults = []
@@ -278,10 +285,16 @@ async function selectDocType() {
 
   try {
     // It would be simple to cache this info client end if we want to
-    const docTypeSchemaInfo = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
+    const {ok,docTypeSchemaInfo,message} = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
+   
+    if(!ok) {
+      formAlert(appStrings.AF_SERVER_ERROR(message));
+      vueApp.selectedDocType = {}
+    }
+
     vueApp.selectedDocTypeSchema = docTypeSchemaInfo
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
-    vueApp.results = Array(20).fill({}) //Empty and show columnheaders
+    vueApp.results = Array(1).fill({}) //Empty and show columnheaders
     vueApp.currentDoc = { doc: {} }
 
   }
@@ -334,8 +347,12 @@ async function formsOnLoad() {
     },
   }).mount("#formsapp")
 
-
-  vueApp.docTypes = await getListOfDocTypes()
+  const {ok,docTypes,message} =  await getListOfDocTypes();
+  if(!ok) {
+    formAlert(appStrings.AF_SERVER_ERROR(message));
+    return;
+  }
+  vueApp.docTypes = docTypes;
   //Set the Document Type dropdown to the first value
   vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
   vueApp.selectDocType();
