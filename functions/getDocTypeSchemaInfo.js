@@ -63,10 +63,11 @@ async function generateDefaultSchemaInfo(namespace) {
     }
 
     const templateDoc = {};
-
+    const sizeInfo = {}; //Info on typical string sizes for form layout
     for (let exampleDoc of exampleDocs) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
+    console.log(JSON.stringify(sizeInfo,null,2))
 
     return templateDoc;
 
@@ -79,7 +80,7 @@ async function generateDefaultSchemaInfo(namespace) {
 //multiple docs - turns out the $mergeObjects or ... operator won't play
 //due to shallow copying
 
-function addDocumentToTemplate(doc, templateDoc) {
+function addDocumentToTemplate(doc, templateDoc,sizeInfo) {
 
     //If doc is a simple scalar return the type
 
@@ -102,7 +103,6 @@ function addDocumentToTemplate(doc, templateDoc) {
                     //It's goign to be an array so add one if we don't have it
                     if (templateDoc[key] == null) { templateDoc[key] = []; }
 
-
                     if (firstItem != null) { //Ignore empties
                         const existing = templateDoc[key][0];
                         if (existing) {
@@ -121,6 +121,9 @@ function addDocumentToTemplate(doc, templateDoc) {
                 }
         } else {
             templateDoc[key] = typeof doc[key];
+            if(typeof doc[key] == 'string') {
+              sizeInfo[key] = ++sizeInfo[key] + doc[key].length
+            }
         }
     }
     return templateDoc;
