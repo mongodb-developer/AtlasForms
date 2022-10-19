@@ -16,7 +16,7 @@ exports = async function (namespace) {
     
     if(namespace == "__atlasforms.doctypes" )
     {
-      return getSystemDocTypeSchemaInfo(namespace);
+      return  {ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace)};
     }
 
     const [databaseName, collectionName] = namespace;
@@ -38,7 +38,7 @@ exports = async function (namespace) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
     
-    return {ok: true, templateDoc};
+    return {ok: true, docTypeSchemaInfo: templateDoc};
 };
 
 
