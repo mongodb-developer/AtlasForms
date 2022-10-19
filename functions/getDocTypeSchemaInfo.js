@@ -18,10 +18,34 @@ exports = async function (namespace) {
     {
       return  {ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace)};
     }
+    
+    //We should be able to pull this info from the doctype record
+    const docTypeCollection = context.services.get("mongodb-atlas").db("__atlasforms").collection("doctypes");
+    try {
+    const docTypeInfo = await docTypeCollecion.findOne({namespace});
+    if(docTypeInfo == null ) {
+        return {ok:false,message:`Cannot find doctype description for ${namespace}`}
+      }
+    if(docTypeInfo.schema == null) {
+      /* Create a Scheam and store it in the record */
+      const schema = await generateDefaultSchema(namespace);
+      schemaAsText = JSON.stringify(schema);
+      await docTypeCollection.updateOne({_id:docTypeInfo._id},{$set:{schema:schemaAsText}})
+      docTypeInfo.schema = schemaAsText;
+    }
+      schemaAsObj = JSON.parse(docTypeInfo.schema)
+      return {ok: true, docTypeSchemaInfo: schemaAsObj};
+    }
+    
+    catch(e) {
+      return { ok: false, message: `Low level error: ${e}`}
+    }
+}
 
+async function  generateDefaultSchemaInfo(namespace)
+{
+    
     const [databaseName, collectionName] = namespace.split('.');
-
-
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     
     const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0};
@@ -40,8 +64,9 @@ exports = async function (namespace) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
     
-    return {ok: true, docTypeSchemaInfo: templateDoc};
-};
+    return templateDoc;
+
+}
 
 
 
@@ -104,7 +129,7 @@ function addDocumentToTemplate(doc, templateDoc) {
 
 function getSystemDocTypeSchemaInfo(namespace) {
   if(namespace == "__atlasforms.doctypes") {
-    return { namespace: "string" , title: "string", listViewFields: ["string"]
+    return { namespace: "string" , title: "string", schema: "string", listViewFields: ["string"]
     }
   }
 }
