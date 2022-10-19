@@ -123,6 +123,7 @@ function addDocumentToTemplate(doc, templateDoc,sizeInfo) {
                 } else {
                     //Basic Objects
                     if (templateDoc[key] == null) { templateDoc[key] = {}; }
+                    if (sizeInfo[key] == null) { sizeInfo[key] = {}; }
                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
