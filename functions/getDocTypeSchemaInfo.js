@@ -66,12 +66,12 @@ async function generateDefaultSchemaInfo(namespace) {
     }
 
     const templateDoc = {};
-    console.log("Merging Sample Documents")
+  
     for (let exampleDoc of exampleDocs) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
 
-    console.log(JSON.stringify(templatedoc, null, 2));
+    console.log(JSON.stringify(templateDoc, null, 2));
     return templateDoc;
 
 }
@@ -91,7 +91,7 @@ function addDocumentToTemplate(doc, templateDoc) {
         let doctype = typeof (doc)
         //Add length to strings
         if (doctype == "string") {
-            console.log("String")
+           
             doctype = doctype + ":" + doc.length;
         }
         return doctype;
