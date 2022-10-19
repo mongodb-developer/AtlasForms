@@ -30,7 +30,9 @@ exports = async function (namespace) {
             console.log(JSON.stringify(docTypeInfo))
             const schema = await generateDefaultSchemaInfo(namespace);
             schemaAsText = JSON.stringify(schema,null,2);
+            console.log('here')
             await docTypeCollection.updateOne({ _id: docTypeInfo._id }, { $set: { schema: schemaAsText } });
+            console.log('here')
             docTypeInfo.schema = schemaAsText;
         }
 
