@@ -2,7 +2,7 @@
 not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates){
-  let rval = { commitSuccess: false, message: "Failed to save record" }
+  let rval = { commitSuccess: false, message: "No Error Message Set" }
   let postCommit = {};
     
   if(_id == undefined) {
@@ -44,7 +44,7 @@ exports = async function(namespace,_id,untypedUpdates){
        }
     
     //Also record all arrays where we are deleting an element 
-    let deletepulls = {}
+    let deletePulls = {}
     for(const fieldName of Object.keys(typedUpdates)) {
       if(typedUpdates[fieldName] == "$$REMOVE") {
          const {arrayFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
