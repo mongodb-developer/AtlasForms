@@ -22,7 +22,7 @@ exports = async function (namespace) {
     //We should be able to pull this info from the doctype record
     const docTypeCollection = context.services.get("mongodb-atlas").db("__atlasforms").collection("doctypes");
     try {
-    const docTypeInfo = await docTypeCollecion.findOne({namespace});
+    const docTypeInfo = await docTypeCollection.findOne({namespace});
     if(docTypeInfo == null ) {
         return {ok:false,message:`Cannot find doctype description for ${namespace}`}
       }
