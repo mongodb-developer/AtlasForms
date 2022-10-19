@@ -2,23 +2,20 @@
 not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates){
-  let rval = { commitSuccess: false }
-  
-
-  let postCommit;
+  let rval = { commitSuccess: false, message: "Failed to save record" }
+  let postCommit = {};
     
-    if(_id == undefined) {
+  if(_id == undefined) {
       return rval;   
   }
-
-  const utilityFunctions =  await context.functions.execute("utility_functions")
-  const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
-
+  
   const [databaseName,collectionName] = namespace.split('.');
-    if(!databaseName || !collectionName) { return rval;}
+  if(!databaseName || !collectionName) { return rval;}
     
-    //TODO - verify we have permission to write to this
-    const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+  const utilityFunctions =  await context.functions.execute("utility_functions")
+  
+  //TODO - verify we have permission to write to this (AUTHZ)
+  const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
       
  
     let user = context.user;
@@ -27,77 +24,45 @@ exports = async function(namespace,_id,untypedUpdates){
     //Cannot unlock it if it's not mine  
     let checkLock = { _id, __lockedby : email };
 
-    // Convert everything to the correct Javascript/BSON type 
-    // As it's all sent as strings from the form, 
-    // also sanitises any Javascript injection
-    let updates = {}
+    // Convert everything to the correct Javascript/BSON type as it's all
+    // sent as strings from the UI,  also sanitises any Javascript injection
     
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
     
-    let deletepulls = {}
-    let arrayPaths = {} ; /* note any arrays we are editing*/
+    let typedUpdates = castDocToType(untypedUpdates,objSchema)
     
-    
-    if(untypedUpdates != null) {
-      for( let field of Object.keys(untypedUpdates) )
-      {
-        let arrayPath = []
         
-          // MongoDB doesn't have a way of removing array elements by position - and with multiple editing processes
-          // That could cause a race condition anyway, normally we would remove by value
-          // As we are explicitly locking we are going to first update them to "$$REMOVE" is we have any then $pull them
-          // in a second unlocking update.
+    // Find all the array fields we are trying to add
+    // And flag them for ensureArrays below
+    let arrayPaths = {} ;
+    for(const fieldName of Object.keys(typedUpdates)) {
+       const {arrayFieldName,ocationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
+       //If this is and array flag it as such
+       if(locationOfIndex != -1) {
+           arrayPaths[arrayFieldName] = true;
+         }
+       }
     
-         if(untypedUpdates[field] == "$$REMOVE") {
-          updates[field] = "$$REMOVE" //Explicity make it this string - maybe should be null though
-          //Get the field name without the index and mark it as needing $$REMOVE's pulled
-          const basename = field.split('.')[0]
-          deletepulls[basename] = "$$REMOVE"
-        } else 
-        {
-          let parts = field.split('.')
-          let subobj = objSchema
-          for(let part of parts) {
-            //This could be field objectfield.member arrayfield.index or arrayfield.index.member
-            //In the schema it's always field or field.0.member
-            if(!isNaN(part) ) {
-              arrayPaths[arrayPath.join(".")] = true; //Record we found an array
-              //!isNaN == isNumber
-              part='0';
-            }
-            arrayPath.push(part)
-            subobj = subobj[part]
-          }
-          //Now based on that convert value and add to our new query
-          let correctlyTypedValue = utilityFunctions.correctValueType(untypedUpdates[field],subobj)
-          if(correctlyTypedValue == null) {
-    
-            console.error(`Bad Record Summitted - cannot convert ${field}`)
-            
-      
-            //Check here and if we cannot cast the value sent to the correct data type
-            //When inserting or updating - so they types yes in a numeric field for example
-            //We should raise an error
-            return rval;
-          }
-          updates[field] = correctlyTypedValue
-        }
-      }
-      
-      
+    //Also record all arrays where we are deleting an element 
+    let deletepulls = {}
+    for(const fieldName of Object.keys(typedUpdates)) {
+      if(typedUpdates[fieldName] == "$$REMOVE") {
+         const {arrayFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
+         deletePulls[arrayFieldName] = "$$REMOVE";
+      }   
     }
-
+    
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}};
     let sets = {$set: updates}
     let pulls = {$pull: deletepulls};
   
     try {
       
-    //If we have any edits to arrays - we first, unfortunately need to ensure that in the document
-    //Those are arrays as is we do {$set:{"a.0":1}} and a is not an array (i.e null) then we get {a:{"0":1}}
-    //we push this down as a pipeline update usin the $ifNull expresssion
-    
-    //TODO - we can ignore this for an insert
-    
+    // If we have any edits to arrays - we first, unfortunately need to ensure that in the document
+    // Those are existing arrays as if we do {$set:{"a.0":1}} and a is not an array (i.e null) 
+    // then we get {a:{"0":1}} not {a:[1]} - MongoDB cannot tell which we want.
+    // we push this down as a pipeline update usin the $ifNull expresssion
+
     let arrayFields = Object.keys(arrayPaths);
     if(arrayFields.length > 0) {
       let ensureArray = {}
