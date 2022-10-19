@@ -19,10 +19,11 @@ exports = async function (namespace) {
       return  {ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace)};
     }
 
-    const [databaseName, collectionName] = namespace;
+    const [databaseName, collectionName] = namespace.split('.');
 
 
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+    
     const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0};
     
     //TODO - Add try/catch
