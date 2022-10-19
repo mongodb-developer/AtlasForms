@@ -29,7 +29,7 @@ exports = async function(namespace,_id,untypedUpdates){
     
     const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
     
-    let typedUpdates = castDocToType(untypedUpdates,objSchema)
+    let typedUpdates = utilityFunctions.castDocToType(untypedUpdates,objSchema)
     
         
     // Find all the array fields we are trying to add
