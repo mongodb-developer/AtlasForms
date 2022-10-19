@@ -53,8 +53,11 @@ exports = async function (namespace,untypedValues) {
     The only thing we can do is work out which array fields we are updating then insert a record with those already set 
     Or in the case of an edit update to set them to an array
  */
-      
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
+    const {ok,docTypeSchemaInfo,message} =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    if(!ok) {
+      return {ok,message}; /* Pass errors up */
+    }
+    const objSchema =  docTypeSchemaInfo
     //This is a create so we just need to insert the document with all the arrays in place
     const newDocument = {}
   

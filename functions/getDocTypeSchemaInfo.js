@@ -38,7 +38,7 @@ exports = async function (namespace) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
     
-    return templateDoc;
+    return {ok: true, templateDoc};
 };
 
 
