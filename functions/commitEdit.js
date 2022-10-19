@@ -31,9 +31,10 @@ exports = async function(namespace,_id,untypedUpdates,asCreate){
     // Convert everything to the correct Javascript/BSON type as it's all
     // sent as strings from the UI,  also sanitises any Javascript injection
     
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    const {docTypeSchemaInfo} =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
     
-    let typedUpdates = utilityFunctions.castDocToType(untypedUpdates,objSchema);
+    
+    let typedUpdates = utilityFunctions.castDocToType(untypedUpdates,docTypeSchemaInfo);
     
      
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}};

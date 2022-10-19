@@ -25,7 +25,8 @@ function refersToArrayElement(fieldName)
 // As insert/update needs them - os shoudl we do it in there.
 
 function castDocToType(doc,objSchema){
-     
+  console.log(JSON.stringify(objSchema,null,2));
+  
   const typedDoc={}
   for( let fieldName of Object.keys(doc) )
   {
