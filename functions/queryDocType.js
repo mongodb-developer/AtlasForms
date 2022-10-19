@@ -63,11 +63,11 @@ exports = async function(namespace,query,projection){
     if(!databaseName || !collectionName) { return {ok: false, message: `Invalid namespace suppied ${namespace}`}; }
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    const {docTypeSchemaInfo} =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    let typedQuery = utilityFunctions.castDocToType(query,objSchema);
+    let typedQuery = utilityFunctions.castDocToType(query,docTypeSchemaInfo);
 
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);
@@ -77,10 +77,10 @@ exports = async function(namespace,query,projection){
       console.log(`Query: ${JSON.stringify(typedQuery,null,2)}`)
       const cursor = await collection.find(typedQuery,projection).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
-      return results;//TODO - Return an OK/Fail
+      return {ok: true, results};//TODO - Return an OK/Fail
     } catch(e) {
       console.error(e);
-      return [];
+      return {ok: false, message: `Error in Querying ${e}`,results:[]}
     }
 
 };

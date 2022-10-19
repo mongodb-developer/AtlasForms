@@ -57,7 +57,7 @@ exports = async function (namespace,untypedValues) {
     if(!ok) {
       return {ok,message}; /* Pass errors up */
     }
-    const objSchema =  docTypeSchemaInfo
+   
     //This is a create so we just need to insert the document with all the arrays in place
     const newDocument = {}
   
@@ -85,7 +85,7 @@ exports = async function (namespace,untypedValues) {
     
       // Assign an ID to the document
  
-      const newId =  getNewIdValue(objSchema);
+      const newId =  getNewIdValue(docTypeSchemaInfo);
       newDocument._id = newId
       
         
