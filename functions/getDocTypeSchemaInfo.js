@@ -12,58 +12,62 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 exports = async function (namespace) {
     /*Dynamically load some shared code*/
-    utilityFunctions =  await context.functions.execute("utility_functions");
-    
-    if(namespace == "__atlasforms.doctypes" )
-    {
-      return  {ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace)};
+    utilityFunctions = await context.functions.execute("utility_functions");
+
+    if (namespace == "__atlasforms.doctypes") {
+        return { ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace) };
     }
-    
+
     //We should be able to pull this info from the doctype record
     const docTypeCollection = context.services.get("mongodb-atlas").db("__atlasforms").collection("doctypes");
     try {
-    const docTypeInfo = await docTypeCollection.findOne({namespace});
-    if(docTypeInfo == null ) {
-        return {ok:false,message:`Cannot find doctype description for ${namespace}`}
-      }
-    if(docTypeInfo.schema == null) {
-      /* Create a Schema and store it in the record */
-      const schema = await generateDefaultSchemaInfo(namespace);
-      schemaAsText = JSON.stringify(schema);
-      await docTypeCollection.updateOne({_id:docTypeInfo._id},{$set:{schema:schemaAsText}})
-      docTypeInfo.schema = schemaAsText;
+        const docTypeInfo = await docTypeCollection.findOne({ namespace });
+        if (docTypeInfo == null) {
+            return { ok: false, message: `Cannot find doctype description for ${namespace}` };
+        }
+        if (docTypeInfo.schema == null) {
+            /* Create a Schema and store it in the record */
+            const schema = await generateDefaultSchemaInfo(namespace);
+            schemaAsText = JSON.stringify(schema);
+            await docTypeCollection.updateOne({ _id: docTypeInfo._id }, { $set: { schema: schemaAsText } });
+            docTypeInfo.schema = schemaAsText;
+        }
+
+        let schemaAsObj = {};
+        try {
+            schemaAsObj = JSON.parse(docTypeInfo.schema);
+        } catch (e) {
+            return { ok: false, message: `Cannot parse schema for ${namespace} error ${e}` };
+        }
+
+        return { ok: true, docTypeSchemaInfo: schemaAsObj };
     }
-      schemaAsObj = JSON.parse(docTypeInfo.schema)
-      return {ok: true, docTypeSchemaInfo: schemaAsObj};
-    }
-    
-    catch(e) {
-      return { ok: false, message: `Low level error: ${e}`}
+    catch (e) {
+        return { ok: false, message: `Low level error: ${e}` };
     }
 }
 
-async function  generateDefaultSchemaInfo(namespace)
-{
-    
+async function generateDefaultSchemaInfo(namespace) {
+
     const [databaseName, collectionName] = namespace.split('.');
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-    
-    const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0};
-    
+
+    const removeLockingFields = { __locked: 0, __lockedby: 0, __lockedtime: 0 };
+
     //TODO - Add try/catch
-    const exampleDocs = await collection.find({},removeLockingFields).limit(10).toArray();
+    const exampleDocs = await collection.find({}, removeLockingFields).limit(10).toArray();
 
     if (exampleDocs.length == 0) {
         console.log("No example doc");
-        return {ok: false, message: `No example document for namespace ${namespace}`};
+        return { ok: false, message: `No example document for namespace ${namespace}` };
     }
-    
+
     const templateDoc = {};
-    
+
     for (let exampleDoc of exampleDocs) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
-    
+
     return templateDoc;
 
 }
@@ -76,27 +80,27 @@ async function  generateDefaultSchemaInfo(namespace)
 //due to shallow copying
 
 function addDocumentToTemplate(doc, templateDoc) {
-   
+
     //If doc is a simple scalar return the type
-    
+
     if (typeof doc != 'object') {
         return typeof doc;
     }
 
     // Iterate through the members adding each to the typemap
     for (let key of Object.keys(doc)) {
-        
+
         if (typeof doc[key] == "object") {
 
             let bsonType = utilityFunctions.getBsonType(doc[key]);
-            if (['array','document'].includes(bsonType) == false) {
+            if (['array', 'document'].includes(bsonType) == false) {
                 templateDoc[key] = bsonType;
             } else
                 if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
                     const firstItem = doc[key][0];
                     //It's goign to be an array so add one if we don't have it
-                    if (templateDoc[key] == null) { templateDoc[key] = [] ;}
+                    if (templateDoc[key] == null) { templateDoc[key] = []; }
 
 
                     if (firstItem != null) { //Ignore empties
@@ -112,7 +116,7 @@ function addDocumentToTemplate(doc, templateDoc) {
                     }
                 } else {
                     //Basic Objects
-                    if (templateDoc[key] == null) { templateDoc[key] = {} ;}
+                    if (templateDoc[key] == null) { templateDoc[key] = {}; }
                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
@@ -128,8 +132,8 @@ function addDocumentToTemplate(doc, templateDoc) {
 /* Return Schema info for the built in doc types - User and SchemaInfo */
 
 function getSystemDocTypeSchemaInfo(namespace) {
-  if(namespace == "__atlasforms.doctypes") {
-    return { namespace: "string" , title: "string", schema: "string", listViewFields: ["string"]
+    if (namespace == "__atlasforms.doctypes") {
+        return { namespace: "string", title: "string", schema: "string", listViewFields: ["string"] };
+
     }
-  }
 }
