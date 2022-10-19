@@ -68,7 +68,7 @@ async function generateDefaultSchemaInfo(namespace) {
     const templateDoc = {};
     const sizeInfo = {}; //Info on typical string sizes for form layout
     for (let exampleDoc of exampleDocs) {
-        addDocumentToTemplate(exampleDoc, templateDoc);
+        addDocumentToTemplate(exampleDoc, templateDoc,sizeInfo);
     }
     console.log(JSON.stringify(sizeInfo,null,2))
 
