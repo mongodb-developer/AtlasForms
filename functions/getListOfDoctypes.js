@@ -2,7 +2,7 @@ exports = async function(arg){
   
   /*Get an Authorization object - should be standard in any non private function*/
   const authorization = await context.functions.execute("newAuthorization",context.user.id);
-  if( authorization == null ) { return {ok: false,  message: "Not Authorized" }; }
+  if( authorization == null ) { return {ok: false,  message: "User no Authorized" }; }
 
   const docTypes = [];
   
@@ -39,5 +39,5 @@ exports = async function(arg){
   }
   
   
-  return docTypes;
+  return {ok: true, docTypes};
 };
