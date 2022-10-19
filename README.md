@@ -20,14 +20,25 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 30/9/2022 - Initial version is only supporting two levels of depth, so arrays and objects only at the top level or objects in a top level array. It is hard to render lower nicely in a basic GUI and also just not a nice schema. Objects might get extended one more level though.
 
+
+
+## Coding Standards
+
+  - All Server Side non private functions return ok(boolena) and message(string) which should be an end user
+appropriate message.
+  - variuable and function nameing are camelCase
+  - Things that can fail are wrapped in try catch
+  - ES6 syntax wherever possible
+  
 ## Questions
   - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters
-  - How Best ot handle date fields, are date pickers good
+  - How Best oto handle date fields, are date pickers good
   - How do we *best* handle date not datetime?
   - Will we add support for Range queries? If so how >5 in a text box
-  - How *critical* are dropdown picklists
+  - How *critical* are dropdown picklists - Very!
    
 ## Known BUGS to fix
+
 
    - Do we handle arrays of non string scalarrs? - test that and fix as required
    - We do not support arrays in Objects and we probably should... Not critical right now

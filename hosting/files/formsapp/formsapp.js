@@ -35,11 +35,10 @@ async function clearForm() {
   //TODO maybe - add an Are you sure? if they have been entering data
 
   vueApp.results = [];
-  vueApp.currentDoc = {};
+  vueApp.currentDoc = { doc: {} };
   vueApp.editing = true;
   //Editable divs we changed need manually cleared
   for (const id of Object.keys(vueApp.fieldEdits)) {
-    console.log(id)
     if (document.getElementById(id)) {
       document.getElementById(id).innerText = ""
       document.getElementById(id).value = null
@@ -50,7 +49,7 @@ async function clearForm() {
 
 async function editRecord() {
 
-  if ( vueApp.currentDoc?.doc?._id == null) {
+  if (vueApp.currentDoc?.doc?._id == null) {
     formAlert(appStrings.AF_NO_OPEN_FOR_EDIT)
     return;
   }
@@ -82,8 +81,8 @@ async function commitEdit(cancel) {
     return;
   }
 
-  if(cancel == true) {
-    vueApp.fieldEdits = {}; 
+  if (cancel == true) {
+    vueApp.fieldEdits = {};
   }
   let commitResult = await vueApp.realmApp.currentUser.functions.commitEdit(vueApp.selectedDocType.namespace,
     vueApp.currentDoc.doc._id, vueApp.fieldEdits);
@@ -94,7 +93,7 @@ async function commitEdit(cancel) {
   console.log(commitResult)
 
   vueApp.currentDocLocked = false;
-  vueApp.fieldEdits = {}; 
+  vueApp.fieldEdits = {};
   //If we change current Doc to a different Doc but with the same values
   //Vue thinks it doesnt need to update anything, but we want to overwrite
   //The things we edited manually that aren't in the model
@@ -114,25 +113,27 @@ async function newRecord() {
   }
 
   let rval = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
-  if (rval.ok) {
-    const wrappedDoc = { downloaded: true, doc: rval.newDoc }
+  if (rval.currentDoc) {
+    const wrappedDoc = { downloaded: true, doc: rval.currentDoc }
     vueApp.results = [wrappedDoc]
     vueApp.currentDoc = wrappedDoc
     vueApp.editing = false
+    vueApp.fieldEdits = {};
   } else {
+    //TODO - redo this error
     formAlert(appStrings.AF_BAD_FIELD_TYPE(rval.errorField, rval.errorType));
   }
 }
 
 async function resultClick(result) {
-  if(result.downloaded == false) {
+  if (result.downloaded == false) {
 
     /* Download the full doc when we select it*/
-    const [wholeDoc] =  await vueApp.realmApp.currentUser.functions.queryDocType(
+    const [wholeDoc] = await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType.namespace
-      , {_id:result.doc._id}, {});
-      result.doc = wholeDoc
-      result.downloaded = true
+      , { _id: result.doc._id }, {});
+    result.doc = wholeDoc
+    result.downloaded = true
   }
   vueApp.currentDoc = result;
 }
@@ -180,63 +181,59 @@ function addArrayElement(name) {
   //We either add and emptyp string or dummy object based on the type
   const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
   //If empty add the one we already are showing first
-  if(vueApp.currentDoc.doc[name] == undefined)
-  {
-    vueApp.currentDoc.doc[name] = []; 
-    if(elementBsonType == "document") {
-      vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+  if (vueApp.currentDoc.doc[name] == undefined) {
+    vueApp.currentDoc.doc[name] = [];
+    if (elementBsonType == "document") {
+      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
     } else {
       vueApp.currentDoc.doc[name].push('')
     }
   }
 
-  if(elementBsonType == "document") {
-    vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+  if (elementBsonType == "document") {
+    vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
   } else {
     vueApp.currentDoc.doc[name].push('')
   }
-  
+
 }
-function deleteArrayElement(name,index) {
+function deleteArrayElement(name, index) {
   //Make sure we have a  real element to delete
-  
-  if(vueApp.currentDoc.doc[name] == undefined)
-  {
+
+  if (vueApp.currentDoc.doc[name] == undefined) {
     const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-    vueApp.currentDoc.doc[name] = []; 
-    if(elementBsonType == "document") {
-      vueApp.currentDoc.doc[name].push({__xyxxy__:1})
+    vueApp.currentDoc.doc[name] = [];
+    if (elementBsonType == "document") {
+      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
     } else {
       vueApp.currentDoc.doc[name].push('')
     }
   }
-  
-  
+
+
   //Record the rquested deletion in our changes
   //We need to remove any existing edits inside this as we cannot
   //set a.b=null and a.b.c=1 - MongoDB won't like that
   //$$REMOVE isn't actually supported in this context but we can make it so
   //on the server
 
-
-
   const elname = `${name}.${index}`
-  vueApp.fieldEdits[elname]="$$REMOVE"
-  for( const entry of Object.keys(vueApp.fieldEdits)) {
-    if(entry.startsWith(elname+'.')) {
+  vueApp.fieldEdits[elname] = "$$REMOVE"
+  for (const entry of Object.keys(vueApp.fieldEdits)) {
+    if (entry.startsWith(elname + '.')) {
       delete vueApp.fieldEdits[entry]
     }
   }
   //If we have removed all elements we need to add an empty one on the end
   //So users can type new data in - count how many we are removing
-  let removed=0;
+  let removed = 0;
   let arrayLength = vueApp.currentDoc.doc[name].length
-  for(let idx=0;idx<arrayLength;idx++) {
-    if(vueApp.fieldEdits[`${name}.${idx}`] == "$$REMOVE") {
+  for (let idx = 0; idx < arrayLength; idx++) {
+    if (vueApp.fieldEdits[`${name}.${idx}`] == "$$REMOVE") {
       removed++;
     }
   }
-  if(removed == arrayLength) {
+  if (removed == arrayLength) {
     vueApp.addArrayElement(name);
   }
 }
@@ -247,7 +244,7 @@ async function runQuery() {
     //Send the fieldEdits to the server, we will process to the correct data type there
     //Avoid any injection also all will be strings at this point.
     let projection = {}
-   
+
     for (const fieldname of vueApp.listViewFields) {
       projection[fieldname] = 1
     }
@@ -258,9 +255,8 @@ async function runQuery() {
     //Wrap this in something to say if we have decoded it
     let wrappedResults = []
     let downloaded = false
-    for(const doc of results)
-    {
-      wrappedResults.push({downloaded,doc})
+    for (const doc of results) {
+      wrappedResults.push({ downloaded, doc })
     }
 
     vueApp.results = wrappedResults;
@@ -286,7 +282,7 @@ async function selectDocType() {
     vueApp.selectedDocTypeSchema = docTypeSchemaInfo
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
     vueApp.results = Array(20).fill({}) //Empty and show columnheaders
-    vueApp.currentDoc = {doc:{}}
+    vueApp.currentDoc = { doc: {} }
 
   }
   catch (e) {
@@ -311,7 +307,7 @@ async function formsOnLoad() {
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
       getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
-      resultClick,deleteArrayElement,addArrayElement
+      resultClick, deleteArrayElement, addArrayElement
 
     },
     data() {
@@ -321,7 +317,7 @@ async function formsOnLoad() {
         docTypes: [],
         selectedDocType: {},
         selectedDocTypeSchema: {},
-        currentDoc: {doc:{}},
+        currentDoc: { doc: {} },
         listViewFields: [],
         editing: false,
         currentDocLocked: false,

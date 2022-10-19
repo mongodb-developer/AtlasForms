@@ -22,7 +22,7 @@
     
     white-space: pre-wrap;
     border: 1px solid black;
-    border-radius: 2px;
+    border-radius: 4px;
     background-color: white;
     resize: both;
     /* Remove line below for labels above boxes*/
@@ -40,7 +40,7 @@
 
 .dynamicformvaluedate {
     border: 1px solid black;
-    border-radius: 2px;
+    border-radius: 4px;
     background-color: white;
     clear: left;
     /* Remove line below for labels above boxes*/
