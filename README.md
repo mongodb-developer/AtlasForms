@@ -85,8 +85,8 @@ appropriate message.
   - ~~Update hitlist on edit~~
   -  ~~Combine Cancel Edit and Commit Edit into one function each end~~
   - ~~Array Editing (Add and Remove elements as needed)~~
-  - Need to be able to add Array Elements when Creating a Document (and Querying?)
-    - Needs to handle Query when sending multiepl array elements ... Implicit AND $elemMAtch
+  - ~~Need to be able to add Array Elements when Creating a Document (and Querying?)~~
+    - ~~Needs to handle Query when sending multiepl array elements ... Implicit AND $elemMAtch~~
 
 
 - Authorization [John Working on This now]
