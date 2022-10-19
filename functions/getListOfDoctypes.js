@@ -1,21 +1,21 @@
 exports = async function(arg){
   
-    
   /*Get an Authorization object - should be standard in any non private function*/
   const authorization = await context.functions.execute("newAuthorization",context.user.id);
-  if( authorization == null ) { return { message: "Not Authorized" }; }
+  if( authorization == null ) { return {ok: false,  message: "User no Authorized" }; }
 
-  const docTypes = []
+  const docTypes = [];
   
   // Read the list of doctypes 
-  // TODO and check if this user can see each
   
+  // TODO and check if this user can see each
   const docTypeCollection = context.services.get("mongodb-atlas").db('__atlasforms').collection('doctypes');
+  
   const nonSystemDocTypes = await docTypeCollection.find({}).toArray();
   for (const docType of nonSystemDocTypes) {
     if(!docType.namespace.startsWith("__atlasforms"))
     {
-      const canSeeDoctype = authorization.authorize(authorization.DOCTYPE_MANAGER);
+      const canSeeDoctype = authorization.authorize(authorization.DOCTYPE_MANAGER); // TODO
       docTypes.push(docType)
     }
   }
@@ -39,5 +39,5 @@ exports = async function(arg){
   }
   
   
-  return docTypes;
+  return {ok: true, docTypes};
 };

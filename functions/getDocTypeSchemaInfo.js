@@ -1,13 +1,4 @@
 
-/* Return Schema info for the built in doc types - User and SchemaInfo */
-
-function getSystemDocTypeSchemaInfo(namespace) {
-  if(namespace == "__atlasforms.doctypes") {
-    return { namespace: "string" , title: "string", listViewFields: ["string"]
-    }
-  }
-}
-
 /* This returns a template document for a given type with information about the fields ,
 data types AND the arrangement/order of those fields. This is needed to provide an empty
 form for Query or data entry  */
@@ -23,31 +14,33 @@ exports = async function (namespace) {
     /*Dynamically load some shared code*/
     utilityFunctions =  await context.functions.execute("utility_functions");
     
-    //console.log(namespace)
     if(namespace == "__atlasforms.doctypes" )
     {
-      return getSystemDocTypeSchemaInfo(namespace);
+      return  {ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace)};
     }
 
-    //docType = { namespace: "sample_airbnb.listingsAndReviews" }
     const [databaseName, collectionName] = namespace.split('.');
-    if (!databaseName || !collectionName) { return {} }
 
 
     var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-    const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0}
     
+    const removeLockingFields = { __locked:0,__lockedby:0,__lockedtime:0};
+    
+    //TODO - Add try/catch
     const exampleDocs = await collection.find({},removeLockingFields).limit(10).toArray();
 
-    if (exampleDocs.length == null) {
-        console.error("No example doc");
-        return {}
+    if (exampleDocs.length == 0) {
+        console.log("No example doc");
+        return {ok: false, message: `No example document for namespace ${namespace}`};
     }
-    templateDoc = {};
+    
+    const templateDoc = {};
+    
     for (let exampleDoc of exampleDocs) {
-        addDocumentToTemplate(exampleDoc, templateDoc)
+        addDocumentToTemplate(exampleDoc, templateDoc);
     }
-    return templateDoc;
+    
+    return {ok: true, docTypeSchemaInfo: templateDoc};
 };
 
 
@@ -58,48 +51,60 @@ exports = async function (namespace) {
 //due to shallow copying
 
 function addDocumentToTemplate(doc, templateDoc) {
-
+   
     //If doc is a simple scalar return the type
-
+    
     if (typeof doc != 'object') {
         return typeof doc;
     }
 
     // Iterate through the members adding each to the typemap
     for (let key of Object.keys(doc)) {
+        
         if (typeof doc[key] == "object") {
 
-            let bsonType = utilityFunctions.getBsonType(doc[key])
+            let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array','document'].includes(bsonType) == false) {
-                templateDoc[key] = bsonType
+                templateDoc[key] = bsonType;
             } else
                 if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
-                    const firstItem = doc[key][0]
+                    const firstItem = doc[key][0];
                     //It's goign to be an array so add one if we don't have it
-                    if (templateDoc[key] == null) { templateDoc[key] = [] }
+                    if (templateDoc[key] == null) { templateDoc[key] = [] ;}
 
 
                     if (firstItem != null) { //Ignore empties
-                        const existing = templateDoc[key][0]
+                        const existing = templateDoc[key][0];
                         if (existing) {
                             if (typeof existing == "object") {
-                                templateDoc[key][0] = addDocumentToTemplate(firstItem, existing)
+                                templateDoc[key][0] = addDocumentToTemplate(firstItem, existing);
                             } //Not an object ignore further values
                         } else {
                             //Not existing Merge with empty obejct
-                            templateDoc[key][0] = addDocumentToTemplate(firstItem, {})
+                            templateDoc[key][0] = addDocumentToTemplate(firstItem, {});
                         }
                     }
                 } else {
                     //Basic Objects
-                    if (templateDoc[key] == null) { templateDoc[key] = {} }
-                    templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key])
+                    if (templateDoc[key] == null) { templateDoc[key] = {} ;}
+                    templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
-            templateDoc[key] = typeof doc[key] 
+            templateDoc[key] = typeof doc[key];
         }
     }
-    return templateDoc
+    return templateDoc;
 
+}
+
+
+
+/* Return Schema info for the built in doc types - User and SchemaInfo */
+
+function getSystemDocTypeSchemaInfo(namespace) {
+  if(namespace == "__atlasforms.doctypes") {
+    return { namespace: "string" , title: "string", listViewFields: ["string"]
+    }
+  }
 }
