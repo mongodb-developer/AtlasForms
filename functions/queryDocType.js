@@ -30,7 +30,7 @@ function rewriteArrayQuery(typedQuery) {
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
       for(let arrayElement of elementsToMatch[arrayName]) {
-        //console.log(`Array Element is type ${utilityFunctions.getBsonType(arrayElement)}`)
+        //A Value of $$REMOVE is not something we want ot be searching for.
         if(arrayElement != "$$REMOVE" && arrayElement != "") {
           if( utilityFunctions.getBsonType(arrayElement) == "document" )
           {

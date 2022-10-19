@@ -20,8 +20,11 @@ function refersToArrayElement(fieldName)
 
 //Take a Document where everything is a string and make it all 
 //be the correct data type according to the schema
+// Question: Shoudl we use the code in here to determine if we are 
+// working with arrays and return a list of arrays and a list of arrays wiuth deletes
+// As insert/update needs them - os shoudl we do it in there.
 
-function castDocToType(doc,objSchema,isQuery){
+function castDocToType(doc,objSchema){
      
   const typedDoc={}
   for( let fieldName of Object.keys(doc) )

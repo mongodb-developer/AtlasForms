@@ -91,7 +91,8 @@ exports = async function (namespace,untypedValues) {
     try {
       await collection.insertOne(newDocument);
       /* Now edit it */
-      const rval = await context.functions.execute("commitEdit",namespace,newId,untypedValues)
+      const asCreate = true
+      const rval = await context.functions.execute("commitEdit",namespace,newId,untypedValues,asCreate)
       //If that goes wrong cleanup (TODO)
       return rval;
     }
