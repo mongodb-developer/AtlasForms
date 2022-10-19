@@ -133,14 +133,12 @@ function addDocumentToTemplate(doc, templateDoc) {
                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
-            const doctype = typeof (templateDoc[key])
+            let doctype = typeof (templateDoc[key])
             //Add length to strings
             if (doctype == "string") {
                 doctype = doctype + ":" + templateDoc[key].length;
             }
-
             templateDoc[key] = doctype
-
         }
     }
     return templateDoc;
