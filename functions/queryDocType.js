@@ -55,7 +55,7 @@ function rewriteArrayQuery(typedQuery) {
 // returns everything as a string
 
 exports = async function(namespace,query,projection){
- 
+    console.log(`Query: ${JSON.stringify(query,null,2)}`)
     /*Dynamically load some shared code*/
     var utilityFunctions =  await context.functions.execute("utility_functions");
 
