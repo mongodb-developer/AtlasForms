@@ -89,6 +89,8 @@ function addDocumentToTemplate(doc, templateDoc) {
 
     if (typeof doc != 'object') {
         let doctype = typeof (doc)
+        
+        
         //Add length to strings
         if (doctype == "string") {
             doctype = doctype + ":" + doc.length;
@@ -134,9 +136,20 @@ function addDocumentToTemplate(doc, templateDoc) {
                 }
         } else {
             let doctype = typeof (doc[key])
-            //Add length to strings
+            //Add length to strings - take largest we find
             if (doctype == "string") {
-                doctype = doctype + ":" + doc[key].length;
+                const len =  doc[key].length;
+                const oldType =  templateDoc[key] 
+                if(oldType) {
+                  const parts = oldType.split(':')
+                  if(parts.length == 2) {
+                    if(len > parts[1]) {
+                      doctype = doctype + ":" + doc[key].length;
+                    }
+                  }
+                } else {
+                  doctype = doctype + ":" + doc[key].length;
+                }
                   console.log(`1> ${key} = ${ doc[key]} `)
             }
             templateDoc[key] = doctype
