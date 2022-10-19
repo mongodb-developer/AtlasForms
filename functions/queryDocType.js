@@ -44,7 +44,6 @@ function rewriteArrayQuery(typedQuery) {
     if(arrayQueryClauses.length > 0) {
       typedQuery['$and'] = arrayQueryClauses;
     }
-    //console.log(JSON.stringify(typedQuery));
     return typedQuery;
 }
 
@@ -55,15 +54,15 @@ function rewriteArrayQuery(typedQuery) {
 // returns everything as a string
 
 exports = async function(namespace,query,projection){
-    console.log(`Query: ${JSON.stringify(query,null,2)}`)
+    console.log(`Query: ${JSON.stringify(query,null,2)}`);
     /*Dynamically load some shared code*/
-    var utilityFunctions =  await context.functions.execute("utility_functions");
-
+    utilityFunctions =  await context.functions.execute("utility_functions");
 
     if (query == null) { query = {}; }
     const [databaseName,collectionName] = namespace.split('.');
-    if(!databaseName || !collectionName) { return {}; }
-
+    if(!databaseName || !collectionName) { return {ok: false, message: `Invalid namespace suppied ${namespace}`}; }
+    const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+    
     const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
@@ -73,12 +72,12 @@ exports = async function(namespace,query,projection){
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);
  
-    var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+
     try {
       console.log(`Query: ${JSON.stringify(typedQuery,null,2)}`)
       const cursor = await collection.find(typedQuery,projection).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
-      return results;
+      return results;//TODO - Return an OK/Fail
     } catch(e) {
       console.error(e);
       return [];

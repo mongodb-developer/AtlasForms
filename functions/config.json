@@ -1,18 +1,12 @@
 [
     {
-        "name": "getDocTypeSchemaInfo",
+        "name": "createDocument",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
         "name": "lockDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "commitEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -28,19 +22,13 @@
         "private": true
     },
     {
-        "name": "tmpTestFn",
+        "name": "getDocTypeSchemaInfo",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "createDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "utility_functions",
+        "name": "getListOfDoctypes",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -52,7 +40,13 @@
         "disable_arg_logs": true
     },
     {
-        "name": "getListOfDoctypes",
+        "name": "commitEdit",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "utility_functions",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true

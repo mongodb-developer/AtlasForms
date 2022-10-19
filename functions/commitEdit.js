@@ -2,24 +2,28 @@
 not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates,asCreate){
-  let rval = { commitSuccess: false, message: "No Error Message Set" }
+  
+  let rval = { ok: false, message: "No Error Message Set" };
+  
   let postCommit = {};
     
   if(_id == undefined) {
+      rval.message = "No _id supplied for document being edited.";
       return rval;   
   }
   
   const [databaseName,collectionName] = namespace.split('.');
-  if(!databaseName || !collectionName) { return rval;}
-    
-  const utilityFunctions =  await context.functions.execute("utility_functions")
+  if(!databaseName || !collectionName) { 
+    rval.message=`Invalid namespace ${namespace}` ;
+    return rval;
+  }
   
-  //TODO - verify we have permission to write to this (AUTHZ)
   const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
-      
- 
-    let user = context.user;
-    let email = user.data.email;
+  const utilityFunctions =  await context.functions.execute("utility_functions");
+  
+  // TODO - verify we have permission to write to this (AUTHZ)
+
+    let email = context.user.data.email;
     
     //Cannot unlock it if it's not mine  
     let checkLock = { _id, __lockedby : email };
@@ -27,13 +31,13 @@ exports = async function(namespace,_id,untypedUpdates,asCreate){
     // Convert everything to the correct Javascript/BSON type as it's all
     // sent as strings from the UI,  also sanitises any Javascript injection
     
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
+    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
     
-    let typedUpdates = utilityFunctions.castDocToType(untypedUpdates,objSchema)
+    let typedUpdates = utilityFunctions.castDocToType(untypedUpdates,objSchema);
     
      
     let unlockRecord = { $unset : { __locked: 1, __lockedby: 1, __locktime: 1}};
-    let sets = {$set: typedUpdates}
+    let sets = {$set: typedUpdates};
    
   
     try {
@@ -45,7 +49,7 @@ exports = async function(namespace,_id,untypedUpdates,asCreate){
 
     if(!asCreate) {
       
-       // Find all the array fields we are trying to add
+    // Find all the array fields we are trying to add
     // And flag them for ensureArrays below
     let arrayPaths = {} ;
     for(const fieldName of Object.keys(typedUpdates)) {
@@ -58,10 +62,10 @@ exports = async function(namespace,_id,untypedUpdates,asCreate){
        
       let arrayFields = Object.keys(arrayPaths);
       if(arrayFields.length > 0) {
-        let ensureArray = {}
+        let ensureArray = {};
         //For each field, if it's null then set it to square brackets
         for( let arrayField of arrayFields) {
-          ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]}
+          ensureArray[arrayField] = { $ifNull : [ `\$${arrayField}`,[] ]};
         }
         //Now apply that updateOne
   
@@ -71,7 +75,7 @@ exports = async function(namespace,_id,untypedUpdates,asCreate){
     }
     
      //Also record all arrays where we are deleting an element 
-    let deletePulls = {}
+    let deletePulls = {};
     for(const fieldName of Object.keys(typedUpdates)) {
       if(typedUpdates[fieldName] == "$$REMOVE") {
          const {arrayFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
@@ -83,15 +87,15 @@ exports = async function(namespace,_id,untypedUpdates,asCreate){
       if(Object.keys(deletePulls).length == 0 )
       {
       
-        const setAndUnlock = { ...sets,...unlockRecord};
+        const setAndUnlock = { ...sets, ...unlockRecord };
         postCommit = await collection.findOneAndUpdate(checkLock,setAndUnlock,{returnNewDocument: true});
-        rval.commitSuccess = true;
+        rval.ok = true;
         rval.currentDoc = postCommit;
       } else {
         await collection.updateOne(checkLock,sets,{returnNewDocument: true});
         const removeElementsAndUnlock = { ...pulls,...unlockRecord};
         postCommit = await collection.findOneAndUpdate(checkLock,removeElementsAndUnlock,{returnNewDocument: true});
-        rval.commitSuccess = true;
+        rval.ok = true;
         rval.currentDoc = postCommit;
       }
     } catch(e) {

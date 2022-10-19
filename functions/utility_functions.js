@@ -20,7 +20,7 @@ function refersToArrayElement(fieldName)
 
 //Take a Document where everything is a string and make it all 
 //be the correct data type according to the schema
-// Question: Shoudl we use the code in here to determine if we are 
+// Question: Should we use the code in here to determine if we are 
 // working with arrays and return a list of arrays and a list of arrays wiuth deletes
 // As insert/update needs them - os shoudl we do it in there.
 
@@ -74,6 +74,8 @@ function  getBsonType(obj) {
 have the overhead of calling them as a context.function so we have one that
 returns an object with all the defined functions - can also do this returning a class*/
 
+/* TODO - Handle Number types correctly*/
+
 function correctValueType(value,type) {
   let rval = null;
   try {
@@ -85,16 +87,14 @@ function correctValueType(value,type) {
       case "int32":
       case "int64":
       case "decimal128":
+        //TODO : FIX THIS!
         rval = Number(value)
-        console.log(`rval = ${rval}`)
         if(isNaN(rval)) { rval = null}
-        console.log(`rval = ${rval}`)
         break;
       case "objectid":
         rval = new BSON.ObjectId(value)
         break;
       case 'date':
-        console.log(`Converting Date: ${value}`)
         rval = new Date(value)
         break;
       default: 
