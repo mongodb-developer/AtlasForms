@@ -27,6 +27,7 @@ exports = async function (namespace) {
         }
         if (docTypeInfo.schema == null || docTypeInfo.schema.length < 3) {
             /* Create a Schema and store it in the record */
+            console.log(JSON.stringify(docTypeInfo))
             const schema = await generateDefaultSchemaInfo(namespace);
             schemaAsText = JSON.stringify(schema,null,2);
             await docTypeCollection.updateOne({ _id: docTypeInfo._id }, { $set: { schema: schemaAsText } });
