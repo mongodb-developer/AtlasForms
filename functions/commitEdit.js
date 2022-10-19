@@ -36,7 +36,7 @@ exports = async function(namespace,_id,untypedUpdates){
     // And flag them for ensureArrays below
     let arrayPaths = {} ;
     for(const fieldName of Object.keys(typedUpdates)) {
-       const {arrayFieldName,ocationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
+       const {arrayFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
        //If this is and array flag it as such
        if(locationOfIndex != -1) {
            arrayPaths[arrayFieldName] = true;
