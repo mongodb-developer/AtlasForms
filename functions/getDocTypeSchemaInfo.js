@@ -51,7 +51,7 @@ exports = async function (namespace) {
 //due to shallow copying
 
 function addDocumentToTemplate(doc, templateDoc) {
-
+    console.log("addDocumentToTemplate")
     //If doc is a simple scalar return the type
     console.log(JSON.stringify(doc));
     
@@ -62,7 +62,7 @@ function addDocumentToTemplate(doc, templateDoc) {
 
     // Iterate through the members adding each to the typemap
     for (let key of Object.keys(doc)) {
-      
+        
         if (typeof doc[key] == "object") {
 
             let bsonType = utilityFunctions.getBsonType(doc[key]);
