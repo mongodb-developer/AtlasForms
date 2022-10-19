@@ -55,7 +55,6 @@ function addDocumentToTemplate(doc, templateDoc) {
     //If doc is a simple scalar return the type
     
     if (typeof doc != 'object') {
-        console.log(`Not an Object`)
         return typeof doc;
     }
 
