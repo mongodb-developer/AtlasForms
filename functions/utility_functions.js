@@ -21,7 +21,7 @@ function refersToArrayElement(fieldName)
 //Take a Document where everything is a string and make it all 
 //be the correct data type according to the schema
 
-function castDocToType(doc,objSchema){
+function castDocToType(doc,objSchema,isQuery){
      
   const typedDoc={}
   for( let fieldName of Object.keys(doc) )
