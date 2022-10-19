@@ -142,6 +142,7 @@ function addDocumentToTemplate(doc, templateDoc) {
                 console.log(`${len}  -> ${doc[key]} `)
                 const oldType =  templateDoc[key] 
                 if(oldType) {
+                  console.log(`oldtype = ${oldType}`)
                   const parts = oldType.split(':')
                   if(parts.length == 2) {
                     if(len > parts[1]) {
