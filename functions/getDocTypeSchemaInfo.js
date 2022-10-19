@@ -53,13 +53,16 @@ exports = async function (namespace) {
 function addDocumentToTemplate(doc, templateDoc) {
 
     //If doc is a simple scalar return the type
-
+    console.log(JSON.stringify(doc));
+    
     if (typeof doc != 'object') {
+        console.log(`Not an Object`)
         return typeof doc;
     }
 
     // Iterate through the members adding each to the typemap
     for (let key of Object.keys(doc)) {
+      
         if (typeof doc[key] == "object") {
 
             let bsonType = utilityFunctions.getBsonType(doc[key]);
