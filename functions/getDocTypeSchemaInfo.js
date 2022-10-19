@@ -88,7 +88,7 @@ function addDocumentToTemplate(doc, templateDoc) {
     //If doc is a simple scalar return the type
 
     if (typeof doc != 'object') {
-        const doctype = typeof(doc)
+        let doctype = typeof(doc)
         //Add length to strings
         if(doctype == "string") {
           doctype += "." + doc.length;
