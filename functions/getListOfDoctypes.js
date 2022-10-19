@@ -1,24 +1,26 @@
 exports = async function(arg){
   
     
-  /*Get an Authorization object - shoudl be standard in any non private function*/
+  /*Get an Authorization object - should be standard in any non private function*/
   const authorization = await context.functions.execute("newAuthorization",context.user.id);
   if( authorization == null ) { return { message: "Not Authorized" }; }
-  
-
-  /* Can we see who it's running as? */
-
-  /*Here we are explicty, programatically choosing which document types to expose to the frontend*/
-  /*We have the user details so wee can factor in authorization too */
-  /*Although MongoDB can be 'Dynamic' we can't just expose all of them */
-  /*Partly because a newly created collection should not just appear to all end users, better to have explicit security*/
-  /*And partly because in App services you cannot enumerate the databases and collections in code without calling the
-   REST Admin API */
 
   const docTypes = []
   
-  /* This is a hard coded list for now */
-  /* But plan to move to a collection */
+  // Read the list of doctypes 
+  // TODO and check if this user can see each
+  
+  const docTypeCollection = context.services.get("mongodb-atlas").db('__atlasforms').collection('doctypes');
+  const nonSystemDocTypes = await docTypeCollection.find({}).toArray();
+  for (const docType of nonSystemDocTypes) {
+    if(!docType.namespace.startsWith("__atlasforms"))
+    {
+      const canSeeDoctype = authorization.authorize(authorization.DOCTYPE_MANAGER);
+      docTypes.push(docType)
+    }
+  }
+  
+  /* System Doctypes at bottom of list */
 
   const canManageUsers = authorization.authorize(authorization.USER_MANAGER);
 
@@ -37,21 +39,5 @@ exports = async function(arg){
   }
   
   
-/*  
-  const sample_airbnb = { title: "Holiday Accomodations", namespace: "sample_airbnb.listingsAndReviews"}
-  sample_airbnb.listViewFields = ["name","property_type","room_type","address.market","address.country"]
-  docTypes.push(sample_airbnb);
-  
-*/
-  // Read the list of doctypes and check if this user can see each
-  const docTypeCollection = context.services.get("mongodb-atlas").db('__atlasforms').collection('doctypes');
-  const nonSystemDocTypes = await docTypeCollection.find({}).toArray();
-  for (const docType of nonSystemDocTypes) {
-    if(!docType.namespace.startsWith("__atlasforms"))
-    {
-      const canSeeDoctype = authorization.authorize(authorization.DOCTYPE_MANAGER);
-      docTypes.push(docType)
-    }
-  }
   return docTypes;
 };
