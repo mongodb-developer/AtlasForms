@@ -99,22 +99,25 @@ function addDocumentToTemplate(doc, templateDoc,sizeInfo) {
             let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array', 'document'].includes(bsonType) == false) {
                 templateDoc[key] = bsonType;
+                sizeInfo[key] = 0;
             } else
                 if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
                     const firstItem = doc[key][0];
                     //It's goign to be an array so add one if we don't have it
                     if (templateDoc[key] == null) { templateDoc[key] = []; }
-
+                    if (sizeInfo[key] == null) { sizeInfo[key] = []; }
+                    
                     if (firstItem != null) { //Ignore empties
                         const existing = templateDoc[key][0];
+                        const existingSizeinfo = sizeInfo[key][0];
                         if (existing) {
                             if (typeof existing == "object") {
-                                templateDoc[key][0] = addDocumentToTemplate(firstItem, existing);
+                                sizeInfo[key][0] = templateDoc[key][0] = addDocumentToTemplate(firstItem, existing,existingSizeinfo);
                             } //Not an object ignore further values
                         } else {
                             //Not existing Merge with empty obejct
-                            templateDoc[key][0] = addDocumentToTemplate(firstItem, {});
+                            sizeInfo[key][0] = templateDoc[key][0] = addDocumentToTemplate(firstItem, {},{});
                         }
                     }
                 } else {
