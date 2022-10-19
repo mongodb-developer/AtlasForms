@@ -150,8 +150,9 @@ function addDocumentToTemplate(doc, templateDoc) {
                 } else {
                   doctype = doctype + ":" + doc[key].length;
                 }
-                  console.log(`1> ${key} = ${ doc[key]} `)
+                  console.log(`1> ${key} = ${doctype} `)
             }
+            
             templateDoc[key] = doctype
         }
     }
