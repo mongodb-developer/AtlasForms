@@ -71,7 +71,7 @@ async function generateDefaultSchemaInfo(namespace) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
   
-
+    console.log(templatedoc);
     return templateDoc;
 
 }
@@ -88,7 +88,12 @@ function addDocumentToTemplate(doc, templateDoc) {
     //If doc is a simple scalar return the type
 
     if (typeof doc != 'object') {
-        return typeof doc;
+        const doctype = typeof(doc)
+        //Add length to strings
+        if(doctype == "string") {
+          doctype += "." + doc.length;
+        }
+        return doctype;
     }
 
     // Iterate through the members adding each to the typemap
@@ -127,7 +132,13 @@ function addDocumentToTemplate(doc, templateDoc) {
                      templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
-            templateDoc[key] = typeof doc[key];
+           const doctype = typeof(templateDoc[key] )
+        //Add length to strings
+        if(doctype == "string") {
+          doctype += "."+templateDoc[key].length;
+        }
+        
+            templateDoc[key] = doctype
         
         }
     }
