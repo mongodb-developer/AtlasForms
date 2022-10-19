@@ -1,60 +1,86 @@
 
+function rewriteArrayQuery(typedQuery) {
+    /* Wherever we are querying against array elements we need to rewrite */
+    /* If we have {skills.1: "archery"} and { skills.2: "weaving" } */
+    /* We want to find them at any location in the array not just at positions 1 and 2 */
+    /* Also if we have { skills.1.skill: "archery", skills.1.level: 3 } we */
+    /* are looking for level3 archery, not any level archery and level=3 in something else*/
+    /* To do this we rewrite the query using $elemMatch */
+    
+    // { skills : { $elemMatch: { skill: "archery", level: 3}}}
+    // We use $and for multiples
+    const elementsToMatch = {};
+    
+    for( let fieldName of Object.keys(typedQuery) )
+    {
+      const {arrayFieldName,index,elementFieldName,locationOfIndex} = utilityFunctions.refersToArrayElement(fieldName); 
+      if( locationOfIndex != -1 ) {
+         if(!elementsToMatch[arrayFieldName]) { elementsToMatch[arrayFieldName] = []; }
+        if(!elementFieldName) {
+          elementsToMatch[arrayFieldName][index] = typedQuery[fieldName];
+        } else {
+          if(!elementsToMatch[arrayFieldName][index]) {elementsToMatch[arrayFieldName][index]={};}
+          elementsToMatch[arrayFieldName][index][elementFieldName] = typedQuery[fieldName];
+        }
+        /* Remove this from the query */
+        delete typedQuery[fieldName];
+      }
+    }
+    //Rewrite as an $and of $elemMatches
+    const arrayQueryClauses = []
+    for(let arrayName of Object.keys(elementsToMatch)) {
+      for(let arrayElement of elementsToMatch[arrayName]) {
+        //A Value of $$REMOVE is not something we want ot be searching for.
+        if(arrayElement != "$$REMOVE" && arrayElement != "") {
+          if( utilityFunctions.getBsonType(arrayElement) == "document" )
+          {
+            arrayQueryClauses.push( { [arrayName] : { $elemMatch : arrayElement}})
+          } else {
+             arrayQueryClauses.push( { [arrayName] : { $elemMatch : {$eq : arrayElement}}})
+          }
+        }
+      }
+    }
+    if(arrayQueryClauses.length > 0) {
+      typedQuery['$and'] = arrayQueryClauses;
+    }
+    return typedQuery;
+}
 
 
-// This just and's the values together - what it does do it cast
+
+// This just ANDs the values together - first though it casts
 // Them all to the correct data type for the field as the form
-// Thinks the numbers are strings
+// returns everything as a string
 
 exports = async function(namespace,query,projection){
-  
-  /*Dynamically load some shared code*/
-  
-  const utilityFunctions =  await context.functions.execute("utility_functions")
-  
+    console.log(`Query: ${JSON.stringify(query,null,2)}`);
+    /*Dynamically load some shared code*/
+    utilityFunctions =  await context.functions.execute("utility_functions");
 
-    if (query == null) { query = {} }
+    if (query == null) { query = {}; }
     const [databaseName,collectionName] = namespace.split('.');
-    if(!databaseName || !collectionName) { return {}}
+    if(!databaseName || !collectionName) { return {ok: false, message: `Invalid namespace suppied ${namespace}`}; }
+    const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     
-  
+    const {docTypeSchemaInfo} =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace)
+    let typedQuery = utilityFunctions.castDocToType(query,docTypeSchemaInfo);
 
-   
-    let newQuery = {}
-    for( let field of Object.keys(query) )
-    {
-      let parts = field.split('.')
-      let subobj = objSchema
-      for(const part of parts) {
-        subobj = subobj[part]
-      }
-      //Now based on that convert value and add to our new query
-      let correctlyTypedValue = utilityFunctions.correctValueType(query[field],subobj)
-      
-      if(correctlyTypedValue != null && correctlyTypedValue!="") {
-        //If we are querying an array we will have 'arrayname.0.field or 'arrayname.0'
-        //We dont want to constrain it to the first array element so remove the .0 
-        //In future add support for multiple array element querying with $elemMatch
-        
-        field = field.replace('.0','');
-        newQuery[field] = correctlyTypedValue
-      }
-    }
+    /* Handle Arrays correctly*/
+    typedQuery = rewriteArrayQuery(typedQuery);
+ 
 
-    let results
-    var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     try {
-  
-      const cursor = await collection.find(newQuery,projection).limit(30); //Temp limit when testing
+      console.log(`Query: ${JSON.stringify(typedQuery,null,2)}`)
+      const cursor = await collection.find(typedQuery,projection).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
-      return results;
+      return {ok: true, results};//TODO - Return an OK/Fail
     } catch(e) {
-      console.error(error);
-      return [];
+      console.error(e);
+      return {ok: false, message: `Error in Querying ${e}`,results:[]}
     }
 
 };
