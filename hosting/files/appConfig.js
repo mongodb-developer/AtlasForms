@@ -16,4 +16,5 @@ const appStrings = {
      AF_NO_OPEN_FOR_EDIT: "You must have a document open to edit it",
      AF_DOC_ALREADY_LOCKED: (otherUser) => `Cannot edit this record. It is currently being edited by  ${otherUser}.`,
      AF_NOT_LOCKED: "You do not currently have this document locked for edit",
+     AF_SERVER_ERROR: (msg)=>`Error from Server: ${msg}`
 }

@@ -30,7 +30,7 @@ function rewriteArrayQuery(typedQuery) {
     const arrayQueryClauses = []
     for(let arrayName of Object.keys(elementsToMatch)) {
       for(let arrayElement of elementsToMatch[arrayName]) {
-        //console.log(`Array Element is type ${utilityFunctions.getBsonType(arrayElement)}`)
+        //A Value of $$REMOVE is not something we want ot be searching for.
         if(arrayElement != "$$REMOVE" && arrayElement != "") {
           if( utilityFunctions.getBsonType(arrayElement) == "document" )
           {
@@ -44,7 +44,6 @@ function rewriteArrayQuery(typedQuery) {
     if(arrayQueryClauses.length > 0) {
       typedQuery['$and'] = arrayQueryClauses;
     }
-    //console.log(JSON.stringify(typedQuery));
     return typedQuery;
 }
 
@@ -55,33 +54,33 @@ function rewriteArrayQuery(typedQuery) {
 // returns everything as a string
 
 exports = async function(namespace,query,projection){
- 
+    console.log(`Query: ${JSON.stringify(query,null,2)}`);
     /*Dynamically load some shared code*/
-    var utilityFunctions =  await context.functions.execute("utility_functions");
-
+    utilityFunctions =  await context.functions.execute("utility_functions");
 
     if (query == null) { query = {}; }
     const [databaseName,collectionName] = namespace.split('.');
-    if(!databaseName || !collectionName) { return {}; }
-
-    const objSchema =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    if(!databaseName || !collectionName) { return {ok: false, message: `Invalid namespace suppied ${namespace}`}; }
+    const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+    
+    const {docTypeSchemaInfo} =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
-    let typedQuery = utilityFunctions.castDocToType(query,objSchema);
+    let typedQuery = utilityFunctions.castDocToType(query,docTypeSchemaInfo);
 
     /* Handle Arrays correctly*/
     typedQuery = rewriteArrayQuery(typedQuery);
  
-    var collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
+
     try {
-  
+      console.log(`Query: ${JSON.stringify(typedQuery,null,2)}`)
       const cursor = await collection.find(typedQuery,projection).limit(30); //Temp limit when testing
       const results = await cursor.toArray(); 
-      return results;
+      return {ok: true, results};//TODO - Return an OK/Fail
     } catch(e) {
       console.error(e);
-      return [];
+      return {ok: false, message: `Error in Querying ${e}`,results:[]}
     }
 
 };

@@ -2,15 +2,18 @@
 editing it - the GUI only submits physical changes so if a backend process modifies it it *might* be OK
 but multiple editors changing same fields obviously needs thought from a business process perspective*/
 
+//TODO - Make it take a namespace
 exports = async function(docType,_id){
-    let lockState = { lockObtained: false }
+    let lockState = { ok: false }
     
     const [databaseName,collectionName] = docType.namespace.split('.');
     if(databaseName == null || collectionName ==null  )
     {
+      lockState.message = `Invalid namespace ${docType.namespace}`;
       return lockState; //Invalid namespace
     }
     if(_id == "" || _id==null) {
+      lockState.message = "No _id supplied in call to Lock document";
       return lockState;//Error - no useful id
     }
     
@@ -20,14 +23,14 @@ exports = async function(docType,_id){
     
     //Check it's not locked, or I already own the lock (in case of page reloaded)
     //Or lock has expired
-    let user = context.user
-    let email = user.data.email
+    let user = context.user;
+    let email = user.data.email;
     
    
-    let isUnlocked = { __locked: null }
-    let isLockedByMe = { __lockedby : email }
+    let isUnlocked = { __locked: null };
+    let isLockedByMe = { __lockedby : email };
     let halfHourAgo = new Date();
-    halfHourAgo.setMinutes(halfHourAgo.getMinutes() - 30 ) //THe time 30 mins ago
+    halfHourAgo.setMinutes(halfHourAgo.getMinutes() - 30 ); //The time 30 mins ago
     
     let isExpiredLock = { __lockTime : { $lt : halfHourAgo}}
     let checkLock = { _id, $or : [ isUnlocked,isLockedByMe,isExpiredLock] }
@@ -38,9 +41,10 @@ exports = async function(docType,_id){
       //We couldn't find a record in editable state
        let getRecord = await collection.findOne({_id},{__locked,__lockedby,__locktime})
        lockState.currentDoc = getRecord
+       lockState.message = "Cannot Lock Document";
     } else {
       //Grab the record details 
-      lockState.lockObtained = true;
+      lockState.ok = true;
       lockState.currentDoc = getLock
     }
     return lockState;

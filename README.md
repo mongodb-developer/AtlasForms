@@ -20,14 +20,28 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 30/9/2022 - Initial version is only supporting two levels of depth, so arrays and objects only at the top level or objects in a top level array. It is hard to render lower nicely in a basic GUI and also just not a nice schema. Objects might get extended one more level though.
 
+
+
+## Coding Standards
+
+  - All Server Side non private functions return ok(boolean) and message(string) which should be an end user
+appropriate message.
+  - variuable and function nameing are camelCase
+  - Things that can fail are wrapped in try catch
+  - ES6 syntax wherever possible
+  - Multiline comments should be in a single multiline-comment
+  - Use TODO: for things we need to get back to
+  - 
+  
 ## Questions
   - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters
-  - How Best ot handle date fields, are date pickers good
+  - How Best oto handle date fields, are date pickers good
   - How do we *best* handle date not datetime?
   - Will we add support for Range queries? If so how >5 in a text box
-  - How *critical* are dropdown picklists
+  - How *critical* are dropdown picklists - Very!
    
 ## Known BUGS to fix
+
 
    - Do we handle arrays of non string scalarrs? - test that and fix as required
    - We do not support arrays in Objects and we probably should... Not critical right now
@@ -74,8 +88,8 @@ _Here we note anything we made an explicit decision about in the design and why_
   - ~~Update hitlist on edit~~
   -  ~~Combine Cancel Edit and Commit Edit into one function each end~~
   - ~~Array Editing (Add and Remove elements as needed)~~
-  - Need to be able to add Array Elements when Creating a Document (and Querying?)
-    - Needs to handle Query when sending multiepl array elements ... Implicit AND $elemMAtch
+  - ~~Need to be able to add Array Elements when Creating a Document (and Querying?)~~
+    - ~~Needs to handle Query when sending multiepl array elements ... Implicit AND $elemMAtch~~
 
 
 - Authorization [John Working on This now]
@@ -91,6 +105,8 @@ _Here we note anything we made an explicit decision about in the design and why_
 
 
 - Error Handling review, Refactor, lint,tidy code
+  - All Strings in a consts class, inc errors and fieldnames
+  - DocTypeSchema shoudl be in doctype record
 
 *** MVP  ish at this point ***
 

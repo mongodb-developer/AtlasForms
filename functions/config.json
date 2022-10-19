@@ -18,6 +18,12 @@
         "disable_arg_logs": true
     },
     {
+        "name": "createDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
         "name": "newAuthorization",
         "private": true,
         "run_as_system": true,
@@ -28,24 +34,6 @@
         "private": true
     },
     {
-        "name": "tmpTestFn",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "createDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "utility_functions",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "queryDocType",
         "private": false,
         "run_as_system": true,
@@ -53,6 +41,12 @@
     },
     {
         "name": "getListOfDoctypes",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "utility_functions",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
