@@ -92,14 +92,14 @@ function addDocumentToTemplate(doc, templateDoc) {
         //Add length to strings
         if (doctype == "string") {
             doctype = doctype + ":" + doc.length;
-            console.log(`${doc.length} [${doc}]`)
+            console.log(`2> ${doc.length} [${doc}]`)
         }
         return doctype;
     }
 
     // Iterate through the members adding each to the typemap
     for (let key of Object.keys(doc)) {
-
+        
         if (typeof doc[key] == "object") {
 
             let bsonType = utilityFunctions.getBsonType(doc[key]);
@@ -137,7 +137,7 @@ function addDocumentToTemplate(doc, templateDoc) {
             //Add length to strings
             if (doctype == "string") {
                 doctype = doctype + ":" + templateDoc[key].length;
-                  console.log(`${ templateDoc[key].length} [${ templateDoc[key]}]`)
+                  console.log(`1> { templateDoc[key].length} [${ templateDoc[key]}]`)
             }
             templateDoc[key] = doctype
         }
