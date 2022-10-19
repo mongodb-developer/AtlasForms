@@ -139,16 +139,17 @@ function addDocumentToTemplate(doc, templateDoc) {
             //Add length to strings - take largest we find
             if (doctype == "string") {
                 const len =  doc[key].length;
+                console.log(`${len}  -> ${doc[key]} `)
                 const oldType =  templateDoc[key] 
                 if(oldType) {
                   const parts = oldType.split(':')
                   if(parts.length == 2) {
                     if(len > parts[1]) {
-                      doctype = doctype + ":" + doc[key].length;
+                      doctype = doctype + ":" + len;
                     }
                   }
                 } else {
-                  doctype = doctype + ":" + doc[key].length;
+                  doctype = doctype + ":" + len;
                 }
                   console.log(`1> ${key} = ${doctype} `)
             }
