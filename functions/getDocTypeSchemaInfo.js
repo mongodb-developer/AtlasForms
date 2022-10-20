@@ -8,9 +8,14 @@ rather than be an explicit definition btu you could explicity define it here or 
 a given collection. As it stands we just look at some of the existing docs*/
 
 /* This will be extended to include lots more metadata like jsonSchema or similar*/
+let logcount =0;
 
-
+function log(val) {
+  if(logcount < 20) { console.log(val);}
+  logcounnt++
+}
 exports = async function (namespace) {
+    
     /*Dynamically load some shared code*/
     utilityFunctions = await context.functions.execute("utility_functions");
 
@@ -30,9 +35,7 @@ exports = async function (namespace) {
             console.log(JSON.stringify(docTypeInfo))
             const schema = await generateDefaultSchemaInfo(namespace);
             schemaAsText = JSON.stringify(schema, null, 2);
-            console.log('here')
             await docTypeCollection.updateOne({ _id: docTypeInfo._id }, { $set: { schema: schemaAsText } });
-            console.log('here')
             docTypeInfo.schema = schemaAsText;
         }
 
@@ -84,12 +87,12 @@ async function generateDefaultSchemaInfo(namespace) {
 //due to shallow copying
 
 function addDocumentToTemplate(doc, templateDoc) {
-
+    
     //If doc is a simple scalar return the type
 
     if (typeof doc != 'object') {
+        /*This is scalars in an array*/
         let doctype = typeof (doc)
-        console.log(`3> ${doc}`)
         return doctype;
     }
 
@@ -100,8 +103,9 @@ function addDocumentToTemplate(doc, templateDoc) {
 
             let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array', 'document'].includes(bsonType) == false) {
+               /* This is for Scalars which are bson objects like Date */
                 templateDoc[key] = bsonType;
-                console.log(`4> ${key} ${bsonType} `)
+              
 
             } else
                 if (bsonType == 'array') {
@@ -130,15 +134,17 @@ function addDocumentToTemplate(doc, templateDoc) {
                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
+            /* This is for scalar members of an object*/
+            
             let doctype = typeof (doc[key])
-            //console.log(`1> ${key} = ${doctype} `)
+            const oldType =  templateDoc[key] 
+            log(`${key} = ${doctype} ${doc[key]} ${oldType}`)
+            
             //Add length to strings - take largest we find
             if (doctype == "string") {
                 const len =  doc[key].length;
-                //console.log(`2> String ${len}  -> ${doc[key]} `)
-                const oldType =  templateDoc[key] 
+                
                 if(oldType) {
-                  console.log(`oldtype = ${oldType}`)
                   const parts = oldType.split(':')
                   if(parts.length == 2) {
                     if(len > parts[1]) {
