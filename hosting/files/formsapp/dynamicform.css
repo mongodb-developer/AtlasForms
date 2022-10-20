@@ -117,8 +117,7 @@ input[type="datetime-local"] {
 }
 
 .inlist {
-    width: calc(100% - 60px);
-  
+    width: calc(100% - 80px);  
 }
 
 .nested {
