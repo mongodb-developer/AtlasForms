@@ -144,7 +144,7 @@ function addDocumentToTemplate(doc, templateDoc) {
             if (doctype == "string") {
                 const len =  doc[key].length;
                 
-                if(oldType) {
+                if(oldType == undefined) {
                   const parts = oldType.split(':')
                   if(parts.length == 2) {
                     if(len > parts[1]) {
