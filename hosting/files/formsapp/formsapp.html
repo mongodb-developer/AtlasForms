@@ -143,17 +143,11 @@
                                                         </div>
                                                     </template>
                                                 </template>
-                                                <!-- Add/Remove buttons only when editing a document for now -->
-                                                <!-- TODO: add ability to search multiple array elements correctly-->
-                                                <div v-if="editing && currentDoc?.doc?._id">
-                                                    <span v-on:click="deleteArrayElement(innername,arrayidx)"
-                                                        class="smallbutton">&otimes;</span>
-                                                </div>
-                                                <!-- We need to be able to add and remove elements at all times-->
-                                                <!-- we may be doing data entry or querying multiple values -->
                                                 <div>
                                                     <span class="smallbutton" v-on:click="addArrayElement(name)"
                                                         v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                                    <span v-on:click="deleteArrayElement(name,arrayidx)"
+                                                        class="smallbutton">&otimes;</span>
                                                 </div>
                                             </div>
                                         </div>
