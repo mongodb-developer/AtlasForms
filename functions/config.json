@@ -1,24 +1,12 @@
 [
     {
-        "name": "getDocTypeSchemaInfo",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "lockDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "commitEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "createDocument",
+        "name": "getListOfDoctypes",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -30,8 +18,10 @@
         "disable_arg_logs": true
     },
     {
-        "name": "newUserSignup",
-        "private": true
+        "name": "getDocTypeSchemaInfo",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     },
     {
         "name": "queryDocType",
@@ -40,10 +30,20 @@
         "disable_arg_logs": true
     },
     {
-        "name": "getListOfDoctypes",
+        "name": "createDocument",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
+    },
+    {
+        "name": "lockDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "newUserSignup",
+        "private": true
     },
     {
         "name": "utility_functions",
