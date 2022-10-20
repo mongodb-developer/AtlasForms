@@ -16,7 +16,7 @@ async function logOut(email, password) {
 
 async function getListOfDocTypes() {
   try {
-    return  await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
+    return await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
   }
   catch (e) {
     console.error(e)
@@ -109,7 +109,7 @@ async function newRecord() {
     return;
   }
 
-  let {ok,message,currentDoc} = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
+  let { ok, message, currentDoc } = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
   if (ok && currentDoc) {
     const wrappedDoc = { downloaded: true, doc: currentDoc }
     vueApp.results = [wrappedDoc]
@@ -125,10 +125,10 @@ async function resultClick(result) {
   if (result.downloaded == false) {
 
     /* Download the full doc when we select it*/
-    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(
+    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType.namespace
       , { _id: result.doc._id }, {});
-    if(ok) {
+    if (ok) {
       result.doc = results[0];
       result.downloaded = true
     } else {
@@ -179,23 +179,38 @@ function addArrayElement(name) {
   //Oddly if we delete it - we will add a delete to send to the server
   //Which works because a delete on the setver is a $set then $pull
   //We either add and emptyp string or dummy object based on the type
-  const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-  //If empty add the one we already are showing first
-  if (vueApp.currentDoc.doc[name] == undefined) {
-    vueApp.currentDoc.doc[name] = [];
-    if (elementBsonType == "document") {
-      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
-    } else {
-      vueApp.currentDoc.doc[name].push('')
+
+  let elementBsonType = null;
+
+  if (vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null) {
+    const [arrayname, subfield] = name.split('.');
+    const schemaElement = vueApp.selectedDocTypeSchema[arrayname][name];
+    elementBsonType = getBsonType(schemaElement);
+    if (elementBsonType == "array") {
+      vueApp.currentDoc.doc[arrayname][name].push('');
+    }
+    else {
+      vueApp.currentDoc.doc[arrayname][name].push({ __xyxxy__: 1 });
     }
   }
+  else {
+    elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+    //If empty add the one we already are showing first
+    if (vueApp.currentDoc.doc[name] == undefined) {
+      vueApp.currentDoc.doc[name] = [];
+      if (elementBsonType == "document") {
+        vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 });
+      } else {
+        vueApp.currentDoc.doc[name].push('');
+      }
+    }
 
-  if (elementBsonType == "document") {
-    vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
-  } else {
-    vueApp.currentDoc.doc[name].push('')
+    if (elementBsonType == "document") {
+      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 });
+    } else {
+      vueApp.currentDoc.doc[name].push('');
+    }
   }
-
 }
 function deleteArrayElement(name, index) {
   //Make sure we have a  real element to delete
@@ -249,15 +264,15 @@ async function runQuery() {
       projection[fieldname] = 1
     }
 
-    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
+    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
       , vueApp.fieldEdits, projection);
 
-    if(!ok) {
+    if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
-      vueApp.wrappedResults=[];
-      vueApp.editing=true;
+      vueApp.wrappedResults = [];
+      vueApp.editing = true;
       return;
-    } 
+    }
 
     //Wrap this in something to say if we have decoded it
     let wrappedResults = []
@@ -285,9 +300,9 @@ async function selectDocType() {
 
   try {
     // It would be simple to cache this info client end if we want to
-    const {ok,docTypeSchemaInfo,message} = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
-   
-    if(!ok) {
+    const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
+
+    if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
       vueApp.selectedDocType = {}
     }
@@ -347,8 +362,8 @@ async function formsOnLoad() {
     },
   }).mount("#formsapp")
 
-  const {ok,docTypes,message} =  await getListOfDocTypes();
-  if(!ok) {
+  const { ok, docTypes, message } = await getListOfDocTypes();
+  if (!ok) {
     formAlert(appStrings.AF_SERVER_ERROR(message));
     return;
   }
