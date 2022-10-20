@@ -1,4 +1,3 @@
-
 /* This returns a template document for a given type with information about the fields ,
 data types AND the arrangement/order of those fields. This is needed to provide an empty
 form for Query or data entry  */
@@ -14,6 +13,7 @@ function log(val) {
   if(logcount < 20) { console.log(val);}
   logcount++
 }
+
 exports = async function (namespace) {
     
     /*Dynamically load some shared code*/
@@ -169,8 +169,6 @@ function addDocumentToTemplate(doc, templateDoc) {
     return templateDoc;
 
 }
-
-
 
 /* Return Schema info for the built in doc types - User and SchemaInfo */
 
