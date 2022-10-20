@@ -154,6 +154,7 @@ function addDocumentToTemplate(doc, templateDoc) {
                 } else {
                   log(`${key} ${doctype} ${len}`)
                   doctype = doctype + ":" + len;
+                  log(doctype)
                 }
                   
             }
