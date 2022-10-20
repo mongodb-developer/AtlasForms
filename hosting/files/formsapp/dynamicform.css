@@ -11,14 +11,26 @@
     white-space: nowrap;
     float: left;
    /*min-width: 150px;*/
+  
+    vertical-align: middle;
+    font-size: small;
+}
+
+.subdocumentlabel {
+    text-transform: capitalize;
+    text-align: left;
+    white-space: nowrap;
+    float: left;
+    min-width: calc( 20vw - 16px );
     vertical-align: middle;
     font-size: small;
 }
 
 
+
 .dynamicformvalue {
     white-space: pre-wrap;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     border-radius: 4px;
     background-color: white;
     resize: both;
@@ -26,17 +38,21 @@
     float: left;
     clear: left;
     display:block;
-    padding: 3px;
-   width: 90%;
+    padding: 8px;
+    width: calc(100% - 20px);
     padding: 3px;
     margin-left: 5px;
     max-height: 100px;
-    min-height: 20px;
+    min-height: 24px;
     overflow: auto;
+    border: 1px solid transparent;
+    border-top: none;
+    border-bottom: 1px solid #DDD;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 }
 
 .dynamicformvaluedate {
-    border: 1px solid black;
+   
     border-radius: 4px;
     background-color: white;
     clear: left;
@@ -47,10 +63,22 @@
     padding: 3px;
     margin-left: 5px;
     max-height: 100px;
-    min-height: 20px;
+    min-height: 24px;
     overflow: auto;
+    width: calc(100% - 20px);
+    border: 1px solid transparent;
+    border-top: none;
+    border-bottom: 1px solid #DDD;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 }
 
+
+.subdocumentlabel {
+    width: calc ( 20vw - 16px);
+   
+}
+
+  
 /* This means a manual resize can override the inital max-height*/
 
 .dynamicformvalue[style*="height"] {
@@ -61,32 +89,61 @@
     margin: 0px;
     padding: 2px;
     float: left;
-    border: 1px solid gray;
-    min-width: 20vw;
+   /* border: 1px solid red;  Debug*/
+    min-width: 200px;
     min-height: 45px;
-    background-color: lightgrey;
+    border-radius: 4px;
+}
+
+.smallitem{
+
+    width: calc( 20vw - 13px );
+    height: 50px;
+}
+
+.mediumitem {
+  
+    width: calc( 40vw  - 14px );
+    height: 50px;
+}
+
+.largeitem {
+    width: calc(100vw - (100vw - 100%) - 16px);
 }
 
 input[type="datetime-local"] {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     border: 1 solid lightgrey;
+}
+
+.inlist {
+    width: calc(100% - 60px);
+  
 }
 
 .nested {
-    border: 1px solid black;
-    background-color: navajowhite;
+    border: 1px solid lightgrey;
     min-height: 20px;
-    width: 90%;
+    border-radius: 4px;
   }
 
 .arrayelement {
-   /* Per element - including hidden ones*/
-
+   background-color: white;
+   border-radius: 5px;
+   padding: 8px;
+   margin-bottom: 5px;
+   
 }
 
+.arraybuttons {
+    float: left;
+    padding-left: 5px;
+    padding-top: 1px;;
+}
 
 .newline {
     clear: both;
+    width: calc(100vw - (100vw - 100%) - 16px);
 }
 
 .arrayscroller {
@@ -94,8 +151,9 @@ input[type="datetime-local"] {
     resize: vertical;
     overflow: auto;
     padding: 5px;
-    background-color: lightskyblue;
-    clear: left;
+    border: 1px solid lightgrey;
+    width: calc( 78vw - 24px );
+    
 }
 
 .arrayscroller[style*="height"] {
@@ -103,7 +161,7 @@ input[type="datetime-local"] {
 }
 
 div.listview {
-    border: 1 solid black;
+    border: 1 solid lightgrey;
     max-height: 300px;
 
     border-collapse: collapse;
@@ -114,7 +172,7 @@ div.listview {
 table.listview {
     border-collapse: collapse;
     border-spacing: 0px;
-    border: 1px solid black;
+    border: 1 solid lightgrey;
     height: 300px;
     display: flex;
 
@@ -124,7 +182,7 @@ th.listview {
 }
 
 tr.listview {
-    border: 1px solid black;
+    border: 1px solid lightgrey;
 }
 
 tr.selected {
@@ -135,7 +193,7 @@ td.listview ,th.listview {
     padding: 0;
     margin: 0px;
     overflow: auto;
-      border: 1px solid black;
+    border: 1px solid lightgrey;
 }
 
 
@@ -147,6 +205,7 @@ div.listviewheader {
     word-break: break-all;
     word-wrap: break-word;
     text-transform: capitalize;
+    font-weight: 300;
 }
 
 div.listviewitem {

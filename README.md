@@ -42,9 +42,10 @@ appropriate message.
    
 ## Known BUGS to fix
 
-
+   - Last listview column needs to fill to end.
    - Do we handle arrays of non string scalarrs? - test that and fix as required
    - We do not support arrays in Objects and we probably should... Not critical right now
+   - Edit/Select contents, press delete - doesn't work, have to replace with a space.
 
 
 ## Work in Progress / TODO / Ideas
@@ -106,7 +107,7 @@ appropriate message.
 
 - Error Handling review, Refactor, lint,tidy code
   - All Strings in a consts class, inc errors and fieldnames
-  - DocTypeSchema shoudl be in doctype record
+  - DocTypeSchema should be in doctype record
 
 *** MVP  ish at this point ***
 

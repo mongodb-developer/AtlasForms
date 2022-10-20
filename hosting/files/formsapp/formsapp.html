@@ -32,8 +32,8 @@
 
                 <div class="left">
                     <!-- odd binding as we do work on change to lookup details-->
-                    Document Type:
-                    <select v-show="!currentDocLocked" name="docType" @change="selectDocType" v-model="selectedDocType">
+                 
+                    <select class="doctypeselect" v-show="!currentDocLocked" name="docType" @change="selectDocType" v-model="selectedDocType">
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
                     <button :disabled="currentDoc?.doc?._id != null"  v-show="!currentDocLocked" class="headerbutton" @click="runQuery()"> Search </button>
@@ -78,14 +78,13 @@
                     <!-- For each K,V pair in document-->
                     <!-- In the line below we add class 'newline' if value is a document or array
                       sorry that the code is ugly, put it in a function if it bothers you -->
-                    <div :class="'dynamicformitem' + (['document','array'].includes(getBsonType(value))?' newline':'') "
-                        v-for="(valtype,name) in selectedDocTypeSchema " :set=" value = getFieldValue(currentDoc,name)">
-
+                    <div :class="'dynamicformitem' + classFromType(valtype)"
+                        v-for="(valtype,name) in selectedDocTypeSchema " :set="value=getFieldValue(currentDoc,name)">
                         <!-- Nested Object -  We are only supprting one level of nesting here -->
                         <template v-if="getBsonType(valtype) == 'document'">
-                            <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
+                            <div class="subdocumentlabel">{{formatFieldname(name)}}:</div>
                             <div class='form_container nested'>
-                                <div class="dynamicformitem" v-for="(valtype,innername) in valtype "
+                                <div :class="'dynamicformitem'  + classFromType(valtype)" v-for="(valtype,innername) in valtype "
                                     :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
                                     <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
                                     <!-- Is this a nested object? -->
@@ -104,7 +103,7 @@
                                                 </div>
                                             </template>
                                             <template v-else="getBsonType(arrayElement) == 'document'">
-                                                <div class="dynamicformitem" v-for="(arrayElement,innername) in arrayElement "
+                                                <div :class="'dynamicformitem'  + classFromType(valtype)" v-for="(arrayElement,innername) in arrayElement "
                                                 :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
                                                    
                                                         <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
@@ -135,7 +134,7 @@
                         <!-- Array -->
 
                         <template v-else-if="getBsonType(valtype) == 'array'">
-                            <div class=" dynamicformlabel">{{formatFieldname(name)}}:
+                            <div class="subdocumentlabel">{{formatFieldname(name)}}:
                             </div>
                             <div class="dynamicformitem arrayscroller">
                                 <!-- If the Array is Empty we still need to show at least one member-->
@@ -151,41 +150,45 @@
                                     <template v-if="!(fieldEdits[`${name}.${arrayidx}`] == `$$REMOVE`)">
                                         <!-- Object in Array-->
                                         <template v-if="getBsonType(arrayElement) == 'document'">
-
-                                            <div class="dynamicformitem"
+                                           <div class="inlist">
+                                            <div :class="'dynamicformitem '  + classFromType(innervaltype)"
                                                 v-for="(innervaltype,innername) in selectedDocTypeSchema[name][0]"
                                                 :set="innervalue = getFieldValue({doc:arrayElement},innername)">
 
                                                 <div class="dynamicformlabel"> {{formatFieldname(innername)}}:</div>
+
                                                 <input v-if="innervaltype == 'date'" v-on:input="formValueChange"
                                                     :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
-                                                    class="dynamicformvaluedate" :disabled="editing == false"
+                                                    :class="dynamicformvaluedate" :disabled="editing == false"
                                                     type="datetime-local" :value="toDateTime(innervalue)">
                                                 <div v-else v-on:input="formValueChange"
                                                     :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
-                                                    :contenteditable="editing?true:null" class="dynamicformvalue">
+                                                    :contenteditable="editing?true:null" :class="'dynamicformvalue'">
                                                     {{innervalue}}
                                                 </div>
+                                            </div>
                                         </template>
                                         <!-- Scalar in an Array-->
                                         <template v-else> 
                                             <input v-on:input="formValueChange" :id=`${name}.${arrayidx}`
                                                 v-if="valtype == 'Date'" :data-bsontype="valtype"
-                                                class="dynamicformvaluedate" :disabled="editing == false"
+                                                class="dynamicformvaluedate inlist" :disabled="editing == false"
                                                 type="datetime-local" :value="toDateTime(arrayElement)">
                                             <div v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-else
                                                 :contenteditable="editing?true:null" :data-bsontype="valtype"
-                                                class="dynamicformvalue">
+                                                class="dynamicformvalue inlist">
                                                 {{arrayElement}} </div>
                                         </template>
                                         <!-- We need to be able to add and remove elements at all times-->
                                         <!-- we may be doing data entry or querying multiple values -->
-                                        <div>
-                                            <span class="smallbutton" v-on:click="addArrayElement(name)"
-                                                v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                        <div class="arraybuttons">
+                                            
                                             <span v-on:click="deleteArrayElement(name,arrayidx)"
                                                 class="smallbutton">&otimes;</span>
+                                                <span class="smallbutton" v-on:click="addArrayElement(name)"
+                                                v-if="!value || arrayidx==value?.length -1">&oplus;</span>
                                         </div>
+                                      
                                     </template>
                                 </div>
                             </div>
@@ -197,7 +200,6 @@
                             <input :data-bsontype="valtype" v-if="valtype == 'date'" v-on:input="formValueChange"
                                 class="dynamicformvaluedate" :disabled="editing == false" type="datetime-local"
                                 :value="toDateTime(value)" :id="name">
-
                             <div v-else v-on:input="formValueChange" :id="name" :data-bsontype="valtype"
                                 :contenteditable="editing ? true : null" class="dynamicformvalue">{{value}} </div>
                             <br />
