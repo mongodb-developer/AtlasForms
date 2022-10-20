@@ -12,7 +12,7 @@ let logcount =0;
 
 function log(val) {
   if(logcount < 20) { console.log(val);}
-  logcounnt++
+  logcount++
 }
 exports = async function (namespace) {
     
