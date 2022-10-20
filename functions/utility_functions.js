@@ -34,7 +34,7 @@ function castDocToType(doc,objSchema){
     if(doc[fieldName] == "$$REMOVE") {
       typedDoc[fieldName] = "$$REMOVE"
     } else {
-      let parts = fieldName.split('.')
+      let parts = fieldName.split('.') ;
       let subobj = objSchema
       for(let part of parts) {
         if(!isNaN(part)) {
@@ -57,7 +57,7 @@ function castDocToType(doc,objSchema){
 //Like Binary, Date, Decimal128 etc.
 
 function  getBsonType(obj) {
-  if (typeof obj != "object") return typeof obj;
+  if (typeof obj != "object") return typeof obj; 
     if (Array.isArray(obj)) return "array"
     if (obj instanceof Date) return "date"
     if (obj instanceof BSON.ObjectId) return "objectid"
@@ -78,6 +78,7 @@ returns an object with all the defined functions - can also do this returning a 
 function correctValueType(value,type) {
   let rval = null;
   try {
+    if(type.startsWith("string")) { type="string"; } //Strip any length info
     switch(type) {
       case "string":
         rval = `${value}`

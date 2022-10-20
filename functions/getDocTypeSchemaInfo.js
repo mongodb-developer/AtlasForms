@@ -81,10 +81,12 @@ async function generateDefaultSchemaInfo(namespace) {
 
 
 
-//This isn't easy to read but it converts object keys to their types
-//as Strings and does a deep merge at the same time to create a schema from
-//multiple docs - turns out the $mergeObjects or ... operator won't play
-//due to shallow copying
+/*This isn't easy to read but it converts object keys to their types
+  as Strings and does a deep merge at the same time to create a schema from
+  multiple docs - turns out the $mergeObjects or ... operator won't play
+ due to shallow copying*/
+
+/* Also tries to estimate max length of strings */
 
 function addDocumentToTemplate(doc, templateDoc) {
     
@@ -93,6 +95,9 @@ function addDocumentToTemplate(doc, templateDoc) {
     if (typeof doc != 'object') {
         /*This is scalars in an array*/
         let doctype = typeof (doc)
+        if(doctype == 'string') {
+          doctype = `${doctype}:${doc.length}`
+        }
         return doctype;
     }
 
@@ -136,30 +141,29 @@ function addDocumentToTemplate(doc, templateDoc) {
         } else {
             /* This is for scalar members of an object*/
             
-            let doctype = typeof (doc[key])
+            let docType = typeof (doc[key])
             const oldType =  templateDoc[key] 
-            log(`${key} = ${doctype} ${doc[key]} ${oldType}`)
+           
             
             //Add length to strings - take largest we find
-            if (doctype == "string") {
+            if (docType == "string") {
                 const len =  doc[key].length;
-                
                 if(oldType != undefined) {
                   const parts = oldType.split(':')
+
                   if(parts.length == 2) {
                     if(len > parts[1]) {
-                      doctype = doctype + ":" + len;
+                      docType =`${docType}:${len}`
+                    } else  {
+                      docType = oldType;
                     }
                   }
                 } else {
-                  log(`${key} ${doctype} ${len}`)
-                  doctype = doctype + ":" + len;
-                 
-                }
-                  
+                  docType =`${docType}:${len}`
+                } 
             } 
-            templateDoc[key] = doctype
-             log( templateDoc[key])
+            templateDoc[key] = docType
+           
         }
     }
     return templateDoc;
