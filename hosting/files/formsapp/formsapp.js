@@ -2,6 +2,25 @@
 
 let vueApp;
 
+function classFromType(valtype){
+  
+  let rval = "smallitem";
+
+  //Document and Array field wrappers have their own class
+  if( ['document','array'].includes(getBsonType(valtype))) {
+    rval= " newline"
+  } else {
+    console.log(valtype);
+    if(valtype.startsWith("string")) {
+      const size = valtype.split(':')[1];
+      if(size > 30) { rval= "mediumitem" };
+      if(size > 150) { rval= "largeitem" };
+      
+    }
+  }
+  return " " + rval /* Non Strings can be type small */
+}
+
 async function logOut(email, password) {
   try {
     await vueApp.realmApp.currentUser.logOut();
@@ -338,7 +357,7 @@ async function formsOnLoad() {
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
       getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
-      resultClick, deleteArrayElement, addArrayElement
+      resultClick, deleteArrayElement, addArrayElement,classFromType
 
     },
     data() {

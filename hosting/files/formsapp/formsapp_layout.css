@@ -16,9 +16,19 @@
     overflow: hidden;
 }
 
+.doctypeselect {
+  width: 200px;
+  border:none;
+  border-bottom: 1px solid #DDD;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 4px;
+ margin: 5px;
+}
+
 .header {
     flex: 0 1 auto;
-    border: 1px solid black;
+    border: none;
+    border-bottom: 1px solid darkgray;
     padding: 3px;
    
 }
@@ -40,6 +50,7 @@
     border: 1px solid black;
     overflow-x: hidden;
 }
+
 
 .right {
     float: right
@@ -76,7 +87,7 @@
     color: #aaa;
     float: right;
     font-size: 28px;
-    font-weight: bold;
+    font-weight:bold;
   }
   
   .close:hover,
@@ -90,7 +101,7 @@
     /* The Close Button */
     .smallbutton {
       color: black;
-      float: right;
+      float: left;
       font-size: 28px;
       font-weight: bold;
     }

@@ -4,6 +4,13 @@ but multiple editors changing same fields obviously needs thought from a busines
 
 //TODO - Make it take a namespace
 exports = async function(docType,_id){
+  
+      /*Get an Authorization object - should be standard in any non private function*/
+    const authorization = await context.functions.execute("newAuthorization",context.user.id);
+    if( authorization == null ) { return {ok: false,  message: "User not Authorized" }; }
+
+
+
     let lockState = { ok: false }
     
     const [databaseName,collectionName] = docType.namespace.split('.');
