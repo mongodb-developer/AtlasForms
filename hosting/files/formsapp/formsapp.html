@@ -141,14 +141,14 @@
                                                             </div>
                                                         </div>
                                                     </template>
-                                                </template>                                                
-                                            </div>
-                                            <div>
-                                                <span class="smallbutton" v-on:click="addArrayElement(name)"
-                                                    v-if="!value || arrayidx==value?.length -1">&oplus;</span>
-                                                <span v-on:click="deleteArrayElement(name,arrayidx)"
+                                                </template>
+                                                <div class="arraybuttons">
+                                                    <span v-on:click="deleteArrayElement(name,arrayidx)"
                                                     class="smallbutton">&otimes;</span>
-                                            </div>
+                                                    <span class="smallbutton" v-on:click="addArrayElement(name)"
+                                                        v-if="!value || arrayidx==value?.length -1">&oplus;</span>                                                   
+                                                </div>                                                
+                                            </div>                                           
                                         </div>
                                     </template>
                                     <template v-else>
