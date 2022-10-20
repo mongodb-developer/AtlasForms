@@ -183,6 +183,7 @@ function addArrayElement(name) {
   let elementBsonType = null;
 
   if (vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null) {
+    console.log(`Add array element: ${arrayname} to ${name}`);
     const [arrayname, subfield] = name.split('.');
     const schemaElement = vueApp.selectedDocTypeSchema[arrayname][name];
     elementBsonType = getBsonType(schemaElement);
