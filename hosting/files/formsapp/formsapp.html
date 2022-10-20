@@ -144,9 +144,9 @@
                                                     </template>
                                                 </template>
                                                 <div>
-                                                    <span class="smallbutton" v-on:click="addArrayElement(arrayname)"
+                                                    <span class="smallbutton" v-on:click="addArrayElement(arrayElement)"
                                                         v-if="!value || arrayidx==value?.length -1">&oplus;</span>
-                                                    <span v-on:click="deleteArrayElement(arrayname,arrayidx)"
+                                                    <span v-on:click="deleteArrayElement(arrayElement,arrayidx)"
                                                         class="smallbutton">&otimes;</span>
                                                 </div>
                                             </div>
