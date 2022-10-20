@@ -181,13 +181,14 @@ function addArrayElement(name) {
   //We either add and emptyp string or dummy object based on the type
 
   let elementBsonType = null;
+  console.log(`Name var: ${name}`);
 
   if (vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null) {   
     const [arrayname, subfield] = name.split('.');
-    console.log(`Add array element: ${arrayname} to ${name}`);
 
     const schemaElement = vueApp.selectedDocTypeSchema[arrayname][name];
     elementBsonType = getBsonType(schemaElement);
+    
     if (elementBsonType == "array") {
       vueApp.currentDoc.doc[arrayname][name].push('');
     }
