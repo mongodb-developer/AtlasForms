@@ -7,8 +7,15 @@ rather than be an explicit definition btu you could explicity define it here or 
 a given collection. As it stands we just look at some of the existing docs*/
 
 /* This will be extended to include lots more metadata like jsonSchema or similar*/
+let logcount =0;
+
+function log(val) {
+  if(logcount < 20) { console.log(val);}
+  logcount++
+}
 
 exports = async function (namespace) {
+    
     /*Dynamically load some shared code*/
     utilityFunctions = await context.functions.execute("utility_functions");
 
@@ -27,10 +34,8 @@ exports = async function (namespace) {
             /* Create a Schema and store it in the record */
             console.log(JSON.stringify(docTypeInfo))
             const schema = await generateDefaultSchemaInfo(namespace);
-            schemaAsText = JSON.stringify(schema,null,2);
-            console.log('here')
+            schemaAsText = JSON.stringify(schema, null, 2);
             await docTypeCollection.updateOne({ _id: docTypeInfo._id }, { $set: { schema: schemaAsText } });
-            console.log('here')
             docTypeInfo.schema = schemaAsText;
         }
 
@@ -64,51 +69,60 @@ async function generateDefaultSchemaInfo(namespace) {
     }
 
     const templateDoc = {};
-   
+  
     for (let exampleDoc of exampleDocs) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
-  
 
+    console.log(JSON.stringify(templateDoc, null, 2));
     return templateDoc;
 
 }
 
 
 
-//This isn't easy to read but it converts object keys to their types
-//as Strings and does a deep merge at the same time to create a schema from
-//multiple docs - turns out the $mergeObjects or ... operator won't play
-//due to shallow copying
+/*This isn't easy to read but it converts object keys to their types
+  as Strings and does a deep merge at the same time to create a schema from
+  multiple docs - turns out the $mergeObjects or ... operator won't play
+ due to shallow copying*/
+
+/* Also tries to estimate max length of strings */
 
 function addDocumentToTemplate(doc, templateDoc) {
-
+    
     //If doc is a simple scalar return the type
 
     if (typeof doc != 'object') {
-        return typeof doc;
+        /*This is scalars in an array*/
+        let doctype = typeof (doc)
+        if(doctype == 'string') {
+          doctype = `${doctype}:${doc.length}`
+        }
+        return doctype;
     }
 
     // Iterate through the members adding each to the typemap
     for (let key of Object.keys(doc)) {
-
+        
         if (typeof doc[key] == "object") {
 
             let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array', 'document'].includes(bsonType) == false) {
+               /* This is for Scalars which are bson objects like Date */
                 templateDoc[key] = bsonType;
-                
+              
+
             } else
                 if (bsonType == 'array') {
                     //If this an Array - then make it an array with whatever member 0 is
                     const firstItem = doc[key][0];
                     //It's goign to be an array so add one if we don't have it
                     if (templateDoc[key] == null) { templateDoc[key] = []; }
-                    
-                    
+
+
                     if (firstItem != null) { //Ignore empties
                         const existing = templateDoc[key][0];
-                       
+
                         if (existing) {
                             if (typeof existing == "object") {
                                 templateDoc[key][0] = addDocumentToTemplate(firstItem, existing);
@@ -120,13 +134,36 @@ function addDocumentToTemplate(doc, templateDoc) {
                     }
                 } else {
                     //Basic Objects
-                    if (templateDoc[key] == null) { templateDoc[key] = {}; } 
-                   
-                     templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
+                    if (templateDoc[key] == null) { templateDoc[key] = {}; }
+
+                    templateDoc[key] = addDocumentToTemplate(doc[key], templateDoc[key]);
                 }
         } else {
-            templateDoc[key] = typeof doc[key];
-        
+            /* This is for scalar members of an object*/
+            
+            let docType = typeof (doc[key])
+            const oldType =  templateDoc[key] 
+           
+            
+            //Add length to strings - take largest we find
+            if (docType == "string") {
+                const len =  doc[key].length;
+                if(oldType != undefined) {
+                  const parts = oldType.split(':')
+
+                  if(parts.length == 2) {
+                    if(len > parts[1]) {
+                      docType =`${docType}:${len}`
+                    } else  {
+                      docType = oldType;
+                    }
+                  }
+                } else {
+                  docType =`${docType}:${len}`
+                } 
+            } 
+            templateDoc[key] = docType
+           
         }
     }
     return templateDoc;
