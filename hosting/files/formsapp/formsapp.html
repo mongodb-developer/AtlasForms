@@ -105,16 +105,18 @@
                                                 <template v-if="!(fieldEdits[`${name}.${arrayidx}`] == `$$REMOVE`)">
                                                     <template v-if="getBsonType(arrayElement) == 'string'">
                                                         <div class="dynamicformvalue">
-                                                            <input v-on:input="formValueChange" :id=`${name}.${innername}`
-                                                            v-if="valtype == 'date'" :data-bsontype="valtype"
-                                                            class="dynamicformvaluedate" :disabled="editing == false"
-                                                            type="datetime-local" :value="toDateTime(value)">
-                                                        <div v-on:input="formValueChange" v-else :id=`${name}.${innername}`
-                                                            :data-bsontype="valtype" :contenteditable="editing?true:null"
-                                                            class="dynamicformvalue">
-                                                            {{arrayElement}} </div>
-                                                        <br />
-                                                           
+                                                            <input v-on:input="formValueChange"
+                                                                :id=`${name}.${innername}` v-if="valtype == 'date'"
+                                                                :data-bsontype="valtype" class="dynamicformvaluedate"
+                                                                :disabled="editing == false" type="datetime-local"
+                                                                :value="toDateTime(value)">
+                                                            <div v-on:input="formValueChange" v-else
+                                                                :id=`${name}.${innername}` :data-bsontype="valtype"
+                                                                :contenteditable="editing?true:null"
+                                                                class="dynamicformvalue">
+                                                                {{arrayElement}} </div>
+                                                            <br />
+
                                                         </div>
                                                     </template>
                                                     <template v-else="getBsonType(arrayElement) == 'document'">
@@ -125,29 +127,34 @@
                                                             <div class="dynamicformlabel">
                                                                 {{formatFieldname(innername)}}:</div>
                                                             <div class="dynamicformvalue">
-                                                                <input v-on:input="formValueChange" :id=`${name}.${innername}`
-                                                                v-if="valtype == 'date'" :data-bsontype="valtype"
-                                                                class="dynamicformvaluedate" :disabled="editing == false"
-                                                                type="datetime-local" :value="toDateTime(value)">
-                                                            <div v-on:input="formValueChange" v-else :id=`${name}.${innername}`
-                                                                :data-bsontype="valtype" :contenteditable="editing?true:null"
-                                                                class="dynamicformvalue">
-                                                                {{arrayElement}} </div>
-                                                            <br />                                                         
+                                                                <input v-on:input="formValueChange"
+                                                                    :id=`${name}.${innername}` v-if="valtype == 'date'"
+                                                                    :data-bsontype="valtype"
+                                                                    class="dynamicformvaluedate"
+                                                                    :disabled="editing == false" type="datetime-local"
+                                                                    :value="toDateTime(value)">
+                                                                <div v-on:input="formValueChange" v-else
+                                                                    :id=`${name}.${innername}` :data-bsontype="valtype"
+                                                                    :contenteditable="editing?true:null"
+                                                                    class="dynamicformvalue">
+                                                                    {{arrayElement}} </div>
+                                                                <br />
                                                             </div>
                                                         </div>
                                                     </template>
                                                 </template>
                                                 <!-- Add/Remove buttons only when editing a document for now -->
                                                 <!-- TODO: add ability to search multiple array elements correctly-->
-                                                <div v-if="editing && currentDoc?.doc?._id">                                                   
+                                                <div v-if="editing && currentDoc?.doc?._id">
                                                     <span v-on:click="deleteArrayElement(innername,arrayidx)"
                                                         class="smallbutton">&otimes;</span>
                                                 </div>
-                                            </div>
-                                            <div v-if="editing && currentDoc?.doc?._id">
-                                                <span class="smallbutton" v-on:click="addArrayElement(innername)"
-                                                    v-if="!value || arrayidx==value?.length -1">&oplus;</span>                                              
+                                                <!-- We need to be able to add and remove elements at all times-->
+                                                <!-- we may be doing data entry or querying multiple values -->
+                                                <div>
+                                                    <span class="smallbutton" v-on:click="addArrayElement(name)"
+                                                        v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </template>
@@ -201,7 +208,7 @@
                                                 </div>
                                         </template>
                                         <!-- Scalar in an Array-->
-                                        <template v-else> 
+                                        <template v-else>
                                             <input v-on:input="formValueChange" :id=`${name}.${arrayidx}`
                                                 v-if="valtype == 'Date'" :data-bsontype="valtype"
                                                 class="dynamicformvaluedate" :disabled="editing == false"
