@@ -1,9 +1,13 @@
 [
     {
-        "name": "queryDocType",
+        "name": "commitEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
+    },
+    {
+        "name": "newUserSignup",
+        "private": true
     },
     {
         "name": "createDocument",
@@ -12,8 +16,16 @@
         "disable_arg_logs": true
     },
     {
-        "name": "newUserSignup",
-        "private": true
+        "name": "utility_functions",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getDocTypeSchemaInfo",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     },
     {
         "name": "getListOfDoctypes",
@@ -28,25 +40,13 @@
         "disable_arg_logs": true
     },
     {
-        "name": "utility_functions",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "commitEdit",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "newAuthorization",
         "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "getDocTypeSchemaInfo",
+        "name": "queryDocType",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
