@@ -104,6 +104,7 @@ function correctValueType(value,type) {
   catch(e) {
     console.error(`Error converting "${value}" to a ${type}`)
     console.error(e)
+    
   }
   return rval;
 }
