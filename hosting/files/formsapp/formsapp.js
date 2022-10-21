@@ -2,20 +2,20 @@
 
 let vueApp;
 
-function classFromType(valtype){
-  
+function classFromType(valtype) {
+
   let rval = "smallitem";
 
   //Document and Array field wrappers have their own class
-  if( ['document','array'].includes(getBsonType(valtype))) {
-    rval= " newline"
+  if (['document', 'array'].includes(getBsonType(valtype))) {
+    rval = " newline"
   } else {
     console.log(valtype);
-    if(valtype.startsWith("string")) {
+    if (valtype.startsWith("string")) {
       const size = valtype.split(':')[1];
-      if(size > 30) { rval= "mediumitem" };
-      if(size > 150) { rval= "largeitem" };
-      
+      if (size > 30) { rval = "mediumitem" };
+      if (size > 150) { rval = "largeitem" };
+
     }
   }
   return " " + rval /* Non Strings can be type small */
@@ -35,7 +35,7 @@ async function logOut(email, password) {
 
 async function getListOfDocTypes() {
   try {
-    return  await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
+    return await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
   }
   catch (e) {
     console.error(e)
@@ -128,7 +128,7 @@ async function newRecord() {
     return;
   }
 
-  let {ok,message,currentDoc} = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
+  let { ok, message, currentDoc } = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
   if (ok && currentDoc) {
     const wrappedDoc = { downloaded: true, doc: currentDoc }
     vueApp.results = [wrappedDoc]
@@ -144,10 +144,10 @@ async function resultClick(result) {
   if (result.downloaded == false) {
 
     /* Download the full doc when we select it*/
-    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(
+    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType.namespace
       , { _id: result.doc._id }, {});
-    if(ok) {
+    if (ok) {
       result.doc = results[0];
       result.downloaded = true
     } else {
@@ -198,37 +198,114 @@ function addArrayElement(name) {
   //Oddly if we delete it - we will add a delete to send to the server
   //Which works because a delete on the setver is a $set then $pull
   //We either add and emptyp string or dummy object based on the type
-  const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-  //If empty add the one we already are showing first
-  if (vueApp.currentDoc.doc[name] == undefined) {
-    vueApp.currentDoc.doc[name] = [];
-    if (elementBsonType == "document") {
-      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
-    } else {
-      vueApp.currentDoc.doc[name].push('')
+
+  let elementBsonType = null;
+  console.log(`Name var: ${name}`);
+
+  if (vueApp.selectedDocTypeSchema[name] == undefined || vueApp.selectedDocTypeSchema[name] == null) {
+    const [arrayname, subfield] = name.split('.');
+
+    const schemaElement = vueApp.selectedDocTypeSchema[arrayname][name];
+    elementBsonType = getBsonType(schemaElement);
+
+    if (elementBsonType == "array") {
+      vueApp.currentDoc.doc[arrayname][name].push('');
+    }
+    else {
+      vueApp.currentDoc.doc[arrayname][name].push({ __xyxxy__: 1 });
     }
   }
+  else {
+    elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+    //If empty add the one we already are showing first
+    if (vueApp.currentDoc.doc[name] == undefined) {
+      vueApp.currentDoc.doc[name] = [];
+      if (elementBsonType == "document") {
+        vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 });
+      } else {
+        vueApp.currentDoc.doc[name].push('');
+      }
+    }
 
-  if (elementBsonType == "document") {
-    vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
-  } else {
-    vueApp.currentDoc.doc[name].push('')
+    if (elementBsonType == "document") {
+      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 });
+    } else {
+      vueApp.currentDoc.doc[name].push('');
+    }
   }
-
 }
 function deleteArrayElement(name, index) {
-  //Make sure we have a  real element to delete
 
-  if (vueApp.currentDoc.doc[name] == undefined) {
-    const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-    vueApp.currentDoc.doc[name] = [];
-    if (elementBsonType == "document") {
-      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
-    } else {
-      vueApp.currentDoc.doc[name].push('')
+  /*
+    Inside an array there can be different types of elements:
+    - objects
+    - arrays
+    - scalar types (string, number, etc.)
+
+    The name argument is the name of the array element we want to delete from
+    eg. Amenities
+
+    Index is the position in the array of the item we want to delete.
+
+    If the element being deleted is is an object then it will have namepart1 and namepart2
+    eg. host.host_reviews.
+
+    So if namepart2 exists after a split then we already know it is an object
+    If it doesn't exist, then it is not an object.
+  */
+
+  /*
+   Two possible definitions here:
+    namepart1 = something, namepart2 = something
+    namepart1 = something, namepart2 = undefined
+  */
+  const [namepart1, namepart2] = name.split('.')
+  let theArray = null;
+
+  if (namepart2 == undefined) {
+    // The element we want to work with is not an object.
+    theArray = vueApp.currentDoc.doc[namepart1];
+  }
+  else {   
+      //Make sure we have a  real element to delete. Namepart1 should always have a value when function called but may not exist in the actual document.
+    if (vueApp.currentDoc.doc[namepart1] == undefined) {
+      vueApp.currentDoc.doc[namepart1] = {};
+      theArray = vueApp.currentDoc.doc[namepart1];
+      const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[namepart1][0])
+      if (elementBsonType == "document") {
+        vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
+      } 
+      else {
+        vueApp.currentDoc.doc[name].push('')
+      } 
+    }
+    // We have both a namepart1 and namepart2
+    else {
+      const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[namepart1][namepart2]);
+      console.log(JSON.stringify(vueApp.currentDoc.doc));
+      theArray = vueApp.currentDoc.doc[namepart1][namepart2];
+      theArray.push('');
     }
   }
 
+
+  // Ensure we have an element in the array
+  // if (namepart2 == undefined) {
+  //   //Make sure we have a  real element to delete
+  //   if (theArray == undefined) {
+  //     const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
+  //     theArray = [];
+  //     if (elementBsonType == "document") {
+  //       theArray.push({ __xyxxy__: 1 })
+  //     } else {
+  //       theArray.push('')
+  //     }
+  //   }
+  // }
+
+  // else {
+
+  // }
 
   //Record the rquested deletion in our changes
   //We need to remove any existing edits inside this as we cannot
@@ -268,15 +345,15 @@ async function runQuery() {
       projection[fieldname] = 1
     }
 
-    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
+    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
       , vueApp.fieldEdits, projection);
 
-    if(!ok) {
+    if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
-      vueApp.wrappedResults=[];
-      vueApp.editing=true;
+      vueApp.wrappedResults = [];
+      vueApp.editing = true;
       return;
-    } 
+    }
 
     //Wrap this in something to say if we have decoded it
     let wrappedResults = []
@@ -304,9 +381,9 @@ async function selectDocType() {
 
   try {
     // It would be simple to cache this info client end if we want to
-    const {ok,docTypeSchemaInfo,message} = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
-   
-    if(!ok) {
+    const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
+
+    if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
       vueApp.selectedDocType = {}
     }
@@ -339,7 +416,7 @@ async function formsOnLoad() {
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
       getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
-      resultClick, deleteArrayElement, addArrayElement,classFromType
+      resultClick, deleteArrayElement, addArrayElement, classFromType
 
     },
     data() {
@@ -366,8 +443,8 @@ async function formsOnLoad() {
     },
   }).mount("#formsapp")
 
-  const {ok,docTypes,message} =  await getListOfDocTypes();
-  if(!ok) {
+  const { ok, docTypes, message } = await getListOfDocTypes();
+  if (!ok) {
     formAlert(appStrings.AF_SERVER_ERROR(message));
     return;
   }
