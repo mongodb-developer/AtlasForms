@@ -3,6 +3,11 @@ not supplied or empty , then no changes are made except the unlock*/
 
 exports = async function(namespace,_id,untypedUpdates,asCreate){
   
+    /*Get an Authorization object - should be standard in any non private function*/
+  const authorization = await context.functions.execute("newAuthorization",context.user.id);
+  if( authorization == null ) { return {ok: false,  message: "User not Authorized" }; }
+
+
   let rval = { ok: false, message: "No Error Message Set" };
   let postCommit = {};
     

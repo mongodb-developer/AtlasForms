@@ -2,19 +2,19 @@
 
 let vueApp;
 
-function classFromType(valtype){
-  
+function classFromType(valtype) {
+
   let rval = "smallitem";
 
   //Document and Array field wrappers have their own class
-  if( ['document','array'].includes(getBsonType(valtype))) {
-    rval= " newline"
+  if (['document', 'array'].includes(getBsonType(valtype))) {
+    rval = " newline"
   } else {
-    if(valtype.startsWith("string")) {
+    if (valtype.startsWith("string")) {
       const size = valtype.split(':')[1];
-      if(size > 30) { rval= "mediumitem" };
-      if(size > 150) { rval= "largeitem" };
-      
+      if (size > 30) { rval = "mediumitem" };
+      if (size > 150) { rval = "largeitem" };
+
     }
   }
   return " " + rval /* Non Strings can be type small */
@@ -34,7 +34,7 @@ async function logOut(email, password) {
 
 async function getListOfDocTypes() {
   try {
-    return  await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
+    return await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
   }
   catch (e) {
     console.error(e)
@@ -127,7 +127,7 @@ async function newRecord() {
     return;
   }
 
-  let {ok,message,currentDoc} = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
+  let { ok, message, currentDoc } = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
   if (ok && currentDoc) {
     const wrappedDoc = { downloaded: true, doc: currentDoc }
     vueApp.results = [wrappedDoc]
@@ -143,10 +143,10 @@ async function resultClick(result) {
   if (result.downloaded == false) {
 
     /* Download the full doc when we select it*/
-    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(
+    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType.namespace
       , { _id: result.doc._id }, {});
-    if(ok) {
+    if (ok) {
       result.doc = results[0];
       result.downloaded = true
     } else {
@@ -242,20 +242,22 @@ function deleteArrayElement(name, index) {
       delete vueApp.fieldEdits[entry]
     }
   }
+
   //If we have removed all elements we need to add an empty one on the end
   //So users can type new data in - count how many we are removing
   let removed = 0;
-  let arrayLength = vueApp.currentDoc.doc[name].length
+  let arrayLength = workingArray.length
   for (let idx = 0; idx < arrayLength; idx++) {
     if (vueApp.fieldEdits[`${name}.${idx}`] == "$$REMOVE") {
       removed++;
     }
   }
+  
   if (removed == arrayLength) {
     vueApp.addArrayElement(name);
   }
+
 }
-// User has clicked the button to query for data
 
 async function runQuery() {
   try {
@@ -267,15 +269,15 @@ async function runQuery() {
       projection[fieldname] = 1
     }
 
-    const {ok,message,results} = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
+    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
       , vueApp.fieldEdits, projection);
 
-    if(!ok) {
+    if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
-      vueApp.wrappedResults=[];
-      vueApp.editing=true;
+      vueApp.wrappedResults = [];
+      vueApp.editing = true;
       return;
-    } 
+    }
 
     //Wrap this in something to say if we have decoded it
     let wrappedResults = []
@@ -303,9 +305,9 @@ async function selectDocType() {
 
   try {
     // It would be simple to cache this info client end if we want to
-    const {ok,docTypeSchemaInfo,message} = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
-   
-    if(!ok) {
+    const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
+
+    if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
       vueApp.selectedDocType = {}
     }
@@ -338,7 +340,7 @@ async function formsOnLoad() {
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
       getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
-      resultClick, deleteArrayElement, addArrayElement,classFromType
+      resultClick, deleteArrayElement, addArrayElement, classFromType
 
     },
     data() {
@@ -365,8 +367,8 @@ async function formsOnLoad() {
     },
   }).mount("#formsapp")
 
-  const {ok,docTypes,message} =  await getListOfDocTypes();
-  if(!ok) {
+  const { ok, docTypes, message } = await getListOfDocTypes();
+  if (!ok) {
     formAlert(appStrings.AF_SERVER_ERROR(message));
     return;
   }

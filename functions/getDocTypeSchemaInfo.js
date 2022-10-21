@@ -174,7 +174,7 @@ function addDocumentToTemplate(doc, templateDoc) {
 
 function getSystemDocTypeSchemaInfo(namespace) {
     if (namespace == "__atlasforms.doctypes") {
-        return { namespace: "string", title: "string", schema: "string", listViewFields: ["string"] };
+        return { _id: "objectid", namespace: "string", title: "string", schema: "string", listViewFields: ["string"] };
 
     }
 }
