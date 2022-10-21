@@ -333,7 +333,7 @@ async function selectDocType() {
 
     vueApp.selectedDocTypeSchema = docTypeSchemaInfo
     vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
-    vueApp.results = Array(1).fill({}) //Empty and show columnheaders
+    vueApp.results = Array(10).fill({}) //Empty and show columnheaders
     vueApp.currentDoc = { doc: {} }
 
   }

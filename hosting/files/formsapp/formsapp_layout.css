@@ -28,7 +28,7 @@
 .header {
     flex: 0 1 auto;
     border: none;
-    border-bottom: 1px solid darkgray;
+    border-bottom: 2px solid darkgray;
     padding: 3px;
    
 }
@@ -39,6 +39,7 @@
     flex: 0 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
+    border-bottom: 2px solid darkgray;
    
 }
 
@@ -48,7 +49,7 @@
     overflow-y: auto;
     height: 100%;
     border: none;
-    border-bottom: 1px solid darkgray;
+   
     overflow-x: hidden;
 }
 
