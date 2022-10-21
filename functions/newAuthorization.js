@@ -58,16 +58,13 @@ class Authorization {
        grant.message=""
      }
    }
-   
-   
-   return grant;
   }
 
   
   
   /****************************/
   
-   return permission;
+   return grant;
   }
 }
 
