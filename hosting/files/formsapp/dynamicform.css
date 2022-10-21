@@ -5,7 +5,7 @@
 }
 
 .dynamicformlabel {
-
+    width: calc( 19vw - 3em ) ;
     text-transform: capitalize;
     text-align: left;
     white-space: nowrap;
@@ -37,7 +37,7 @@
     float: left;
     clear: left;
     display:block;
-    width: calc(100% - 20px);
+    width: calc( 19vw - 1em ) ;
     max-height: 100px;
     min-height: 26px;
     overflow: auto;
@@ -54,13 +54,13 @@
     clear: left;
     /* Remove line below for labels above boxes*/
     float: left;
-    padding: 3px;
-    min-width: 150px;
-    padding: 3px;
-    margin-left: 5px;
+   
+
+    padding-right: 1em;
+    
     max-height: 100px;
     overflow: auto;
-    width: calc( 20vw - 26px );
+    width: calc( 19vw - 2.3em ) ;
     border: 1px solid transparent;
     border-top: none;
     border-bottom: 1px solid #DDD;
@@ -82,24 +82,22 @@
 
 .dynamicformitem {
     margin: 0px;
-    padding-right: 5px;
+    padding-right: 1em;
     float: left;
-    xx-border: 1px solid red; 
-    min-width: 200px;
     min-height: 3.2em;
     border-radius: 4px;
 }
 
 .smallitem{
-    width: calc( 20vw - 15px );
+    width: calc( 19vw - 1em ) ;
 }
 
 .mediumitem {
-    width: calc( 40vw  - 17px );
+    width:  calc( 38vw - 1em ) ;
 }
 
 .largeitem {
-    width: calc(100vw  - 32px);
+    width:  calc( 95vw - 1em );
 }
 
 input[type="datetime-local"] {
@@ -108,7 +106,7 @@ input[type="datetime-local"] {
 }
 
 .inlist {
- width: calc(100% - 70px);
+ width: calc( 100% - 70px);
  
 }
 
@@ -123,11 +121,10 @@ input[type="datetime-local"] {
    border-radius: 5px;
    padding: 2px;
    margin-bottom: 5px;
-   
 }
 
 .arraybuttons {
-    float: left;
+    float: right;
     padding-left: 5px;
     padding-top: 1px;;
 }

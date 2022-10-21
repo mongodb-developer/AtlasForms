@@ -81,13 +81,13 @@
                     <!-- For each K,V pair in document-->
                     <!-- In the line below we add class 'newline' if value is a document or array
                       sorry that the code is ugly, put it in a function if it bothers you -->
-                    <div :class="'dynamicformitem'"
+                    <div class="dynamicformitem"
                         v-for="(valtype,name) in selectedDocTypeSchema " :set="value=getFieldValue(currentDoc,name)">
                         <!-- Nested Object -  We are only supprting one level of nesting here -->
                         <template v-if="getBsonType(valtype) == 'document'">
                             <div class="subdocumentlabel">{{formatFieldname(name)}}:</div>
                             <div class='form_container nested'>
-                                <div :class="'dynamicformitem'" v-for="(valtype,innername) in valtype "
+                                <div class="dynamicformitem" v-for="(valtype,innername) in valtype "
                                     :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
                                     <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
                                     <!-- Is this a nested object? -->
@@ -99,12 +99,12 @@
                                         <div class='dynamicformitem arrayscroller'>
                                             <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
                                                 (typeof selectedDocTypeSchema[name][innername][0] == 'string' ? [''] : [{__xyzzy__:1}] )"
-                                                class="form_container ">
+                                                class="form_container arrayelement ">
 
                                                 <template v-if="!(fieldEdits[`${name}.${innername}.${arrayidx}`] == `$$REMOVE`)">                                                   
                                                     <!-- Member of an array inside a document-->
                                                     <template v-if="getBsonType(arrayElement) == 'document'">
-                                                        <div :class="'dynamicformitem'"
+                                                        <div class="dynamicformitem"
                                                             v-for="(elementvaltype,elementname) in selectedDocTypeSchema[name][innername][0]"
                                                             :set="elementvalue = getFieldValue({doc:arrayElement},elementname)">
 
@@ -134,16 +134,17 @@
                                                         <div v-on:input="formValueChange" v-else
                                                             :id=`${name}.${innername}.${arrayidx}` :data-bsontype="valtype"
                                                             :contenteditable="editing?true:null"
-                                                            :class="'dynamicformvalue inlist'">
+                                                            class="dynamicformvalue inlist">
                                                             {{arrayElement}} </div>
                                                         <br />                                                      
                                                 </template>
                                              
                                                 <div class="arraybuttons">
+                                                    <span class="smallbutton" v-on:click="addArrayElement(`${name}.${innername}`)"
+                                                    v-if="!value || arrayidx==value?.length -1">&oplus;</span>         
                                                     <span v-on:click="deleteArrayElement(`${name}.${innername}`,arrayidx)"
                                                     class="smallbutton">&otimes;</span>
-                                                    <span class="smallbutton" v-on:click="addArrayElement(`${name}.${innername}`)"
-                                                        v-if="!value || arrayidx==value?.length -1">&oplus;</span>                                                   
+                                                                                            
                                                 </div>   
                                             </template>                                             
                                             </div>                                           
@@ -191,7 +192,7 @@
 
                                                 <input v-if="innervaltype == 'date'" v-on:input="formValueChange"
                                                     :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
-                                                    :class="dynamicformvaluedate" :disabled="editing == false"
+                                                    class="dynamicformvaluedate" :disabled="editing == false"
                                                     type="datetime-local" :value="toDateTime(innervalue)">
                                                 <div v-else v-on:input="formValueChange"
                                                     :id=`${name}.${arrayidx}.${innername}` :data-bsontype="innervaltype"
@@ -208,17 +209,17 @@
                                                 type="datetime-local" :value="toDateTime(arrayElement)">
                                             <div v-on:input="formValueChange" :id=`${name}.${arrayidx}` v-else
                                                 :contenteditable="editing?true:null" :data-bsontype="valtype"
-                                                :class="'dynamicformvalue inlist' ">
+                                                class="dynamicformvalue inlist">
                                                 {{arrayElement}} </div>
                                         </template>
                                         <!-- We need to be able to add and remove elements at all times-->
                                         <!-- we may be doing data entry or querying multiple values -->
                                         <div class="arraybuttons">
-                                            
+                                            <span class="smallbutton" v-on:click="addArrayElement(name)"
+                                            v-if="!value || arrayidx==value?.length -1">&oplus;</span>
                                             <span v-on:click="deleteArrayElement(name,arrayidx)"
                                                 class="smallbutton">&otimes;</span>
-                                                <span class="smallbutton" v-on:click="addArrayElement(name)"
-                                                v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                              
                                         </div>
                                       
                                     </template>
