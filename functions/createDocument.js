@@ -76,7 +76,7 @@ exports = async function (namespace,untypedValues) {
             case 2:
               const [pathParts] = arrayFieldName.split('.');
               if(newDocument[pathParts[0]] == undefined) { newDocument[pathParts[0]] = {} }
-              newDocument[pathParts[0]][pathparts]=[]; /* Array in subdoc */
+              newDocument[pathParts[0]][pathParts[1]]=[]; /* Array in subdoc */
               break;
              default:
          }
