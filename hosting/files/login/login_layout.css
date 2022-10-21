@@ -4,8 +4,8 @@
     width: 40%;
     min-width: 400px;  
     padding: 10px;
-    border: 1px solid black;
-    border-radius: 2px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
     height: 250px;
     position: absolute;
     top: 0;
