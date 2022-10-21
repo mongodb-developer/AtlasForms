@@ -106,13 +106,13 @@ appropriate message.
 
 
 - Error Handling review, Refactor, lint,tidy code
-  - All Strings in a consts class, inc errors and fieldnames
-  - DocTypeSchema should be in doctype record
-
-*** MVP  ish at this point ***
-
 - Basic Import
+- DocTypeSchema should be in doctype record
 
+*** MVP ish at this point ***
+
+
+ - All Strings in a consts class, inc errors and fieldnames
 - Listview
   - Choose Columns from Cient
 
