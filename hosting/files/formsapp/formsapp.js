@@ -145,11 +145,12 @@ async function resultClick(result) {
     /* Download the full doc when we select it*/
     const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType.namespace
-      , { _id: result.doc._id }, {});
+      , { _id: `${result.doc._id}` }, {});
     if (ok) {
       result.doc = results[0];
       result.downloaded = true
     } else {
+      
       formAlert(appStrings.AF_SERVER_ERROR(message));
     }
   }
@@ -393,7 +394,11 @@ async function formsOnLoad() {
   }
   vueApp.docTypes = docTypes;
   //Set the Document Type dropdown to the first value
-  vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
-  vueApp.selectDocType();
-  vueApp.editing = true; //Can edit in empty form
+  if(vueApp.docTypes.length > 0) {
+    vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
+    vueApp.selectDocType();
+    vueApp.editing = true; //Can edit in empty form
+  } else {
+    formAlert(appStrings.AF_NO_DOCTYPES);
+  }
 }

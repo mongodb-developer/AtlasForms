@@ -36,15 +36,15 @@
                     <select class="doctypeselect" v-show="!currentDocLocked" name="docType" @change="selectDocType" v-model="selectedDocType">
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
-                    <button :disabled="currentDoc?.doc?._id != null" v-show="!currentDocLocked" class="headerbutton"
+                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null" v-show="!currentDocLocked" class="headerbutton"
                         @click="runQuery()"> Search </button>
-                    <button v-show="!currentDocLocked" class="headerbutton" @click="clearForm()"> Clear </button>
-                    <button :disabled="currentDoc?.doc?._id == null" v-show="!currentDocLocked" class="headerbutton"
+                    <button v-show="!currentDocLocked" :disabled="!selectedDocType.namespace" class="headerbutton" @click="clearForm()"> Clear </button>
+                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id == null" v-show="!currentDocLocked" class="headerbutton"
                         @click="editRecord()"> Edit </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit()"> Save Edits </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit(true)"> Cancel Edits
                     </button>
-                    <button :disabled="currentDoc?.doc?._id != null" v-show="!currentDocLocked" class="headerbutton"
+                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null" v-show="!currentDocLocked" class="headerbutton"
                         @click="newRecord()"> Create </button>
                 </div>
                 <div class="right">
