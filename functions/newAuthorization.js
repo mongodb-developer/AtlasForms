@@ -55,7 +55,7 @@ class Authorization {
      if(permission.item == docType.namespace &&
         permission.permissions.split(',').includes(type)) {
        grant.permissions = true;
-       grenat.message=""
+       grant.message=""
      }
    }
    
