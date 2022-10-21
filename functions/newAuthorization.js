@@ -60,8 +60,10 @@ class Authorization {
    }
   }
 
+  /* Execute a custom function for each operations/namspace combo*/
+  
   try {
-    context.functions.execute(`verify_${type}_${docType.namespace}`,targetRecord,...args);
+    context.functions.execute(`verify_${type}_${docType.namespace}`,grant,targetRecord,...args);
   } catch (e) {
     //Ignore error
   }
