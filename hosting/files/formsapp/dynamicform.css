@@ -10,8 +10,6 @@
     text-align: left;
     white-space: nowrap;
     float: left;
-   /*min-width: 150px;*/
-  
     vertical-align: middle;
     font-size: small;
 }
@@ -29,6 +27,7 @@
 
 
 .dynamicformvalue {
+
     white-space: pre-wrap;
     /*border: 1px solid black;*/
     border-radius: 4px;
@@ -38,12 +37,9 @@
     float: left;
     clear: left;
     display:block;
-    padding: 8px;
     width: calc(100% - 20px);
-    padding: 3px;
-    margin-left: 5px;
     max-height: 100px;
-    min-height: 24px;
+    min-height: 26px;
     overflow: auto;
     border: 1px solid transparent;
     border-top: none;
@@ -52,7 +48,7 @@
 }
 
 .dynamicformvaluedate {
-   
+    min-height: 26px;
     border-radius: 4px;
     background-color: white;
     clear: left;
@@ -63,9 +59,8 @@
     padding: 3px;
     margin-left: 5px;
     max-height: 100px;
-    min-height: 24px;
     overflow: auto;
-    width: calc(100% - 20px);
+    width: calc( 20vw - 26px );
     border: 1px solid transparent;
     border-top: none;
     border-bottom: 1px solid #DDD;
@@ -87,28 +82,24 @@
 
 .dynamicformitem {
     margin: 0px;
-    padding: 2px;
+    padding-right: 5px;
     float: left;
-   /* border: 1px solid red;  Debug*/
+    xx-border: 1px solid red; 
     min-width: 200px;
-    min-height: 45px;
+    min-height: 3.2em;
     border-radius: 4px;
 }
 
 .smallitem{
-
-    width: calc( 20vw - 13px );
-    height: 50px;
+    width: calc( 20vw - 15px );
 }
 
 .mediumitem {
-  
-    width: calc( 40vw  - 14px );
-    height: 50px;
+    width: calc( 40vw  - 17px );
 }
 
 .largeitem {
-    width: calc(100vw - (100vw - 100%) - 16px);
+    width: calc(100vw  - 32px);
 }
 
 input[type="datetime-local"] {
@@ -117,7 +108,8 @@ input[type="datetime-local"] {
 }
 
 .inlist {
-    width: calc(100% - 80px);  
+ width: calc(100% - 70px);
+ 
 }
 
 .nested {
@@ -129,7 +121,7 @@ input[type="datetime-local"] {
 .arrayelement {
    background-color: white;
    border-radius: 5px;
-   padding: 8px;
+   padding: 2px;
    margin-bottom: 5px;
    
 }
@@ -175,6 +167,8 @@ table.listview {
     height: 300px;
     display: flex;
     table-layout: fixed;
+
+
 }
 th.listview {
     x-width:0.1%;

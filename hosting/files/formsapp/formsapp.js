@@ -193,47 +193,66 @@ function formValueChange(event) {
 }
 
 function addArrayElement(name) {
-  //Add a blank item at the end of the list
-  //Oddly if we delete it - we will add a delete to send to the server
-  //Which works because a delete on the setver is a $set then $pull
-  //We either add and emptyp string or dummy object based on the type
-  const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-  //If empty add the one we already are showing first
-  if (vueApp.currentDoc.doc[name] == undefined) {
-    vueApp.currentDoc.doc[name] = [];
-    if (elementBsonType == "document") {
-      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
-    } else {
-      vueApp.currentDoc.doc[name].push('')
-    }
-  }
+  /* array or object.array are the paths we support, no array nesting */
+  const pathParts = name.split('.');
+  const workingDoc = vueApp.currentDoc.doc;
+  let workingArray = null;
+  let elementBsonType = null; 
+  if(pathParts.length > 2) return false; /* Not supported */
 
-  if (elementBsonType == "document") {
-    vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
+  /* It's possible to click delete when there is nothing actually in the array yet
+     Add a dummy entrry - content doesnt matter but make it an object so iterable
+     Alternative is to clear the entries in element 0 if it's empty */
+  
+  if(pathParts.length == 2) {
+    const arraySchema = vueApp.selectedDocTypeSchema[pathParts[0]][pathParts[1]];
+    elementBsonType = getBsonType(arraySchema[0]);
+    if(workingDoc[pathParts[0]] == undefined) { 
+      workingDoc[pathParts[0]] = { [pathParts[1]] : [elementBsonType=='document'?{_xyzzy_:1}:''] }}
+    if(workingDoc[pathParts[0]][pathParts[1]] == undefined) {
+      workingDoc[pathParts[0]][pathParts[1]] =  [elementBsonType=='document'?{_xyzzy_:1}:''];
+    }
+    workingArray = workingDoc[pathParts[0]][pathParts[1]]
   } else {
-    vueApp.currentDoc.doc[name].push('')
-  }
-
-}
-function deleteArrayElement(name, index) {
-  //Make sure we have a  real element to delete
-
-  if (vueApp.currentDoc.doc[name] == undefined) {
-    const elementBsonType = getBsonType(vueApp.selectedDocTypeSchema[name][0])
-    vueApp.currentDoc.doc[name] = [];
-    if (elementBsonType == "document") {
-      vueApp.currentDoc.doc[name].push({ __xyxxy__: 1 })
-    } else {
-      vueApp.currentDoc.doc[name].push('')
+    const arraySchema =  vueApp.selectedDocTypeSchema[pathParts[0]];
+    elementBsonType = getBsonType(arraySchema[0]);
+    //pathPart[0] is an array
+    if(workingDoc[pathParts[0]] == undefined) {
+      workingDoc[pathParts[0]] =  [elementBsonType=='document'?{_xyzzy_:1}:''];
     }
+    workingArray = workingDoc[pathParts[0]]
+  }
+  if (elementBsonType == "document") {
+    workingArray.push({ __xyxxy__: 1 });
+  } else {
+    workingArray.push('');
+  }
+}
+
+function deleteArrayElement(name, index) {
+
+  /* array or object.array are the paths we support, no array nesting */
+  const pathParts = name.split('.');
+  const workingDoc = vueApp.currentDoc.doc;
+  let workingArray = null;
+
+  if(pathParts.length > 2) return false; /* Not supported */
+
+  /* It's possible to click delete when there is nothing actually in the array yet
+     Add a dummy entrry - content doesnt matter but make it an object so iterable
+     Alternative is to clear the entries in element 0 if it's empty */
+
+  if(pathParts.length == 2) {
+    if(workingDoc[pathParts[0]] == undefined) { workingDoc[pathParts[0]] = { [ pathParts[1]] : [{_xyzzy_:1}] }}
+    if(workingDoc[pathParts[0]][pathParts[1]] == undefined) { workingDoc[pathParts[0]][pathParts[1]] = [{_xyzzy_:1}] }
+    workingArray = workingDoc[pathParts[0]][pathParts[1]]
+  } else {
+    //pathPart[0] is an array
+    if(workingDoc[pathParts[0]] == undefined) { workingDoc[pathParts[0]] = [{_xyzzy_:1}]}
+    workingArray = workingDoc[pathParts[0]]
   }
 
-
-  //Record the rquested deletion in our changes
-  //We need to remove any existing edits inside this as we cannot
-  //set a.b=null and a.b.c=1 - MongoDB won't like that
-  //$$REMOVE isn't actually supported in this context but we can make it so
-  //on the server
+  /* Record what we want ot remove in our list of edits as $$REMOVE */
 
   const elname = `${name}.${index}`
   vueApp.fieldEdits[elname] = "$$REMOVE"
