@@ -10,7 +10,13 @@
         "private": true
     },
     {
-        "name": "createDocument",
+        "name": "getListOfDoctypes",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "lockDocument",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -28,18 +34,6 @@
         "disable_arg_logs": true
     },
     {
-        "name": "getListOfDoctypes",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "lockDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "newAuthorization",
         "private": true,
         "run_as_system": true,
@@ -47,6 +41,12 @@
     },
     {
         "name": "queryDocType",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "createDocument",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true

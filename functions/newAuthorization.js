@@ -10,6 +10,8 @@ class Authorization {
     this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
     this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
     this.ACCESS_DOCTYPE = "ACCESS_DOCTYPE"; /* User can see a given doctype */
+    this.CREATE_DOCTYPE = "CREATE_DOCTYPE"; /* User can create given doctype */
+    this.EDIT_DOCTYPE = "CREATE_DOCTYPE"; /* User can create given doctype */
   }
   
   async lookupUser(user) {
