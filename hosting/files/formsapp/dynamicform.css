@@ -175,10 +175,10 @@ table.listview {
     border: 1 solid lightgrey;
     height: 300px;
     display: flex;
-
+    table-layout: fixed;
 }
 th.listview {
-    width:0.1%;
+    x-width:0.1%;
 }
 
 tr.listview {
@@ -189,7 +189,9 @@ tr.selected {
     background-color: lightgrey;
 }
 
-td.listview ,th.listview {
+td.listview  {}
+
+th.listview {
     padding: 0;
     margin: 0px;
     overflow: auto;

@@ -10,7 +10,6 @@ function classFromType(valtype){
   if( ['document','array'].includes(getBsonType(valtype))) {
     rval= " newline"
   } else {
-    console.log(valtype);
     if(valtype.startsWith("string")) {
       const size = valtype.split(':')[1];
       if(size > 30) { rval= "mediumitem" };
