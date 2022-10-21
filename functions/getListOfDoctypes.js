@@ -15,8 +15,10 @@ exports = async function(arg){
   for (const docType of nonSystemDocTypes) {
     if(!docType.namespace.startsWith("__atlasforms"))
     {
-      const canSeeDoctype = authorization.authorize(authorization.DOCTYPE_MANAGER); // TODO
-      docTypes.push(docType)
+      const canSeeDoctype = authorization.authorize(authorization.ACCESS_DOCTYPE,docType);
+      if(canSeeDoctype.granted) {
+        docTypes.push(docType)
+      }
     }
   }
   

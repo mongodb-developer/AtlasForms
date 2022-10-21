@@ -28,14 +28,16 @@ class Authorization {
     let grant = { granted: false, message: ""}
 
     if(this.userRecord == null) { 
-      permission.granted = false;
-      permission.message = 'Unknown User';
-      return permission;
+      grant.granted = false;
+      grant.message = 'Unknown User';
+      return grant;
     }
   
   if(this.userRecord.isSuperUser) {
      console.log("Caller is SuperUser");
-     permission.granted = true;
+     grant.granted = true;
+     return grant;
+    
   }    
 
   /*****************************/
@@ -48,14 +50,16 @@ class Authorization {
   //If we cannot do this we cannot see the doctype
   
   if(type == this.ACCESS_DOCTYPE) {
+  grant.message="Not Allowed";
    for(const permission of this.userRecord.permissions) {
      if(permission.item == docType.namespace &&
         permission.permissions.split(',').includes(type)) {
        grant.permissions = true;
-       return grant;
+       grenat.message=""
      }
    }
-   grant.message="Not Allowed";
+   
+   
    return grant;
   }
 
