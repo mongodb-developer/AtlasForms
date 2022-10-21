@@ -9,9 +9,9 @@ class Authorization {
   constructor() {
     this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
     this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
-    this.ACCESS_DOCTYPE = "ACCESS_DOCTYPE"; /* User can see a given doctype */
-    this.CREATE_DOCTYPE = "CREATE_DOCTYPE"; /* User can create a given doctype */
-    this.EDIT_DOCTYPE = "EDIT_DOCTYPE"; /* User can edit given doctype */
+    this.ACCESS_DOCTYPE = "READ"; /* User can see a given doctype */
+    this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
+    this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
   }
   
   async lookupUser(user) {
@@ -25,7 +25,7 @@ class Authorization {
   
   authorize(type,docType,targetRecord,...args) {
     
-    let permission = { granted: false, message: ""}
+    let grant = { granted: false, message: ""}
 
     if(this.userRecord == null) { 
       permission.granted = false;
@@ -38,6 +38,31 @@ class Authorization {
      permission.granted = true;
   }    
 
+  /*****************************/
+  
+  /* Change this for whatever permission model you want */
+  /* This can handle both security and business rules */
+  /* Even call out to a custom function based on the docype if it exists */
+  
+  //Simple one - Check user record permissions - This is a global permissions
+  //If we cannot do this we cannot see the doctype
+  
+  if(type == this.ACCESS_DOCTYPE) {
+   for(const permission of this.userRecord.permissions) {
+     if(permission.item == docType.namespace &&
+        permission.permissions.split(',').includes(type)) {
+       grant.permissions = true;
+       return grant;
+     }
+   }
+   grant.message="Not Allowed";
+   return grant;
+  }
+
+  
+  
+  /****************************/
+  
    return permission;
   }
 }
