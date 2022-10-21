@@ -60,7 +60,11 @@ class Authorization {
    }
   }
 
-  
+  try {
+    context.functions.execute(`verify_${type}_${docType.namespace}`,targetRecord,...args);
+  } catch (e) {
+    //Ignore error
+  }
   
   /****************************/
   
