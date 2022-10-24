@@ -6,14 +6,14 @@
         "disable_arg_logs": true
     },
     {
-        "name": "newAuthorization",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "newUserSignup",
         "private": true
+    },
+    {
+        "name": "getListOfDoctypes",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     },
     {
         "name": "queryDocType",
@@ -22,7 +22,7 @@
         "disable_arg_logs": true
     },
     {
-        "name": "utility_functions",
+        "name": "commitEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -40,13 +40,13 @@
         "disable_arg_logs": true
     },
     {
-        "name": "commitEdit",
-        "private": false,
+        "name": "newAuthorization",
+        "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "getListOfDoctypes",
+        "name": "utility_functions",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true

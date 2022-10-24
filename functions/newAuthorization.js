@@ -48,10 +48,12 @@ class Authorization {
   
   //Simple one - Check user record permissions - This is a global permissions
   //If we cannot do this we cannot see the doctype
-  
+  console.log(`Checking: ${type} on ${docType.namespace} for ${this.userRecord.data,email}`)
   if(type == this.ACCESS_DOCTYPE) {
   grant.message="Not Allowed";
+   
    for(const permission of this.userRecord.permissions) {
+     
      if(permission.item == docType.namespace &&
         permission.permissions.split(',').includes(type)) {
        grant.permissions = true;
