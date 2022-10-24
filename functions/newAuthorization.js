@@ -9,7 +9,7 @@ class Authorization {
   constructor() {
     this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
     this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
-    this.ACCESS_DOCTYPE = "READ"; /* User can see a given doctype */
+    this.READ_DOCTYPE = "READ"; /* User can see a given doctype */
     this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
     this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
   }
