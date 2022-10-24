@@ -8,7 +8,12 @@ exports = async function(docType,_id){
       /*Get an Authorization object - should be standard in any non private function*/
     const authorization = await context.functions.execute("newAuthorization",context.user.id);
     if( authorization == null ) { return {ok: false,  message: "User not Authorized" }; }
-
+    
+    //Verify user can edit this kind of document
+    const canLockDoctype = await authorization.authorize(authorization.EDIT_DOCTYPE,docType);
+    if(canLockDoctype.granted == false) {
+        return {ok: false,  message: canLockDoctype.message }; 
+    }
 
 
     let lockState = { ok: false }
@@ -48,7 +53,11 @@ exports = async function(docType,_id){
       //We couldn't find a record in editable state
        let getRecord = await collection.findOne({_id},{__locked,__lockedby,__locktime})
        lockState.currentDoc = getRecord
-       lockState.message = "Cannot Lock Document";
+       if(getRecord) {
+          lockState.message = `It's locked by ${getRecord__lockedby}`;
+       } else {
+         lockState.message = `It does not exist anymore`;
+       }
     } else {
       //Grab the record details 
       lockState.ok = true;

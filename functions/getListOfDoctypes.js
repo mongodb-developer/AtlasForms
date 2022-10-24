@@ -13,9 +13,10 @@ exports = async function(arg){
   
   const nonSystemDocTypes = await docTypeCollection.find({}).toArray();
   for (const docType of nonSystemDocTypes) {
+
     if(!docType.namespace.startsWith("__atlasforms"))
     {
-      const canSeeDoctype = authorization.authorize(authorization.ACCESS_DOCTYPE,docType);
+      const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE,docType);
       if(canSeeDoctype.granted) {
         docTypes.push(docType)
       }
@@ -24,7 +25,7 @@ exports = async function(arg){
   
   /* System Doctypes at bottom of list */
 
-  const canManageUsers = authorization.authorize(authorization.USER_MANAGER);
+  const canManageUsers = await authorization.authorize(authorization.USER_MANAGER);
 
   if(canManageUsers.granted) {
     const atlasFormsUsers = { title: "AF_Users", namespace: "__atlasforms.users"}
@@ -32,7 +33,7 @@ exports = async function(arg){
     docTypes.push(atlasFormsUsers);  
   }
   
-  const canManageDoctypes = authorization.authorize(authorization.DOCTYPE_MANAGER);
+  const canManageDoctypes = await authorization.authorize(authorization.DOCTYPE_MANAGER);
   
    if(canManageDoctypes.granted) {
     const altasFormsDoctypes = { title: "AF_Doctypes", namespace: "__atlasforms.doctypes"}

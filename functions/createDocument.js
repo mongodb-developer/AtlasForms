@@ -13,9 +13,19 @@ function getNewIdValue(objSchema) {
   }
 }
 
-exports = async function (namespace,untypedValues) {
+exports = async function (docType,untypedValues) {
   
-   //TODO : Load AuthZ
+      /*Get an Authorization object - should be standard in any non private function*/
+    const authorization = await context.functions.execute("newAuthorization",context.user.id);
+    if( authorization == null ) { return {ok: false,  message: "User not Authorized" }; }
+    
+    //Verify user can edit this kind of document
+    const canCreateDoctype = await authorization.authorize(authorization.CREATE_DOCTYPE,docType);
+    if(canCreateDoctype.granted == false) {
+        return {ok: false,  message: canCreateDoctype.message }; 
+    }
+
+    const namespace = docType.namespace;
     utilityFunctions =  await context.functions.execute("utility_functions");
     
     if (untypedValues == null || untypedValues == {} ) { return {ok: false, message: "No values supplied to create"}; }
@@ -53,7 +63,7 @@ exports = async function (namespace,untypedValues) {
     The only thing we can do is work out which array fields we are updating then insert a record with those already set 
     Or in the case of an edit update to set them to an array
  */
-    const {ok,docTypeSchemaInfo,message} =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    const {ok,docTypeSchemaInfo,message} =  await context.functions.execute("getDocTypeSchemaInfo",docType);
     if(!ok) {
       return {ok,message}; /* Pass errors up */
     }
@@ -99,7 +109,7 @@ exports = async function (namespace,untypedValues) {
       await collection.insertOne(newDocument);
       /* Now edit it */
       const asCreate = true
-      const returnValue = await context.functions.execute("commitEdit",namespace,newId,untypedValues,asCreate)
+      const returnValue = await context.functions.execute("internalCommitEdit",docType,newId,untypedValues,asCreate)
       //If that goes wrong cleanup (TODO)
       return returnValue;
     }

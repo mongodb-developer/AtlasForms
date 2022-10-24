@@ -6,19 +6,25 @@ form for Query or data entry  */
 rather than be an explicit definition btu you could explicity define it here or read a definition from
 a given collection. As it stands we just look at some of the existing docs*/
 
-/* This will be extended to include lots more metadata like jsonSchema or similar*/
-let logcount =0;
 
-function log(val) {
-  if(logcount < 20) { console.log(val);}
-  logcount++
-}
-
-exports = async function (namespace) {
-    
+exports = async function (docType) {
+  
+    /*Get an Authorization object - should be standard in any non private function*/
+  const authorization = await context.functions.execute("newAuthorization",context.user.id);
+  if( authorization == null ) { return {ok: false,  message: "User no Authorized" }; }
+  
+  //TODO - Change this to a specific security check that let's us manipulate the schema
+  
+   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE,docType);
+   if(canSeeDoctype.granted == false) {
+      return {ok:false,message:canSeeDoctype.message};
+  }
+      
+  
     /*Dynamically load some shared code*/
     utilityFunctions = await context.functions.execute("utility_functions");
-
+    const {namespace} = docType;
+    
     if (namespace == "__atlasforms.doctypes") {
         return { ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace) };
     }
@@ -45,6 +51,7 @@ exports = async function (namespace) {
         } catch (e) {
             return { ok: false, message: `Cannot parse schema for ${namespace} error ${e}` };
         }
+
 
         return { ok: true, docTypeSchemaInfo: schemaAsObj };
     }
