@@ -99,43 +99,48 @@ appropriate message.
   - Pre Operation Trigger - allows cancellation or modification.
   - Read (Field Based)
   - Update (Field Based)
-  
 
-- *Make it look nicer*
+- *Picklists* (Key feature) (John)
+  - Picklist Config?
+  - Picklist Determination
+  
+- ~~*Make it look nicer*~~~
+- Error Handling review, Refactor, lint,tidy code
+- All Strings in a consts class, inc errors and fieldnames
+- 
+- Basic Import (Luce)
+  - Ask for db.collection, Name, URL, Fields for Listview on form
+  - Empty existing if it exists (use $out in aggregation)
+  - Load the data
+  - May have 16MB limit for now!
+  -  
+- ~~DocTypeSchema should be in doctype record~~
+
+- Range Queries
+- Fuzzy (Atlas) Search
+  
+- Linking 
+  - Follow Links
+  - Add Links
+
+*** V1 at this point for reInvent ***
+
+
 - Mobile Layout CSS/swipes
 
-
-- Error Handling review, Refactor, lint,tidy code
-- Basic Import
-- DocTypeSchema should be in doctype record
-
-*** MVP ish at this point ***
-
-
- - All Strings in a consts class, inc errors and fieldnames
 - Listview
   - Choose Columns from Cient
 
 - FormView
-    - Better Layout (Will be an ongoing battle)
+    - ~~Better Layout (Will be an ongoing battle)~~
     - Formview rememeber personal layout changes
     - Controls
       - ~~Numbers~~
       - boolean support (button/box)
       - Constraints & Validation 
         - On submit and on Change (Download JS to client??)
-      - *Picklists* (Key feature)
-          - Picklist Config?
-          - Picklist Determination
+
     - Date Only Chooser
-
-- Range Queries
-- Fuzzy (Atlas) Search
 - Printing (Stylesheet)
-
-- Linking andd following links
-
-*** V1 at this point for reInvent ***
-
 - Charts?
 - Acessability
