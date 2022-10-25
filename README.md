@@ -44,8 +44,8 @@ appropriate message.
 
    - Last listview column needs to fill to end.
    - Do we handle arrays of non string scalarrs? - test that and fix as required
-   - We do not support arrays in Objects and we probably should... Not critical right now
-   - Edit/Select contents, press delete - doesn't work, have to replace with a space.
+   - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
+   - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
 
 
 ## Work in Progress / TODO / Ideas

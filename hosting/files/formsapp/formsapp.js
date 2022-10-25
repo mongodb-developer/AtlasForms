@@ -164,12 +164,14 @@ async function resultClick(result) {
 
 //TODO - Handle Dates
 function formValueChange(event) {
-
+  
   const element = event.target
   const fieldName = element.id
   let value = ""
+
+  
   //If it'a a DIV take the text, if not take the value
-  if (element.nodeName == "INPUT") {
+  if (element.nodeName == "INPUT" || element.nodeName == "SELECT") {
     value = element.value
   } else {
     value = element.innerText
@@ -292,6 +294,7 @@ async function runQuery() {
       projection[fieldname] = 1
     }
 
+
     const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType
       , vueApp.fieldEdits, projection);
 
@@ -325,21 +328,35 @@ async function runQuery() {
 //User has changed the dropdown for the document type
 async function selectDocType() {
   vueApp.columnResizeObserver.disconnect()
-
   try {
     // It would be simple to cache this info client end if we want to
     const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType);
 
+    vueApp.fieldEdits = {};
+    vueApp.listViewFields = [];
+    vueApp.results = Array(10).fill({}) //Empty and show columnheaders
+    vueApp.currentDoc = { doc: {} }
+    await Vue.nextTick();
     if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
       vueApp.selectedDocType = {}
+    } else {
+      vueApp.fieldEdits = {};
+      vueApp.selectedDocTypeSchema = docTypeSchemaInfo
+      vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
+      // We cache these
+     
+      if (vueApp.selectedDocType.picklists == null) {
+       
+        const { ok, message, picklists } = await vueApp.realmApp.currentUser.functions.getPicklists(vueApp.selectedDocType);
+        if (!ok) {
+          formAlert(appStrings.AF_SERVER_ERROR(message));
+        } else {
+          
+          vueApp.selectedDocType.picklists = picklists;
+        }
+      }
     }
-
-    vueApp.selectedDocTypeSchema = docTypeSchemaInfo
-    vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
-    vueApp.results = Array(10).fill({}) //Empty and show columnheaders
-    vueApp.currentDoc = { doc: {} }
-
   }
   catch (e) {
     console.error(e)
