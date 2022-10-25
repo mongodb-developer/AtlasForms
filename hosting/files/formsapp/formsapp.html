@@ -296,7 +296,7 @@
                                             <!-- Picklist-->
                                             <div v-else-if="selectedDocType?.picklists?.[name]">
                                                 <!-- Has a picklist-->
-                                                <input :disabled="editing == false" :class="'dynamicformvalue inlist '"
+                                              X <input :disabled="editing == false" :class="'dynamicformvalue inlist '"
                                                     :data-bsontype="valtype" :value="arrayElement" type="text"
                                                     :list=`${name}_picklist` :id=`${name}.${arrayidx}`  v-on:input="formValueChange"  />
                                                 <datalist :id=`${name}_picklist`>

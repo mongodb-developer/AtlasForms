@@ -162,17 +162,17 @@ async function resultClick(result) {
 //Atlas also because we are editing InnerText rather than using a control we can't bind to it.
 //Also we want to keep the original verison anyway.
 
-//TODO - Handle Dates
+
 function formValueChange(event) {
   
   const element = event.target
   const fieldName = element.id
   let value = ""
 
-  
   //If it'a a DIV take the text, if not take the value
-  if (element.nodeName == "INPUT" || element.nodeName == "SELECT") {
+  if (element.nodeName == "INPUT") {
     value = element.value
+    console.log('change');
   } else {
     value = element.innerText
     //If this is not acceptable (letters in a number for example)
@@ -194,7 +194,7 @@ function formValueChange(event) {
 
 
   vueApp.fieldEdits[fieldName] = value;
-
+  return ;
 }
 
 function addArrayElement(name) {
@@ -385,7 +385,7 @@ async function formsOnLoad() {
     },
     data() {
       return {
-        fieldEdits: {},
+        
         results: [],
         docTypes: [],
         selectedDocType: {},
@@ -404,6 +404,7 @@ async function formsOnLoad() {
       //Also confiuses first login attempt for a new user with realmApp.
       this.realmApp = realmApp;
       this.columnResizeObserver = new ResizeObserver(onListviewColumnResize);
+      this.fieldEdits={};
     },
   }).mount("#formsapp")
 
