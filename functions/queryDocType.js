@@ -54,6 +54,16 @@ function rewriteArrayQuery(typedQuery) {
 // returns everything as a string
 
 exports = async function(docType,query,projection){
+  
+  /*Get an Authorization object - should be standard in any non private function*/
+  const authorization = await context.functions.execute("newAuthorization",context.user.id);
+  if( authorization == null ) { return {ok: false,  message: "User no Authorized" }; }
+  
+   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE,docType);
+   if(canSeeDoctype.granted == false) {
+      return {ok:false,message:canSeeDoctype.message};
+   }
+   
     const MAX_RESULTS = 200; /* THink carefully if you really need this larger or not */
     const {namespace} = docType;
     
