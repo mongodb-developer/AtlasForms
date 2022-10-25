@@ -167,19 +167,20 @@ function formValueChange(event) {
   
   const element = event.target
   const fieldName = element.id
-  let value = ""
+  let evalue = ""
 
   //If it'a a DIV take the text, if not take the value
   if (element.nodeName == "INPUT") {
-    value = element.value
+    evalue = element.value
+    this.value = evalue;
     console.log('change');
   } else {
-    value = element.innerText
+    evalue = element.innerText
     //If this is not acceptable (letters in a number for example)
     //Set it back to the previous value and place the cursor at the end
 
     if (['number', 'int32', 'int64', 'decimal128'].includes(element.getAttribute('data-bsontype'))) {
-      if (isNaN(Number(value))) {
+      if (isNaN(Number(evalue))) {
         element.innerText = vueApp.fieldEdits[fieldName] ? vueApp.fieldEdits[fieldName] : "";
         let range = document.createRange();
         let sel = window.getSelection();
@@ -193,7 +194,7 @@ function formValueChange(event) {
   }
 
 
-  vueApp.fieldEdits[fieldName] = value;
+  vueApp.fieldEdits[fieldName] = evalue;
   return ;
 }
 
@@ -385,7 +386,7 @@ async function formsOnLoad() {
     },
     data() {
       return {
-        
+        fieldEdits: {},
         results: [],
         docTypes: [],
         selectedDocType: {},
@@ -404,7 +405,6 @@ async function formsOnLoad() {
       //Also confiuses first login attempt for a new user with realmApp.
       this.realmApp = realmApp;
       this.columnResizeObserver = new ResizeObserver(onListviewColumnResize);
-      this.fieldEdits={};
     },
   }).mount("#formsapp")
 
