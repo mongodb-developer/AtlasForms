@@ -25,7 +25,7 @@ exports = async function (docType) {
     utilityFunctions = await context.functions.execute("utility_functions");
     const {namespace} = docType;
     
-    if (namespace == "__atlasforms.doctypes") {
+    if (["__atlasforms.doctypes","__atlasforms.picklists"].includes(namespace)) {
         return { ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace) };
     }
 
