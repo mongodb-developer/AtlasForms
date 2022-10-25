@@ -41,6 +41,15 @@ exports = async function(arg){
     docTypes.push(altasFormsDoctypes);  
   }
   
+  const canManagePicklists = await authorization.authorize(authorization.PICKLIST_MANAGER);
+
+  if(canManagePicklists.granted) {
+    const atlasFormsPicklists = { title: "AF_Picklists", namespace: "__atlasforms.picklists"}
+    atlasFormsPicklists.listViewFields = ['databsase','collection']; 
+    docTypes.push(atlasFormsPicklists);  
+  }
+  
+  
   
   return {ok: true, docTypes};
 };

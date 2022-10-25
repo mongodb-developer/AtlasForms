@@ -184,4 +184,8 @@ function getSystemDocTypeSchemaInfo(namespace) {
         return { _id: "objectid", namespace: "string", title: "string", schema: "string", listViewFields: ["string"] };
 
     }
+    
+    if(namespace == '__atlasforms.picklists') {
+       return { _id: "objectid", database: "string", colleciton: "string", field: "string", values: ["string"] };
+    }
 }
