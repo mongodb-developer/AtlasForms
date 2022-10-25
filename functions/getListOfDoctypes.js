@@ -45,7 +45,7 @@ exports = async function(arg){
 
   if(canManagePicklists.granted) {
     const atlasFormsPicklists = { title: "AF_Picklists", namespace: "__atlasforms.picklists"}
-    atlasFormsPicklists.listViewFields = ['databsase','collection']; 
+    atlasFormsPicklists.listViewFields = ['database','collection','fieldname'];
     docTypes.push(atlasFormsPicklists);  
   }
   

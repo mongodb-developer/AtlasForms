@@ -54,6 +54,7 @@ function rewriteArrayQuery(typedQuery) {
 // returns everything as a string
 
 exports = async function(docType,query,projection){
+    const MAX_RESULTS = 200; /* THink carefully if you really need this larger or not */
     const {namespace} = docType;
     
     /*Dynamically load some shared code*/
@@ -77,7 +78,7 @@ exports = async function(docType,query,projection){
 
     try {
       console.log(`Query: ${JSON.stringify(typedQuery,null,2)}`)
-      const cursor = await collection.find(typedQuery,projection).limit(30); //Temp limit when testing
+      const cursor = await collection.find(typedQuery,projection).limit(MAX_RESULTS); //Temp limit when testing
       const results = await cursor.toArray(); 
       return {ok: true, results};//TODO - Return an OK/Fail
     } catch(e) {

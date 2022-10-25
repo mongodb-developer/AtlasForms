@@ -9,11 +9,12 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 exports = async function (docType) {
   
-    /*Get an Authorization object - should be standard in any non private function*/
+  /*Get an Authorization object - should be standard in any non private function*/
   const authorization = await context.functions.execute("newAuthorization",context.user.id);
   if( authorization == null ) { return {ok: false,  message: "User no Authorized" }; }
   
-  //TODO - Change this to a specific security check that let's us manipulate the schema
+  //TODO - Change this to a specific security check that let's us manipulate the schema per person */
+  //For now it's see the whole schema if you can read the doc.
   
    const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE,docType);
    if(canSeeDoctype.granted == false) {
@@ -186,6 +187,6 @@ function getSystemDocTypeSchemaInfo(namespace) {
     }
     
     if(namespace == '__atlasforms.picklists') {
-       return { _id: "objectid", database: "string", colleciton: "string", field: "string", values: ["string"] };
+       return { _id: "objectid", database: "string", collection: "string", fieldname: "string", values: ["string"] };
     }
 }
