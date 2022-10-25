@@ -72,5 +72,11 @@
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
+    },
+    {
+        "name": "ADMIN_PicklistGenerator",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]
