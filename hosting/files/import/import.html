@@ -21,8 +21,35 @@
 
 
 <body onLoad="importOnLoad()">
-    <div class="importapp">
-        
+    <div id="importapp">
+        <div class="importlayout">
+            <label for="namespace" class="formlabel namespacelab">Namespace (db.collection):</label>
+            <input type="text" class="formwriteable namespacetxt"
+                placeholder="Enter Namespace eg. sample_airbnb.listingsAndReviews" v-model="text" name="namespace"
+                required><br />
+
+            <label for="importdoctypename" class="formlabel namelab">Name:</label>
+            <input type="text" class="formwriteable nametxt" placeholder="Enter Name eg. Holiday Accomodations..."
+                v-model="text" name="importdoctypename" required><br />
+
+            <label for="importurl" class="formlabel importurllab">URL of file for import:</label>
+            <input type="url" class="formwriteable importurltxt" placeholder="Enter URL..." v-model="text"
+                name="importurl" required><br />
+
+            <label for="listviewfields" class="formlabel listviewfieldslab">Fields to display in list view (comma
+                separated):</label>
+            <input type="text" class="formwriteable listviewfieldstxt" placeholder="Enter Listview fields..."
+                v-model="text" name="listviewfields" required></br>
+
+            <div class="importbut">
+                <button class="formbutton" :disabled='namespace.length==0 || !namespace.contains(".") || importdoctypename.length==0 || importurl.length==0 || listviewfields.length == 0'
+                    @click="importDocType">Import</button>
+            </div>
+
+            <div class="importmsg">
+                {{message}}
+            </div>
+        </div>
     </div>
 </body>
 

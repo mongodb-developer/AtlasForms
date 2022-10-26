@@ -2,8 +2,8 @@
     width: 40%;
     min-width: 400px;  
     padding: 10px;
-    border: 1px solid black;
-    border-radius: 2px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
     height: 250px;
     position: absolute;
     top: 0;
@@ -14,20 +14,22 @@
     display: grid;
     grid-auto-rows: minmax(min-content, max-content);
     grid-template-areas:
-        "checktypelab checktyperadiobut"
-        "loclab loctxt"
-        "importbut importbut";
+        "namespacelab namespacetxt"
+        "namelab nametxt"    
+        "importurllab importurltxt"
+        "listviewfieldslab listviewfieldstxt"   
 }
 
-.checktypelab { grid-area: checktypelab}
-.checktyperadiobut { grid-area: checktyperadiobut}
-.loclab { grid-area: loclab}
-.loctxt { grid-area: loctxt}
-.loginbut { grid-area: loginbut}
-.loginmsg { grid-area: loginmsg;
-            color: red;
-            padding: 20px;
-            text-align: center;
-        }
-.newuser { grid-area: newuser}
-.resetpass { grid-area: resetpass}
+
+
+.namespacelab { grid-area: namespacelab}
+.namespacetxt { grid-area: namespacetxt}
+
+.namelab { grid-area: namelab}
+.nametxt { grid-area: nametxt }
+
+.importurllab { grid-area: importurllab}
+.importurltxt { grid-area: importurltxt}
+
+.listviewfieldslab { grid-area: listviewfieldslab}
+.listviewfieldstxt{ grid-area: listviewfieldstxt}
