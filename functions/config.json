@@ -1,6 +1,17 @@
 [
     {
-        "name": "getListOfDoctypes",
+        "name": "createDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "verify_EDIT___atlasforms_doctypes",
+        "private": true,
+        "run_as_system": true
+    },
+    {
+        "name": "lockDocument",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -10,42 +21,7 @@
         "private": true
     },
     {
-        "name": "verify_EDIT___atlasforms_doctypes",
-        "private": true,
-        "run_as_system": true
-    },
-    {
-        "name": "getDocTypeSchemaInfo",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "utility_functions",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "internalCommitEdit",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "newAuthorization",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "ADMIN_PicklistGenerator",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "createDocument",
+        "name": "getListOfDoctypes",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -57,15 +33,16 @@
         "disable_arg_logs": true
     },
     {
-        "name": "commitEdit",
-        "private": false,
+        "name": "newAuthorization",
+        "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "sample_custom_verify",
-        "private": true,
-        "run_as_system": true
+        "name": "getDocTypeSchemaInfo",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     },
     {
         "name": "getPicklists",
@@ -74,9 +51,32 @@
         "disable_arg_logs": true
     },
     {
-        "name": "lockDocument",
+        "name": "internalCommitEdit",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "ADMIN_PicklistGenerator",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "commitEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
+    },
+    {
+        "name": "utility_functions",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "sample_custom_verify",
+        "private": true,
+        "run_as_system": true
     }
 ]
