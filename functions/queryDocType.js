@@ -89,7 +89,7 @@ console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
     
     // If we have a text query then send this via Atlas search
     if(textquery) {
-      const atlasSearch = { $search : {  index: 'default', text: { query: textquery },path: {'wildcard': '*'}}};
+      const atlasSearch = { $search : {  index: 'default', text: { query: textquery ,path: {'wildcard': '*'}}}};
       const pipeline = [atlasSearch];
       pipeline.push({$limit:MAX_RESULTS})
       const cursor = await collection.aggregate(pipeline)
