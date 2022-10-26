@@ -122,6 +122,9 @@ function correctValueType(value, type) {
       case 'date':
         rval = new Date(value)
         break;
+      case 'boolean':
+        rval == (rval == 'true');
+        break;
       default:
         console.log(`Nothing defined for converting ${value} to ${type}`)
     }
