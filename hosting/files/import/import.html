@@ -41,10 +41,9 @@
             <input type="text" class="formwriteable listviewfieldstxt" placeholder="Enter Listview fields..."
                 v-model="text" name="listviewfields" required></br>
 
-            <div class="importbut">
-                <button class="formbutton"
-                    @click="importDocType">Import</button>
-            </div>
+                <div class="importbut">
+                    <button class="formbutton" @click="importDocType(namepsace,name,listviewfields,url)">Import</button>
+                </div>
 
             <div class="importmsg">
                 {{message}}
