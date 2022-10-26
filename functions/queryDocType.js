@@ -89,7 +89,7 @@ console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
     
     // If we have a text query then send this via Atlas search
     if(textquery) {
-      
+      return { ok: false, message: "textquery not available"}
     } else {
     
     const cursor = await collection.find(typedQuery, projection).limit(MAX_RESULTS); //Temp limit when testing
