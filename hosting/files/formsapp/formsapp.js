@@ -54,6 +54,7 @@ async function clearForm() {
   vueApp.results = [];
   vueApp.currentDoc = { doc: {} };
   vueApp.editing = true;
+  vueApp.textquery = ""
   //Editable divs we changed need manually cleared
   for (const id of Object.keys(vueApp.fieldEdits)) {
     if (document.getElementById(id)) {
@@ -156,6 +157,7 @@ async function resultClick(result) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
     }
   }
+  vueApp.editing = false;
   vueApp.currentDoc = result;
 }
 //We use this to track editied controls so we can send an update to 
@@ -302,7 +304,7 @@ async function runQuery() {
 
 
     const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType
-      , vueApp.fieldEdits, projection);
+      , vueApp.fieldEdits, projection,vueApp.textquery);
 
     if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
@@ -319,7 +321,7 @@ async function runQuery() {
     }
 
     vueApp.results = wrappedResults;
-    vueApp.editing = false; //No implicit editing
+
     if (results.length == 0) {
       formAlert(appStrings.AF_NO_RESULTS_FOUND);
       vueApp.editing = true;
@@ -401,7 +403,8 @@ async function formsOnLoad() {
         editing: false,
         currentDocLocked: false,
         modal_content: "test",
-        show_modal: false
+        show_modal: false,
+        textquery: ""
       }
     },
     mounted() {

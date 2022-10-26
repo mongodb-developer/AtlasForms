@@ -36,16 +36,19 @@
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
                     <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
+                        v-show="!currentDocLocked" class="headerbutton" @click="newRecord()"> Create </button>
+                    <input v-show="!currentDocLocked" class="searchbar" v-model="textquery" type="text" />
+                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
                         v-show="!currentDocLocked" class="headerbutton" @click="runQuery()"> Search </button>
-                    <button v-show="!currentDocLocked" :disabled="!selectedDocType.namespace" class="headerbutton"
+                        <button v-show="!currentDocLocked" :disabled="!selectedDocType.namespace" class="headerbutton"
                         @click="clearForm()"> Clear </button>
+                   
                     <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id == null"
                         v-show="!currentDocLocked" class="headerbutton" @click="editRecord()"> Edit </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit()"> Save Edits </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit(true)"> Cancel Edits
                     </button>
-                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
-                        v-show="!currentDocLocked" class="headerbutton" @click="newRecord()"> Create </button>
+                    
                 </div>
                 <div class="right">
                     <button v-show="!currentDocLocked" class="headerbutton" @click="logOut()"> Logout </button>
@@ -62,9 +65,9 @@
                                 :style="{width: (98/listViewFields.length) +'vw'}">{{formatFieldname(fieldname)}}</div>
                         </th>
                     </tr>
-                    <tr class="listview" :class="{selected:(result == currentDoc)}" v-for="result in results">
+                    <tr  :class="'listview '+ (( result == currentDoc && result.doc._id ) ? 'highlightitem' : '')" v-for="result in results">
                         <td @click="resultClick(result)" class="listview" v-for="fieldname in listViewFields">
-                            <div class="listviewitem"> {{ getFieldValue(result,fieldname) }} </div>
+                            <div class="listviewitem">{{ getFieldValue(result,fieldname) }} </div>
                         </td>
                     </tr>
                 </table>

@@ -17,10 +17,6 @@ html {
     overflow: hidden;
 }
 
-input::-webkit-calendar-picker-indicator {
-    xdisplay: none !important;
-}
-
 /* All labels on forms includign login */
 .formlabel {
     padding: 10px;
@@ -31,9 +27,24 @@ input::-webkit-calendar-picker-indicator {
     background-color: white;
     border-top: none;
     border: none;
-    border-bottom: 1px solid #DDD;
+    border-bottom: 1px solid #bbb;;
+    border-left: 1px solid  #bbb;;
     border-radius: 4px;
-    margin: 5px;
+    margin: 0.5em;
+    min-width: 100px;
+}
+
+.searchbar {
+    padding: 5px 10px 5px 10px;
+    background-color: white;
+  
+    border: none;
+    border-top: 1px solid #bbb;;
+    border-right: 1px solid #bbb;;
+    border-radius: 4px;
+    margin: 0.5em;
+    margin-left: 3em;
+    width: 20vw;
     min-width: 100px;
 }
 
@@ -45,8 +56,8 @@ input::-webkit-calendar-picker-indicator {
     background-color: white;
 
     border: none;
-    border-bottom: 1px solid #DDD;
-
+    border-bottom: 1px solid #bbb;;
+    border-left: 1px solid #bbb;
     border-radius: 4px;
     margin-top: 10px;
     min-width: 100px;
@@ -70,4 +81,13 @@ input::-webkit-calendar-picker-indicator {
 
 .dynamicformvaluedate:disabled {
     background-color: lightgray;
+    color: grey
+}
+
+button:disabled {
+    color: lightgrey;
+}
+
+.highlightitem {
+    border: 2px solid black !important;
 }
