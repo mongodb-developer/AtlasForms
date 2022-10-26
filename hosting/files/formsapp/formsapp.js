@@ -164,7 +164,7 @@ async function resultClick(result) {
 
 
 function formValueChange(event) {
-  
+
   const element = event.target
   const fieldName = element.id
   let evalue = ""
@@ -175,18 +175,24 @@ function formValueChange(event) {
     this.value = evalue;
   } else {
     evalue = element.innerText
+
     //If this is not acceptable (letters in a number for example)
     //Set it back to the previous value and place the cursor at the end
+    
+    /* Allow > and < in front of numbers */
 
     if (['number', 'int32', 'int64', 'decimal128'].includes(element.getAttribute('data-bsontype'))) {
-      if (isNaN(Number(evalue))) {
+      let trimmed = evalue.replace(/^[>< ]*/,'')
+      if (isNaN(Number(trimmed))) {
         element.innerText = vueApp.fieldEdits[fieldName] ? vueApp.fieldEdits[fieldName] : "";
         let range = document.createRange();
         let sel = window.getSelection();
+        try {
         range.setStart(element, 1);
         range.collapse(true);
         sel.removeAllRanges();
         sel.addRange(range);
+        } catch(e) { /* Can fail if empty*/}
         return;
       }
     }
@@ -194,7 +200,7 @@ function formValueChange(event) {
 
 
   vueApp.fieldEdits[fieldName] = evalue;
-  return ;
+  return;
 }
 
 function addArrayElement(name) {
@@ -345,14 +351,14 @@ async function selectDocType() {
       vueApp.selectedDocTypeSchema = docTypeSchemaInfo
       vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
       // We cache these
-     
+
       if (vueApp.selectedDocType.picklists == null) {
-       
+
         const { ok, message, picklists } = await vueApp.realmApp.currentUser.functions.getPicklists(vueApp.selectedDocType);
         if (!ok) {
           formAlert(appStrings.AF_SERVER_ERROR(message));
         } else {
-          
+
           vueApp.selectedDocType.picklists = picklists;
         }
       }

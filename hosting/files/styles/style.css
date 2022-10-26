@@ -1,19 +1,24 @@
 /* Minimalist CSS using only standard CSS not any library like bootstrap,
 wanted this to have minimal opinion on using external libraries */
 
+/* TODO: Replace all px with em or vw*/
+
 /* Very  global style elements */
 
 * {
-    background-color:#F8F8F8;
+    background-color: #F8F8F8;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: black;
     font-size: 12pt;
-    
 }
 
 
 html {
-    overflow:hidden;
+    overflow: hidden;
+}
+
+input::-webkit-calendar-picker-indicator {
+    xdisplay: none !important;
 }
 
 /* All labels on forms includign login */
@@ -27,18 +32,18 @@ html {
     border-top: none;
     border: none;
     border-bottom: 1px solid #DDD;
-    
     border-radius: 4px;
-   margin: 5px;
+    margin: 5px;
     min-width: 100px;
 }
+
 /* Buttons on forms */
 
 .formbutton {
     padding: 5px 10px 5px 10px;
     background-color: white;
     background-color: white;
- 
+
     border: none;
     border-bottom: 1px solid #DDD;
 
@@ -46,22 +51,23 @@ html {
     margin-top: 10px;
     min-width: 100px;
     display: block;
-    margin-left:  auto;
+    margin-left: auto;
     margin-right: auto;
 }
+
 /*All data entry on forms including login etc. */
 .formwriteable {
     /*border: 1px solid black;*/
     background-color: white;
     border: none;
     border-bottom: 1px solid #DDD;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 }
 
 .dynamicformvalue:not([contenteditable="true"]) {
     background-color: #F0F0F0;
-  }
+}
 
-  .dynamicformvaluedate:disabled {
+.dynamicformvaluedate:disabled {
     background-color: lightgray;
-  }
+}

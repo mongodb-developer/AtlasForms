@@ -34,16 +34,13 @@ appropriate message.
   - 
   
 ## Questions
-  - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters
-  - How Best oto handle date fields, are date pickers good
   - How do we *best* handle date not datetime?
-  - Will we add support for Range queries? If so how >5 in a text box
-  - How *critical* are dropdown picklists - Very!
-   
-## Known BUGS to fix
 
+## IMPORTANT BUGS to fix
+
+   - Server conversion of NUmbers is converting all to double!!
    - Last listview column needs to fill to end.
-   - Do we handle arrays of non string scalarrs? - test that and fix as required
+   - Do we handle arrays of non string scalars? - test that and fix as required
    - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
    - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
 
@@ -114,7 +111,7 @@ appropriate message.
   -  
 - ~~DocTypeSchema should be in doctype record~~
 
-- Range Queries
+- ~~Range Queries (> and < support)~~
 - Fuzzy (Atlas) Search
   
 - Linking 
