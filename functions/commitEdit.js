@@ -12,6 +12,11 @@ exports = async function (docType, _id, untypedUpdates) {
     return { ok: false, message: canEditDoctype.message }
   }
 
-  return await context.functions.execute("internalCommitEdit", docType, _id, untypedUpdates);
-
+  try {
+    const rval =  await context.functions.execute("internalCommitEdit", docType, _id, untypedUpdates);
+    return rval;
+  } catch(e) {
+    return { ok: false, message: e}
+  }
+  
 };

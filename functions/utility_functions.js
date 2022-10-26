@@ -21,8 +21,9 @@ function refersToArrayElement(fieldName) {
 // working with arrays and return a list of arrays and a list of arrays wiuth deletes
 // As insert/update needs them - os shoudl we do it in there.
 
-function castDocToType(doc, objSchema) {
-  const typedDoc = {}
+
+function castDocToType(doc, objSchema, forQuery) {
+  const typedDoc = {};
   for (let fieldName of Object.keys(doc)) {
     /* Special value we put in to remove array elements
        when editing - copy over unchanged*/
@@ -38,11 +39,38 @@ function castDocToType(doc, objSchema) {
         }
         subobj = subobj[part]
       }
-      //Now based on that convert value and add to our new query
-      let correctlyTypedValue = correctValueType(doc[fieldName], subobj)
-      if (correctlyTypedValue != null && correctlyTypedValue != "") {
-        typedDoc[fieldName] = correctlyTypedValue
+      
+      // If this is for a query, let's check if the value is prefixed by > or <
+      let stripped = doc[fieldName];
+      let operators;
+      if(forQuery) {
+        operators = stripped.match(/^ *([<>])/);
+        stripped = stripped.replace(/^[ <>]*/,'') //Remove any prefix
       }
+      
+      //Now based on that convert value and add to our new query
+      try {
+        let correctlyTypedValue = correctValueType(stripped, subobj)
+        if (correctlyTypedValue != null && correctlyTypedValue != "") {
+          
+          typedDoc[fieldName] = correctlyTypedValue
+          if (forQuery && operators && operators.length==2) {
+            switch(operators[1]){
+              case `>`:
+                typedDoc[fieldName] = { $gt : correctlyTypedValue};
+                break;
+              case `<`:
+                typedDoc[fieldName] = { $lt : correctlyTypedValue};
+                break;
+              default:
+                 //Nothing, add more operators here 
+            }
+          }
+        }
+      } catch(e) {
+        throw `${e} in ${fieldName}`
+      }
+     
     }
   }
   return typedDoc
@@ -84,9 +112,9 @@ function correctValueType(value, type) {
       case "int64":
       case "decimal128":
         //TODO : FIX THIS to set the correct type!! IMPORTANT
-        console.log(`Converting ${value} to ${type}`)
+   
         rval = Number(value)
-        if (isNaN(rval)) { console.log(rval) ; rval = null }
+        if (isNaN(rval)) { throw `Cannot convert ${value} to a number`}
         break;
       case "objectid":
         rval = new BSON.ObjectId(value)
@@ -99,9 +127,8 @@ function correctValueType(value, type) {
     }
   }
   catch (e) {
-    console.error(`Error converting "${value}" to a ${type}`)
     console.error(e)
-
+    throw e;
   }
   return rval;
 }

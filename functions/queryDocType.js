@@ -10,7 +10,6 @@ function rewriteArrayQuery(typedQuery) {
   // { skills : { $elemMatch: { skill: "archery", level: 3}}}
   // We use $and for multiples
   const elementsToMatch = {};
-
   for (let fieldName of Object.keys(typedQuery)) {
     const { arrayFieldName, index, elementFieldName, locationOfIndex } = utilityFunctions.refersToArrayElement(fieldName);
     if (locationOfIndex != -1) {
@@ -78,7 +77,9 @@ exports = async function (docType, query, projection) {
   // Convert everything to the correct Javascript/BSON type 
   // As it's all sent as strings from the form, 
   // also sanitises any Javascript injection
-  let typedQuery = utilityFunctions.castDocToType(query, docTypeSchemaInfo);
+  // 
+  const forQuery = true; // Used to tell it to convert > and < values
+  let typedQuery = utilityFunctions.castDocToType(query, docTypeSchemaInfo, forQuery );
 
   /* Handle Arrays correctly*/
   typedQuery = rewriteArrayQuery(typedQuery);

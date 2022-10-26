@@ -2,9 +2,10 @@
 // probably should override In the preinsert function
 
 function getNewIdValue(objSchema) {
-  const type = objSchema._id;
+  const [type] = objSchema._id.split(':');
   /* We want the ID values ot be the same type */
   const objid = new BSON.ObjectId();
+  console.log(`Creating _id as ${type}`)
   switch (type) {
     case "string":
       return objid.toString();
@@ -110,12 +111,13 @@ exports = async function (docType, untypedValues) {
     /* Now edit it */
     const asCreate = true
     const returnValue = await context.functions.execute("internalCommitEdit", docType, newId, untypedValues, asCreate)
+  
     //If that goes wrong cleanup (TODO)
     return returnValue;
   }
   catch (e) {
     console.error(e);
-    return { ok: false };
+    return { ok: false, message: e };
   }
 }
 
