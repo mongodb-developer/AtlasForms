@@ -91,6 +91,10 @@ console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
     if(textquery) {
       const atlasSearch = { $search : {  index: 'default', text: { query: textquery ,path: {'wildcard': '*'}}}};
       const pipeline = [atlasSearch];
+      
+      if(Object.keys(typedQuery).length > 0) {
+        pipeline.push({$match:typedquery})
+      }
       pipeline.push({$limit:MAX_RESULTS})
       const cursor = await collection.aggregate(pipeline)
       const results = await cursor.toArray();
