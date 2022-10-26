@@ -1,5 +1,5 @@
 // This is for importing a document passed
-exports = async function importDocType(namespace, name, url, listviewfields) {
+exports = async function (namespace, name, url, listviewfields) {
 
     // Get the 
 
