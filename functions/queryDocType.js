@@ -84,7 +84,7 @@ exports = async function (docType, query, projection, textquery) {
   /* Handle Arrays correctly*/
   typedQuery = rewriteArrayQuery(typedQuery);
 
-console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
+
   try {
     
     // If we have a text query then send this via Atlas search
@@ -96,11 +96,12 @@ console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
         pipeline.push({$match:typedQuery})
       }
       pipeline.push({$limit:MAX_RESULTS})
+      console.log(`Atlas Search: ${JSON.stringify(typedQuery, null, 2)}`)
       const cursor = await collection.aggregate(pipeline)
       const results = await cursor.toArray();
       return { ok: true, results };//TODO - Return an OK/Fail
     } else {
-    
+    console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
     const cursor = await collection.find(typedQuery, projection).limit(MAX_RESULTS); 
     const results = await cursor.toArray();
     return { ok: true, results };//TODO - Return an OK/Fail
