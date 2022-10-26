@@ -124,7 +124,7 @@ function correctValueType(value, type) {
         break;
       case 'boolean':
         if(['true','false'].includes(value) == false ) { throw `"${value}" is not true or false`}
-        rval == (value == 'true');
+        rval = (value == 'true');
         break;
       default:
         throw `Nothing defined for converting ${value} to ${type}`
