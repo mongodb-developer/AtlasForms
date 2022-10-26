@@ -34,7 +34,8 @@ async function logOut(email, password) {
 
 async function getListOfDocTypes() {
   try {
-    return await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
+    const docTypes = await vueApp.realmApp.currentUser.functions.getListOfDoctypes();
+    return docTypes;
   }
   catch (e) {
     console.error(e)
@@ -82,7 +83,7 @@ async function editRecord() {
     //Tell them Why not
     //TODO - Perhaps offer a 'Steal Lock' option in future depending
     //How long it's been locked for
-    formAlert(appStrings.AF_DOC_ALREADY_LOCKED(lockResult.currentDoc.doc.__lockedBy))
+    formAlert(appStrings.AF_DOC_CANNOT_LOCK(lockResult.message))
   }
 
 }
@@ -99,25 +100,26 @@ async function commitEdit(cancel) {
   if (cancel == true) {
     vueApp.fieldEdits = {};
   }
-  let commitResult = await vueApp.realmApp.currentUser.functions.commitEdit(vueApp.selectedDocType.namespace,
+  let commitResult = await vueApp.realmApp.currentUser.functions.commitEdit(vueApp.selectedDocType,
     vueApp.currentDoc.doc._id, vueApp.fieldEdits);
 
-  //TODO: Error handling if edit fails
+  if (commitResult.ok) {
+    vueApp.currentDocLocked = false;
+    vueApp.fieldEdits = {};
+    //If we change current Doc to a different Doc but with the same values
+    //Vue thinks it doesnt need to update anything, but we want to overwrite
+    //The things we edited manually that aren't in the model
+    vueApp.currentDoc.doc = {}; //This forces Vue to rerender divs we edited manually
+    await Vue.nextTick(); // As the valuses change from nothing to the same value.
+    vueApp.currentDoc.doc = commitResult.currentDoc; //Revert to latest server version
+    vueApp.editing = false;
 
-  //Mostly if I didn't have it locked (perhaps stolen) it doesn't matter
-  console.log(commitResult)
-
-  vueApp.currentDocLocked = false;
-  vueApp.fieldEdits = {};
-  //If we change current Doc to a different Doc but with the same values
-  //Vue thinks it doesnt need to update anything, but we want to overwrite
-  //The things we edited manually that aren't in the model
-  vueApp.currentDoc.doc = {}; //This forces Vue to rerender divs we edited manually
-  await Vue.nextTick(); // As the valuses change from nothing to the same value.
-
-  vueApp.currentDoc.doc = commitResult.currentDoc; //Revert to latest server version
-  vueApp.editing = false;
-
+  } else {
+    //Tell them Why not
+    //TODO - Perhaps offer a 'Steal Lock' option in future depending
+    //How long it's been locked for
+    formAlert(appStrings.AF_DOC_CANNOT_LOCK(commitResult.message))
+  }
 }
 
 async function newRecord() {
@@ -127,7 +129,7 @@ async function newRecord() {
     return;
   }
 
-  let { ok, message, currentDoc } = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType.namespace, vueApp.fieldEdits)
+  let { ok, message, currentDoc } = await vueApp.realmApp.currentUser.functions.createDocument(vueApp.selectedDocType, vueApp.fieldEdits)
   if (ok && currentDoc) {
     const wrappedDoc = { downloaded: true, doc: currentDoc }
     vueApp.results = [wrappedDoc]
@@ -135,7 +137,7 @@ async function newRecord() {
     vueApp.editing = false;
     vueApp.fieldEdits = {};
   } else {
-    formAlert(appStrings.AF_SERVER_ERROR(message));
+    formAlert(appStrings.AF_DOC_CANNOT_CREATE(message));
   }
 }
 
@@ -144,13 +146,13 @@ async function resultClick(result) {
 
     /* Download the full doc when we select it*/
     const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(
-      vueApp.selectedDocType.namespace
+      vueApp.selectedDocType
       , { _id: `${result.doc._id}` }, {});
     if (ok) {
       result.doc = results[0];
       result.downloaded = true
     } else {
-      
+
       formAlert(appStrings.AF_SERVER_ERROR(message));
     }
   }
@@ -160,22 +162,25 @@ async function resultClick(result) {
 //Atlas also because we are editing InnerText rather than using a control we can't bind to it.
 //Also we want to keep the original verison anyway.
 
-//TODO - Handle Dates
-function formValueChange(event) {
 
+function formValueChange(event) {
+  
   const element = event.target
   const fieldName = element.id
-  let value = ""
+  let evalue = ""
+
   //If it'a a DIV take the text, if not take the value
   if (element.nodeName == "INPUT") {
-    value = element.value
+    evalue = element.value
+    this.value = evalue;
+    console.log('change');
   } else {
-    value = element.innerText
+    evalue = element.innerText
     //If this is not acceptable (letters in a number for example)
     //Set it back to the previous value and place the cursor at the end
 
     if (['number', 'int32', 'int64', 'decimal128'].includes(element.getAttribute('data-bsontype'))) {
-      if (isNaN(Number(value))) {
+      if (isNaN(Number(evalue))) {
         element.innerText = vueApp.fieldEdits[fieldName] ? vueApp.fieldEdits[fieldName] : "";
         let range = document.createRange();
         let sel = window.getSelection();
@@ -189,8 +194,8 @@ function formValueChange(event) {
   }
 
 
-  vueApp.fieldEdits[fieldName] = value;
-
+  vueApp.fieldEdits[fieldName] = evalue;
+  return ;
 }
 
 function addArrayElement(name) {
@@ -198,28 +203,29 @@ function addArrayElement(name) {
   const pathParts = name.split('.');
   const workingDoc = vueApp.currentDoc.doc;
   let workingArray = null;
-  let elementBsonType = null; 
-  if(pathParts.length > 2) return false; /* Not supported */
+  let elementBsonType = null;
+  if (pathParts.length > 2) return false; /* Not supported */
 
   /* It's possible to click delete when there is nothing actually in the array yet
      Add a dummy entrry - content doesnt matter but make it an object so iterable
      Alternative is to clear the entries in element 0 if it's empty */
-  
-  if(pathParts.length == 2) {
+
+  if (pathParts.length == 2) {
     const arraySchema = vueApp.selectedDocTypeSchema[pathParts[0]][pathParts[1]];
     elementBsonType = getBsonType(arraySchema[0]);
-    if(workingDoc[pathParts[0]] == undefined) { 
-      workingDoc[pathParts[0]] = { [pathParts[1]] : [elementBsonType=='document'?{_xyzzy_:1}:''] }}
-    if(workingDoc[pathParts[0]][pathParts[1]] == undefined) {
-      workingDoc[pathParts[0]][pathParts[1]] =  [elementBsonType=='document'?{_xyzzy_:1}:''];
+    if (workingDoc[pathParts[0]] == undefined) {
+      workingDoc[pathParts[0]] = { [pathParts[1]]: [elementBsonType == 'document' ? { _xyzzy_: 1 } : ''] }
+    }
+    if (workingDoc[pathParts[0]][pathParts[1]] == undefined) {
+      workingDoc[pathParts[0]][pathParts[1]] = [elementBsonType == 'document' ? { _xyzzy_: 1 } : ''];
     }
     workingArray = workingDoc[pathParts[0]][pathParts[1]]
   } else {
-    const arraySchema =  vueApp.selectedDocTypeSchema[pathParts[0]];
+    const arraySchema = vueApp.selectedDocTypeSchema[pathParts[0]];
     elementBsonType = getBsonType(arraySchema[0]);
     //pathPart[0] is an array
-    if(workingDoc[pathParts[0]] == undefined) {
-      workingDoc[pathParts[0]] =  [elementBsonType=='document'?{_xyzzy_:1}:''];
+    if (workingDoc[pathParts[0]] == undefined) {
+      workingDoc[pathParts[0]] = [elementBsonType == 'document' ? { _xyzzy_: 1 } : ''];
     }
     workingArray = workingDoc[pathParts[0]]
   }
@@ -237,19 +243,19 @@ function deleteArrayElement(name, index) {
   const workingDoc = vueApp.currentDoc.doc;
   let workingArray = null;
 
-  if(pathParts.length > 2) return false; /* Not supported */
+  if (pathParts.length > 2) return false; /* Not supported */
 
   /* It's possible to click delete when there is nothing actually in the array yet
      Add a dummy entrry - content doesnt matter but make it an object so iterable
      Alternative is to clear the entries in element 0 if it's empty */
 
-  if(pathParts.length == 2) {
-    if(workingDoc[pathParts[0]] == undefined) { workingDoc[pathParts[0]] = { [ pathParts[1]] : [{_xyzzy_:1}] }}
-    if(workingDoc[pathParts[0]][pathParts[1]] == undefined) { workingDoc[pathParts[0]][pathParts[1]] = [{_xyzzy_:1}] }
+  if (pathParts.length == 2) {
+    if (workingDoc[pathParts[0]] == undefined) { workingDoc[pathParts[0]] = { [pathParts[1]]: [{ _xyzzy_: 1 }] } }
+    if (workingDoc[pathParts[0]][pathParts[1]] == undefined) { workingDoc[pathParts[0]][pathParts[1]] = [{ _xyzzy_: 1 }] }
     workingArray = workingDoc[pathParts[0]][pathParts[1]]
   } else {
     //pathPart[0] is an array
-    if(workingDoc[pathParts[0]] == undefined) { workingDoc[pathParts[0]] = [{_xyzzy_:1}]}
+    if (workingDoc[pathParts[0]] == undefined) { workingDoc[pathParts[0]] = [{ _xyzzy_: 1 }] }
     workingArray = workingDoc[pathParts[0]]
   }
 
@@ -272,7 +278,7 @@ function deleteArrayElement(name, index) {
       removed++;
     }
   }
-  
+
   if (removed == arrayLength) {
     vueApp.addArrayElement(name);
   }
@@ -289,7 +295,8 @@ async function runQuery() {
       projection[fieldname] = 1
     }
 
-    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType.namespace
+
+    const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType
       , vueApp.fieldEdits, projection);
 
     if (!ok) {
@@ -322,21 +329,35 @@ async function runQuery() {
 //User has changed the dropdown for the document type
 async function selectDocType() {
   vueApp.columnResizeObserver.disconnect()
-
   try {
     // It would be simple to cache this info client end if we want to
-    const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType.namespace);
+    const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType);
 
+    vueApp.fieldEdits = {};
+    vueApp.listViewFields = [];
+    vueApp.results = Array(10).fill({}) //Empty and show columnheaders
+    vueApp.currentDoc = { doc: {} }
+    await Vue.nextTick();
     if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
       vueApp.selectedDocType = {}
+    } else {
+      vueApp.fieldEdits = {};
+      vueApp.selectedDocTypeSchema = docTypeSchemaInfo
+      vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
+      // We cache these
+     
+      if (vueApp.selectedDocType.picklists == null) {
+       
+        const { ok, message, picklists } = await vueApp.realmApp.currentUser.functions.getPicklists(vueApp.selectedDocType);
+        if (!ok) {
+          formAlert(appStrings.AF_SERVER_ERROR(message));
+        } else {
+          
+          vueApp.selectedDocType.picklists = picklists;
+        }
+      }
     }
-
-    vueApp.selectedDocTypeSchema = docTypeSchemaInfo
-    vueApp.listViewFields = vueApp.selectedDocType.listViewFields;
-    vueApp.results = Array(10).fill({}) //Empty and show columnheaders
-    vueApp.currentDoc = { doc: {} }
-
   }
   catch (e) {
     console.error(e)
@@ -394,7 +415,7 @@ async function formsOnLoad() {
   }
   vueApp.docTypes = docTypes;
   //Set the Document Type dropdown to the first value
-  if(vueApp.docTypes.length > 0) {
+  if (vueApp.docTypes.length > 0) {
     vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
     vueApp.selectDocType();
     vueApp.editing = true; //Can edit in empty form

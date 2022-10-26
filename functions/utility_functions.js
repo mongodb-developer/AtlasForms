@@ -3,7 +3,6 @@
 
 function refersToArrayElement(fieldName)
 {
-    
     const parts = fieldName.split('.');
     //Is anything in here a number if so return the index
     const locationOfIndex = parts.reduce((val,el,idx)=>{ return isNaN(el) ? val : idx ;}  , -1);

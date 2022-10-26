@@ -53,8 +53,20 @@ function rewriteArrayQuery(typedQuery) {
 // Them all to the correct data type for the field as the form
 // returns everything as a string
 
-exports = async function(namespace,query,projection){
-    console.log(`Query: ${JSON.stringify(query,null,2)}`);
+exports = async function(docType,query,projection){
+  
+  /*Get an Authorization object - should be standard in any non private function*/
+  const authorization = await context.functions.execute("newAuthorization",context.user.id);
+  if( authorization == null ) { return {ok: false,  message: "User no Authorized" }; }
+  
+   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE,docType);
+   if(canSeeDoctype.granted == false) {
+      return {ok:false,message:canSeeDoctype.message};
+   }
+   
+    const MAX_RESULTS = 200; /* THink carefully if you really need this larger or not */
+    const {namespace} = docType;
+    
     /*Dynamically load some shared code*/
     utilityFunctions =  await context.functions.execute("utility_functions");
 
@@ -63,7 +75,8 @@ exports = async function(namespace,query,projection){
     if(!databaseName || !collectionName) { return {ok: false, message: `Invalid namespace suppied ${namespace}`}; }
     const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
     
-    const {docTypeSchemaInfo} =  await context.functions.execute("getDocTypeSchemaInfo",namespace);
+    const {docTypeSchemaInfo} =  await context.functions.execute("getDocTypeSchemaInfo",docType);
+    
     // Convert everything to the correct Javascript/BSON type 
     // As it's all sent as strings from the form, 
     // also sanitises any Javascript injection
@@ -75,7 +88,7 @@ exports = async function(namespace,query,projection){
 
     try {
       console.log(`Query: ${JSON.stringify(typedQuery,null,2)}`)
-      const cursor = await collection.find(typedQuery,projection).limit(30); //Temp limit when testing
+      const cursor = await collection.find(typedQuery,projection).limit(MAX_RESULTS); //Temp limit when testing
       const results = await cursor.toArray(); 
       return {ok: true, results};//TODO - Return an OK/Fail
     } catch(e) {
