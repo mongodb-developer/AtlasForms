@@ -29,8 +29,8 @@ function importOnLoad() {
 
       console.log(vueApp.listViewFields);
 }
-
-//User has added listview field names
-async function addListviewFieldName(name) {
-
-}
+// async function importDocType(namespace, name, url, listviewfields) {
+//     try {
+//         vueApp.realmApp
+//     }
+// }

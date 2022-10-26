@@ -1,11 +1,11 @@
-// This is for importing a document passed
+// This is for importing a document passed via url
 exports = async function (namespace, name, url, listviewfields) {
-
-    // Get the 
 
     /*Get an Authorization object - should be standard in any non private function*/
     const authorization = await context.functions.execute("newAuthorization", context.user.id);
     if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
+
+    await fetchFile(url);
 
     let rval = { ok: false, message: "No Error Message Set" };
     let postCommit = {};
@@ -15,4 +15,14 @@ exports = async function (namespace, name, url, listviewfields) {
 
     const newdoctype = {};
     
+}
+
+async function fetchFile(url) {
+    try {
+        const response = await context.http.get({url: url});
+        console.log(JSON.parse(response.body.text()));
+    }
+    catch(e) {
+        return {ok: false, message: `Error in Importing ${e}`,results:[]}
+    }
 }
