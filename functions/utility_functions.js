@@ -123,11 +123,11 @@ function correctValueType(value, type) {
         rval = new Date(value)
         break;
       case 'boolean':
-        if(['true','false'].includes(rval) == false ) { throw `${value} is not true or false`}
-        rval == (rval == 'true');
+        if(['true','false'].includes(value) == false ) { throw `${value} is not true or false`}
+        rval == (value == 'true');
         break;
       default:
-        console.log(`Nothing defined for converting ${value} to ${type}`)
+        throw `Nothing defined for converting ${value} to ${type}`
     }
   }
   catch (e) {
