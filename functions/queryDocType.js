@@ -50,7 +50,7 @@ function rewriteArrayQuery(typedQuery) {
 // Them all to the correct data type for the field as the form
 // returns everything as a string
 
-exports = async function (docType, query, projection) {
+exports = async function (docType, query, projection, textquery) {
 
   /*Get an Authorization object - should be standard in any non private function*/
   const authorization = await context.functions.execute("newAuthorization", context.user.id);
@@ -84,12 +84,18 @@ exports = async function (docType, query, projection) {
   /* Handle Arrays correctly*/
   typedQuery = rewriteArrayQuery(typedQuery);
 
-
+console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
   try {
-    console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
+    
+    // If we have a text query then send this via Atlas search
+    if(textquery) {
+      
+    } else {
+    
     const cursor = await collection.find(typedQuery, projection).limit(MAX_RESULTS); //Temp limit when testing
     const results = await cursor.toArray();
     return { ok: true, results };//TODO - Return an OK/Fail
+    }
   } catch (e) {
     console.error(e);
     return { ok: false, message: `Error in Querying ${e}`, results: [] }
