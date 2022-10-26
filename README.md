@@ -107,7 +107,7 @@ appropriate message.
 - ~~*Make it look nicer*~~~
 
 - Basic Import (Luce)
-  - Ask for db.collection, Name, URL, Fields for Listview on form
+  - Ask for ~~db.collection~~, ~~Name~~, ~~URL~~, Fields for Listview on form
   - Empty existing if it exists (use $out in aggregation)
   - Load the data
   - May have 16MB limit for now!
