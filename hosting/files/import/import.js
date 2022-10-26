@@ -29,8 +29,11 @@ function importOnLoad() {
 
       console.log(vueApp.listViewFields);
 }
-// async function importDocType(namespace, name, url, listviewfields) {
-//     try {
-//         vueApp.realmApp
-//     }
-// }
+async function importDocType(namespace, name, url, listviewfields) {
+    try {
+      let { ok, message } = await vueApp.realmApp.currentUser.functions.importDocType(namespace,name,listviewfields,url)
+    }
+    catch(e) {
+
+    }
+}
