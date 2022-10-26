@@ -96,18 +96,16 @@ appropriate message.
 - Authorization [John Working on This now]
   - ~~User Details (and user editing?)~~
   - ~~Concepts of 'UserAdmin'~~
-  - Pre Operation Trigger - allows cancellation or modification.
-  - Read (Field Based)
-  - Update (Field Based)
+  - ~~Pre Operation Trigger - allows cancellation or modification.~~
+  - ~~Read (Field Based)~~
+  - ~~Update (Field Based)~~
 
-- *Picklists* (Key feature) (John)
-  - Picklist Config?
-  - Picklist Determination
+- ~~*Picklists* ~~
+  - ~~Picklist Config~~
+  - ~~Picklist Determination~~
   
 - ~~*Make it look nicer*~~~
-- Error Handling review, Refactor, lint,tidy code
-- All Strings in a consts class, inc errors and fieldnames
-- 
+
 - Basic Import (Luce)
   - Ask for db.collection, Name, URL, Fields for Listview on form
   - Empty existing if it exists (use $out in aggregation)
@@ -123,6 +121,8 @@ appropriate message.
   - Follow Links
   - Add Links
 
+- Error Handling review, Refactor, lint,tidy code
+- All Strings in a consts class, inc errors and fieldnames
 *** V1 at this point for reInvent ***
 
 

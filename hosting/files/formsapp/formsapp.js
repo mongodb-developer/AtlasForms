@@ -173,7 +173,6 @@ function formValueChange(event) {
   if (element.nodeName == "INPUT") {
     evalue = element.value
     this.value = evalue;
-    console.log('change');
   } else {
     evalue = element.innerText
     //If this is not acceptable (letters in a number for example)
