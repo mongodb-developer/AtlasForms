@@ -18,7 +18,6 @@ exports = async function(docType){
       const [database,collection] = docType.namespace.split(".");
       const pickListCursor = await pickListsCollection.find({ database,collection },{_id:0});
       const pickLists = await pickListCursor.toArray();
-      console.log(JSON.stringify(pickLists))
       for( const picklist of pickLists) {
         pickListObj[picklist.fieldname] = picklist.values;
       }
