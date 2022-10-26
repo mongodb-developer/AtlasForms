@@ -123,7 +123,7 @@ function correctValueType(value, type) {
         rval = new Date(value)
         break;
       case 'boolean':
-        if(['true','false'].includes(value) == false ) { throw `${value} is not true or false`}
+        if(['true','false'].includes(value) == false ) { throw `"${value}" is not true or false`}
         rval == (value == 'true');
         break;
       default:
