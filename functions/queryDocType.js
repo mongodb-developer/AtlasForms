@@ -89,10 +89,15 @@ console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
     
     // If we have a text query then send this via Atlas search
     if(textquery) {
-      return { ok: false, message: "textquery not available"}
+      const atlasSearch = { $search : {  index: 'default', text: { query: textquery },path: {'wildcard': '*'}}};
+      const pipeline = [atlasSearch];
+      pipeline.push({$limit:MAX_RESULTS})
+      const cursor = await collection.aggregate(pipeline)
+      const results = await cursor.toArray();
+      return { ok: true, results };//TODO - Return an OK/Fail
     } else {
     
-    const cursor = await collection.find(typedQuery, projection).limit(MAX_RESULTS); //Temp limit when testing
+    const cursor = await collection.find(typedQuery, projection).limit(MAX_RESULTS); 
     const results = await cursor.toArray();
     return { ok: true, results };//TODO - Return an OK/Fail
     }
