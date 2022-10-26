@@ -3,12 +3,14 @@ wanted this to have minimal opinion on using external libraries */
 
 /* Very  global style elements */
 
-body {
+* {
     background-color:#F8F8F8;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: black;
-
+    font-size: 12pt;
+    
 }
+
 
 html {
     overflow:hidden;

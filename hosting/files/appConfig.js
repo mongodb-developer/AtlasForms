@@ -14,7 +14,8 @@ const appStrings = {
      AF_BAD_FIELD_TYPE: (errorField,errorType) => `Value in ${errorField} is not ${errorType}. Cannot write changes.`,
      AF_NO_MANUAL_ID: "This application does not let you manually specify an id when creating a new document",
      AF_NO_OPEN_FOR_EDIT: "You must have a document open to edit it",
-     AF_DOC_ALREADY_LOCKED: (otherUser) => `Cannot edit this record. It is currently being edited by  ${otherUser}.`,
+     AF_DOC_CANNOT_LOCK: (msg) => `Cannot edit this record.  ${msg}.`,
+     AF_DOC_CANNOT_CREATE: (msg) => `Cannot create this record.  ${msg}.`,
      AF_NOT_LOCKED: "You do not currently have this document locked for edit",
      AF_SERVER_ERROR: (msg)=>`Error from Server: ${msg}`,
      AF_NO_DOCTYPES: "Your Administrator has not granted you any permissions yet."

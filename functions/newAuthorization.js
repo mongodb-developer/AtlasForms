@@ -9,6 +9,7 @@ class Authorization {
   constructor() {
     this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
     this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
+    this.PICKLIST_MANAGER = "PICKLIST_MANAGER"; /* Can edit dropdown*/
     this.READ_DOCTYPE = "READ"; /* User can see a given doctype */
     this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
     this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
@@ -23,7 +24,9 @@ class Authorization {
   
   /* Return True is the user may do this , False if they may not*/
   
-  authorize(type,docType,targetRecord,...args) {
+  async authorize(type,docType,targetRecord,...args) {
+    
+   // console.log(`Request AUTHZ: ${type} ${docType?.namespace} ${targetRecord?._id}`);
     
     let grant = { granted: false, message: ""}
 
@@ -34,10 +37,8 @@ class Authorization {
     }
   
   if(this.userRecord.isSuperUser) {
-     console.log("Caller is SuperUser");
-     grant.granted = true;
-     return grant;
     
+     grant.granted = true;
   }    
 
   /*****************************/
@@ -48,24 +49,37 @@ class Authorization {
   
   //Simple one - Check user record permissions - This is a global permissions
   //If we cannot do this we cannot see the doctype
-  
-  if(type == this.ACCESS_DOCTYPE) {
+
+  if( [this.READ_DOCTYPE,this.EDIT_DOCTYPE,this.CREATE_DOCTYPE].includes(type)) {
   grant.message="Not Allowed";
    for(const permission of this.userRecord.permissions) {
      if(permission.item == docType.namespace &&
         permission.permissions.split(',').includes(type)) {
-       grant.permissions = true;
+       grant.granted = true;
        grant.message=""
      }
    }
   }
-
+ 
   /* Execute a custom function for each operations/namspace combo*/
   
   try {
-    context.functions.execute(`verify_${type}_${docType.namespace}`,grant,targetRecord,...args);
+    if(docType) {
+      //This is called even for superusers
+      const fname = `verify_${type}_${docType.namespace.replace(/\./g,'_')}`
+      const verify_fn = context.functions.execute(fname);
+      if(verify_fn) {
+        verify_fn(grant,targetRecord,...args);
+      }
+    }
   } catch (e) {
-    //Ignore error
+    if(e.message.includes('function not found')) {
+     //console.log(`No Custom Permissions Function ${e}`)
+    } else {
+      console.log(e);
+    }
+    
+     //console.log(`Granted: ${grant.granted}`)
   }
   
   /****************************/
