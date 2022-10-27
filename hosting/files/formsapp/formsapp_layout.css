@@ -112,14 +112,7 @@
 
 /* Buttons on forms */
 
-.formbutton {
-  padding: 0.1em 0.2em 0.1em 0.2em;
-  margin-top: 0.5em;
-  min-width: 4em;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
+
 
 /*All data entry on login, password forms etc including login etc. */
 .formwriteable {
