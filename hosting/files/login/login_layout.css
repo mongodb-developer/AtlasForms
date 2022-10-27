@@ -2,11 +2,9 @@
 /* Login centered on login screen */
 .loginlayout {
     width: 40%;
-    min-width: 400px;  
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    height: 250px;
+    min-width: 200em;
+    padding: 1em;
+    height: 100em;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -29,8 +27,7 @@
 .passtxt { grid-area: passtxt}
 .loginbut { grid-area: loginbut}
 .loginmsg { grid-area: loginmsg;
-            color: red;
-            padding: 20px;
+            padding: 1em;
             text-align: center;
         }
 .newuser { grid-area: newuser}

@@ -6,14 +6,22 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
      /*Get an Authorization object - should be standard in any non private function*/
      // const authorization = await context.functions.execute("newAuthorization", context.user.id);
      // if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
- 
-     const filetoimport = await fetchFile(importurl);
+     
+     if(namespace == undefined || importdoctypename == undefined || importurl == undefined || listviewfields == undefined)
+    {
+      namespace = "sample.people";
+      importdoctypename = "People";
+      importurl = "https://filesamples.com/samples/code/json/sample2.json";
+      listviewfields = "firstName,lastName,details";
+    }
+
      
      if(importurl.slice(-4).toLowerCase() != 'json' )
      {
        rval = { ok: false, message: "URL not a json file" };
      }
-    
+     
+    let filetoimport = await fetchFile(importurl);
      try {
          const [db, collection] = namespace.split('.');
  
@@ -29,8 +37,17 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
          */
          const emptyCollPipeline = [{$indexStats: {}}, {$match: {luce:"awesome"}}, {$out: collection}];
          await importcoll.aggregate(emptyCollPipeline).toArray();
-         importcoll.insertMany(filetoimport);
+       
+        if(Array.isArray(filetoimport)) {
+           importcoll.insertMany(filetoimport);
+        }
+        else {
+          const newArrayToInsert = [];
+          newArrayToInsert.push(filetoimport);
+          importcoll.insertMany(newArrayToInsert);
+        }
          
+        
          await addToDocTypes(namespace,importdoctypename,listviewfields);
          
          rval = { ok: true, message: "Succesfully imported to collection" };
@@ -48,7 +65,7 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
          const response = await context.http.get({
              url: fileUrl
          });
-        
+         
          return JSON.parse(response.body.text());
  
      } catch (e) {
