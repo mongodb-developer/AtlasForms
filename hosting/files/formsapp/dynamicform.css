@@ -14,7 +14,7 @@
     white-space: nowrap;
     float: left;
     vertical-align: middle;
-    font-size: small;
+    /*font-size: small;*/
 }
 
 .subdocumentlabel {
@@ -25,7 +25,7 @@
     float: left;
     min-width: calc(20vw - 2em);
     vertical-align: middle;
-    font-size: small;
+   /*font-size: small;*/
     width: calc (20vw - 16px);
 }
 
@@ -104,9 +104,14 @@ input[type="datetime-local"] {
 /* Each element in an array */
 
 .arrayelement {
-    padding: 2px;
-    margin-bottom: 5px; /* Space between items */
+    padding: 0.2em;
+    margin-bottom: 1em; /* Space between items */
     border-bottom: 1px solid var(--form-element-divider);
+    border-radius: 0;
+}
+
+.arrayelement:last-child {
+    border-bottom: none;
 }
 
 /*The (+) (X) buttons on array elements */
@@ -124,12 +129,14 @@ input[type="datetime-local"] {
 
 .arrayscroller {
     max-height: 10em;
-    resize: vertical;
+    resize: both;
     overflow: auto;
     padding: 0.5em;
     width: calc(78% - 2em);
+  
     border: 1px solid var(--form-element-divider);
     margin-bottom: 1em;
+    margin-top: 1em;
 }
 
 /* Allow arrays to be resized beyond initial content/size */
