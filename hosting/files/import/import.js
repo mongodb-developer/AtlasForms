@@ -4,7 +4,7 @@ function importOnLoad() {
     const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
 
     if (realmApp.currentUser == null) {
-      // We should not be here if we are already logged in
+      // We should not be here if we are not already logged in
       window.location.replace("/login/login.html");
     }
 
