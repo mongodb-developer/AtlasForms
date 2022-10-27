@@ -342,8 +342,7 @@ async function selectDocType() {
 
     // We only want to show the import button when the doctypes dropdown is selected
     if(vueApp.selectedDocType.title == 'AF_Doctypes') {
-      console.log('AF_Doctypes selected');
-      vueApp.showImport = true;
+           vueApp.showImport = true;
     }
     else {
       vueApp.showImport = false;

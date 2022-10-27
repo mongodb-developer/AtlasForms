@@ -109,25 +109,13 @@ appropriate message.
 - All Strings in a consts class, inc errors and fieldnames
 - 
 - Basic Import (Luce)
-  - Ask for ~~db.collection~~, ~~Name~~, ~~URL~~, ~~Fields for Listview~~ on form
-  - ~~Add  page with form for entry values needed~~
-    - ~~Namespace~~
-    - ~~Title~~
-    - ~~Listviewfields~~
-    - ~~URL~~
-    - Create import function
-        - [ ]  Request file from URL passed in (start with json)
-            - [ ]  If success
-                - [ ]  Check all listviewfield present in file (see what happens if they don’t match first)
-                    - [ ]  If success
-                        - [ ]  Write data to db and collection ($out)
-                        - [ ]  Add to doc types database
-                        - [ ]  Add message to report success
-                        - [ ]  Display button to navigate to formsapp
-                    - [ ]  If not
-                        - [ ]  Add message to report error
-            - [ ]  If not
-                - [ ]  Display modal to report error  
+  - ~~Add  page with form for entry values needed~~  
+  - Create import function
+    - ~~Request file from URL passed in (start with json)~~    
+    - ~~Write data to db and collection~~
+    - ~~Add to doc types database~~
+    - ~~Add message to report success or error~~
+    - ~~Display button to navigate to formsapp~~
 - ~~DocTypeSchema should be in doctype record~~
 
 - ~~Range Queries (> and < support)~~
