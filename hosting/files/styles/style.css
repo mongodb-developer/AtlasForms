@@ -13,10 +13,12 @@ wanted this to have minimal opinion on using external libraries */
     --form-element-divider: aliceblue;
     --light-brand-color: rgb(191, 220, 246);
     --bright-brand-color: rgb(108, 158, 251);
-    --bright-brand-contrast: rgb(33, 33, 33);
+    --bright-brand-contrast: rgb(143, 139, 139);
     font-size: medium;
     border: none;
     border-radius: 0.5em;
+    font-weight: 400;
+    color: var(--darkest-color);
   
 }
 
@@ -27,7 +29,7 @@ select {
 
 button {
     background-color: var(--bright-brand-color);
-    color: var(--bright-brand-contrast);
+    color: var(--darkest-color);
 }
 
 button:disabled {
@@ -42,3 +44,14 @@ body {
 html {
     overflow: hidden;
 }
+
+.formbutton {
+    padding: 0.1em 0.2em 0.1em 0.2em;
+    margin-top: 0.5em;
+   
+    min-width: 8em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
