@@ -1,7 +1,3 @@
 {
-    "enabled": false,
-    "mongo_service_name": "mongodb-atlas",
-    "database_name": "MongoAtlasFormUsers",
-    "collection_name": "Users",
-    "user_id_field": "userId"
+    "enabled": false
 }
