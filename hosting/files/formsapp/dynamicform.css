@@ -1,146 +1,211 @@
 .form_container {
-    /* Wraps the whole of the dynamic form */
-    padding: 0.5em;
+    padding: 3px;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 .dynamicformlabel {
-    /* Text label for any box on the form that's a value */
-
-    width: calc(19vw - 2em);
+    width: calc( 19vw - 3em ) ;
     text-transform: capitalize;
     text-align: left;
     white-space: nowrap;
     float: left;
     vertical-align: middle;
-    /*font-size: small;*/
+    font-size: small;
 }
 
 .subdocumentlabel {
-    /* Text label for any subdocument */
     text-transform: capitalize;
     text-align: left;
     white-space: nowrap;
     float: left;
-    min-width: calc(20vw - 2em);
+    min-width: calc( 20vw - 16px );
     vertical-align: middle;
-   /*font-size: small;*/
-    width: calc (20vw - 16px);
+    font-size: small;
 }
+
+
 
 .dynamicformvalue {
-    /*Rendering for text box on the form */
+
     white-space: pre-wrap;
+    /*border: 1px solid black;*/
+    border-radius: 4px;
+    background-color: white;
     resize: both;
+    /* Remove line below for labels above boxes*/
     float: left;
     clear: left;
-    display: block;
-    width: calc(19vw - 1em);
-    max-height: 5em; /* The largest it will appear based on content*/
-    min-height: 2em;
-    background-color: var(--lightest-color) ;
+    display:block;
+    width: calc( 19vw - 1em ) ;
+    max-height: 100px;
+    min-height: 26px;
     overflow: auto;
-}
-
-/* This means a manual resize can override the inital max-height*/
-.dynamicformvalue[style*="height"] {
-    max-height: unset;
+    border: 1px solid transparent;
+    border-top: none;
+    border-bottom: 1px solid #DDD;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 }
 
 .dynamicformvaluedate {
-    /*Rendering for tedatet box on the form */
-    min-height: 2em;
-    background-color: var(--lightest-color) ;
+    min-height: 26px;
+    border-radius: 4px;
+    background-color: white;
     clear: left;
+    /* Remove line below for labels above boxes*/
     float: left;
+   
+
     padding-right: 1em;
-    max-height: 2em;
+    
+    max-height: 100px;
     overflow: auto;
-    width: calc(19vw - 2.3em);
+    width: calc( 19vw - 2.3em ) ;
+    border: 1px solid transparent;
+    border-top: none;
+    border-bottom: 1px solid #DDD;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
 }
 
 
-/* Wrapper round a label and value*/
+.subdocumentlabel {
+    width: calc ( 20vw - 16px);
+   
+}
+
+  
+/* This means a manual resize can override the inital max-height*/
+
+.dynamicformvalue[style*="height"] {
+    max-height: unset;
+}
 
 .dynamicformitem {
     margin: 0px;
     padding-right: 1em;
     float: left;
     min-height: 3.2em;
+    border-radius: 4px;
 }
 
-/* Differrnt item sizes 1,2 and 5 columns wide*/
-.smallitem {
-    width: calc(19vw - 1em);
+.smallitem{
+    width: calc( 19vw - 1em ) ;
 }
 
 .mediumitem {
-    width: calc(38vw - 1em);
+    width:  calc( 38vw - 1em ) ;
 }
 
 .largeitem {
-    width: calc(95vw - 1em);
+    width:  calc( 95vw - 1em );
 }
 
-/*
 input[type="datetime-local"] {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border: 1 solid lightgrey;
-}*/
+     border: 1 solid lightgrey;
+}
 
-/* When an item is in a list - leave space after it for add-remove buttons*/
 .inlist {
-    width: calc(100% - 3.5em);
+ width: calc( 100% - 70px);
+ 
 }
 
-/* Wraps round a subrecord/sub document */
 .nested {
-    min-height: 4em;
-    border: 1px solid var(--form-element-divider);
-    margin-bottom: 1em;
-}
-
-/* Each element in an array */
+    border: 1px solid lightgrey;
+    min-height: 20px;
+    border-radius: 4px;
+  }
 
 .arrayelement {
-    padding: 0.2em;
-    margin-bottom: 1em; /* Space between items */
-    border-bottom: 1px solid var(--form-element-divider);
-    border-radius: 0;
+   background-color: white;
+   border-radius: 5px;
+   padding: 2px;
+   margin-bottom: 5px;
 }
 
-.arrayelement:last-child {
-    border-bottom: none;
-}
-
-/*The (+) (X) buttons on array elements */
 .arraybuttons {
     float: right;
-    padding-top: 0.1em;
+    padding-left: 5px;
+    padding-top: 1px;;
 }
-/* Added to Arrays and Sub objects to force them to take a new row*/
+
 .newline {
     clear: both;
-    width: calc(100vw - (100vw - 100%) - 1em); /*Subteact the scroll bar width*/
+    width: calc(100vw - (100vw - 100%) - 16px);
 }
-
-/* The scrollable div arrays are inside */
 
 .arrayscroller {
-    max-height: 10em;
-    resize: both;
+    max-height: 300px;
+    resize: vertical;
     overflow: auto;
-    padding: 0.5em;
-    width: calc(78% - 2em);
-  
-    border: 1px solid var(--form-element-divider);
-    margin-bottom: 1em;
-    margin-top: 1em;
+    padding: 5px;
+    border: 1px solid lightgrey;
+    width: calc( 78vw - 24px );
+    
 }
-
-/* Allow arrays to be resized beyond initial content/size */
 
 .arrayscroller[style*="height"] {
     max-height: unset;
+}
+
+div.listview {
+    border: 1 solid lightgrey;
+    max-height: 300px;
+
+    border-collapse: collapse;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+table.listview {
+    border-collapse: collapse;
+    border-spacing: 0px;
+    border: 1 solid lightgrey;
+    height: 300px;
+    display: flex;
+    table-layout: fixed;
+
+
+}
+th.listview {
+    x-width:0.1%;
+}
+
+tr.listview {
+    border: 1px solid lightgrey;
+}
+
+tr.selected {
+    background-color: lightgrey;
+}
+
+td.listview  {}
+
+th.listview {
+    padding: 0;
+    margin: 0px;
+    overflow: auto;
+    border: 1px solid lightgrey;
+}
+
+
+
+div.listviewheader {
+    margin: 0px 0px 0px 0px;
+    resize: horizontal;
+    overflow: auto;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-transform: capitalize;
+    font-weight: 300;
+}
+
+div.listviewitem {
+
+    overflow: clip;
+    word-break: break-all;
+    word-wrap: break-word;
+    height: 20px;
+
+
 }

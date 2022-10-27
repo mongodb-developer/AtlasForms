@@ -9,7 +9,6 @@ async function getPicklistValues(databaseName, collectionName, fieldName) {
 
     const pipeline = [sample, unwindArray, groupAll]
     picklist = await collection.aggregate(pipeline).toArray();
-
   } catch (e) {
     console.error(e);
   }
