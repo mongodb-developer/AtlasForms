@@ -385,6 +385,25 @@ function importDoc() {
   window.location.replace("../import/import.html");
 }
 
+
+function getLink(fieldname) {
+  if(vueApp?.selectedDocType?.links ) {
+    for(const link of vueApp?.selectedDocType?.links )
+    {
+      if(link.fromField == fieldname) {
+        //TODO - Check we can see that entity too otherwise dont show follow link
+        return link;
+      }
+    }
+  }
+  return false;
+}
+
+function followLink(fieldname) {
+  const linkInfo = getLink(fieldname);
+  console.log(linkInfo);
+}
+
 async function formsOnLoad() {
   const { createApp } = Vue
   const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID });
@@ -401,7 +420,7 @@ async function formsOnLoad() {
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
       getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
-      resultClick, deleteArrayElement, addArrayElement, classFromType, importDoc
+      resultClick, deleteArrayElement, addArrayElement, classFromType, importDoc,getLink,followLink
     },
     data() {
       return {

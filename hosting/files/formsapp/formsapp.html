@@ -338,7 +338,7 @@
 
                         <!-- Simple Top Level Fields, Render According to type (Date, Typeable) and if they have a picklist-->
                         <template v-else>
-                            <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
+                            <div class="dynamicformlabel">{{formatFieldname(name)}} <span class="doclink" @click="followLink(name)" v-if="getLink(name)">🔗</span></div>
                             <!-- Date-->
                             <input v-if="valtype == 'date'" :data-bsontype="valtype" v-on:input="formValueChange"
                                 class="dynamicformvaluedate" :disabled="editing == false" type="datetime-local"
