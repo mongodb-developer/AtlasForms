@@ -10,13 +10,15 @@ function importOnLoad() {
 
     vueApp = createApp({
         methods: {
-          //Method we call from  HTML
-          //log: console.log,
-          //logOut, selectDocType, formValueChange, runQuery, clearForm     
+          importDocType  
         },
         data() {
           return {
-            listViewFields: [],          
+            namespace: "",
+            importdoctypename: "",
+            importurl: "",
+            listviewfields: "",
+            message: ""          
           }
         },
         mounted() {
@@ -25,13 +27,12 @@ function importOnLoad() {
           //Also confiuses first login attempt for a new user with realmApp.
           this.realmApp = realmApp;         
         },
-      }).mount("#importapp");    
-
-      console.log(vueApp.listViewFields);
+      }).mount("#importapp");          
 }
-async function importDocType(namespace, name, url, listviewfields) {
+
+async function importDocType(namespace,importdoctypename,importurl,listviewfields) {
     try {
-      let { ok, message } = await vueApp.realmApp.currentUser.functions.importDocType(namespace,name,listviewfields,url)
+      let { ok, message } = await vueApp.realmApp.currentUser.functions.importDocType(namespace,importdoctypename,importurl,listviewfields)
     }
     catch(e) {
 
