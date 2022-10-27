@@ -1,22 +1,12 @@
 [
     {
-        "name": "commitEdit",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "newUserSignup",
-        "private": true
-    },
-    {
-        "name": "ADMIN_PicklistGenerator",
+        "name": "newAuthorization",
         "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "queryDocType",
+        "name": "importDocType",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -28,8 +18,18 @@
         "disable_arg_logs": true
     },
     {
-        "name": "newAuthorization",
-        "private": true,
+        "name": "getDocTypeSchemaInfo",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "newUserSignup",
+        "private": true
+    },
+    {
+        "name": "getListOfDoctypes",
+        "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
@@ -39,22 +39,9 @@
         "run_as_system": true
     },
     {
-        "name": "importDocType",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getListOfDoctypes",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getDocTypeSchemaInfo",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
+        "name": "verify_EDIT___atlasforms_doctypes",
+        "private": true,
+        "run_as_system": true
     },
     {
         "name": "lockDocument",
@@ -63,7 +50,18 @@
         "disable_arg_logs": true
     },
     {
-        "name": "createDocument",
+        "name": "queryDocType",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "utility_functions",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "commitEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -75,13 +73,15 @@
         "disable_arg_logs": true
     },
     {
-        "name": "verify_EDIT___atlasforms_doctypes",
-        "private": true,
-        "run_as_system": true
+        "name": "createDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     },
     {
-        "name": "sample_custom_verify",
+        "name": "ADMIN_PicklistGenerator",
         "private": true,
-        "run_as_system": true
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]
