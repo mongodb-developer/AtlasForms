@@ -17,10 +17,10 @@
         "namespacelab namespacetxt"
         "namelab nametxt"    
         "importurllab importurltxt"
-        "listviewfieldslab listviewfieldstxt"   
+        "listviewfieldslab listviewfieldstxt"
+        "importbut returntoformbut"
+        "importmsg importmsg"        
 }
-
-
 
 .namespacelab { grid-area: namespacelab}
 .namespacetxt { grid-area: namespacetxt}
@@ -33,3 +33,12 @@
 
 .listviewfieldslab { grid-area: listviewfieldslab}
 .listviewfieldstxt{ grid-area: listviewfieldstxt}
+
+.importmsg { grid-area: importmsg;
+             padding:1em;
+             text-align:center;
+}
+
+.importbut {grid-area: importbut}
+
+.returntoformbut { grid-area: returntoformbut}

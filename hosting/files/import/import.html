@@ -45,6 +45,10 @@
                 <button class="formbutton" @click="importDocType(namespace,importdoctypename,importurl,listviewfields)">Import</button>
             </div>
 
+            <div class="returntoformbut">
+                <button class="formbutton" v-show="!isBusy" @click="navToForm()">Return to Form</button>
+            </div>
+
             <div class="importmsg">
                 {{message}}
             </div>

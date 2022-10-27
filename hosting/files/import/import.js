@@ -10,7 +10,7 @@ function importOnLoad() {
 
     vueApp = createApp({
         methods: {
-          importDocType  
+          importDocType, navToForm  
         },
         data() {
           return {
@@ -18,7 +18,8 @@ function importOnLoad() {
             importdoctypename: "",
             importurl: "",
             listviewfields: "",
-            message: ""          
+            message: "",
+            isBusy: false       
           }
         },
         mounted() {
@@ -32,10 +33,20 @@ function importOnLoad() {
 
 async function importDocType(namespace,importdoctypename,importurl,listviewfields) {
     try {
+      vueApp.isBusy = true;
       let { ok, message } = await vueApp.realmApp.currentUser.functions.importDocType(namespace,importdoctypename,importurl,listviewfields);
       vueApp.message =  message;
+      vueApp.isBusy = false;
+      vueApp.namespace = "";
+      vueApp.importdoctypename = "";
+      vueApp.importurl = "";
+      vueApp.listviewfields = "";
     }
     catch(e) {
       vueApp.message = message;
     }
+}
+
+function navToForm() {
+  window.location.replace("../formsapp/formsapp.html");
 }
