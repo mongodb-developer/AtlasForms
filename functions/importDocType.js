@@ -1,18 +1,19 @@
 // This is for importing a document passed via url
 exports = async function (namespace, importdoctypename, importurl, listviewfields) {
-
-    namespace = "animals.monkeys";
-    importdoctypename = "Monkeys";
-    importurl = "https://www.montemagno.com/monkeys.json";
-    listviewfields = "Name,Location,Description";
+  
+   let rval = { ok: false, message: "No Error Message Set" };
     
     /*Get an Authorization object - should be standard in any non private function*/
     // const authorization = await context.functions.execute("newAuthorization", context.user.id);
     // if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
 
     const filetoimport = await fetchFile(importurl);
-    let rval = { ok: false, message: "No Error Message Set" };
-  
+    
+    if(importurl.slice(-4).toLowerCase() != 'json' )
+    {
+      rval = { ok: false, message: "URL not a json file" };
+    }
+   
     try {
         const [db, collection] = namespace.split('.');
 
@@ -29,6 +30,9 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
         const emptyCollPipeline = [{$indexStats: {}}, {$match: {luce:"awesome"}}, {$out: collection}];
         await importcoll.aggregate(emptyCollPipeline).toArray();
         importcoll.insertMany(filetoimport);
+        
+        await addToDocTypes(namespace,importdoctypename,listviewfields);
+        
         rval = { ok: true, message: "Succesfully imported to collection" };
     }
     catch (e) {
@@ -43,10 +47,38 @@ async function fetchFile(fileUrl) {
         const response = await context.http.get({
             url: fileUrl
         });
-
+       
         return JSON.parse(response.body.text());
 
     } catch (e) {
         console.log(`Error: ${e}`);
     }
+}
+
+// As well as import the data, we want to record that this is a new entity/doc type
+async function addToDocTypes(namespace,title,listviewfields) {
+  let rval = { ok: false, message: "No Error Message Set" };
+  
+  const doctypescoll = context.services.get("mongodb-atlas").db("__atlasforms").collection("doctypes");
+  
+  try {
+    const fields = listviewfields.split(',');
+    
+    if(fields.length >0) {
+      const newDocType = {
+        title: title,
+        namespace: namespace,
+        listViewFields: fields
+      };
+    
+      doctypescoll.replaceOne({title: title}, newDocType, {upsert: true});
+      rval = {ok: true, message: `Successfully added new doc type`};
+    }
+    
+    rval = {ok: false, message: "Listview fields not present" };
+  } 
+  catch (e) {
+    console.log(`Error adding to DocTypes: ${e}`)
+    rval = {ok: false, message: `Error adding to DocTypes: ${e}`};
+  }
 }
