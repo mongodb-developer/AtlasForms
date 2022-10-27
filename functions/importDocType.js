@@ -37,17 +37,16 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
         */
         const emptyCollPipeline = [{$indexStats: {}}, {$match: {luce:"awesome"}}, {$out: collection}];
         await importcoll.aggregate(emptyCollPipeline).toArray();
-        
-        if(Array.isArray(filetoimport)) {
-           importcoll.insertMany(filetoimport);
-        }
-        
-        else {
-          const arrayForInsert = [];
-          arrayForInsert.push(filetoimport);
-          importcoll.insertMany(arrayForInsert);
-        }
        
+        if(Array.isArray(filetoimport)) {
+          importcoll.insertMany(filetoimport);
+        }
+        else {
+          const newArrayToInsert = [];
+          newArrayToInsert.push(filetoimport);
+          importcoll.insertMany(newArrayToInsert);
+        }
+        
         
         await addToDocTypes(namespace,importdoctypename,listviewfields);
         
