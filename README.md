@@ -110,7 +110,7 @@ appropriate message.
 - 
 - Basic Import (Luce)
   - ~~Add  page with form for entry values needed~~  
-  - Create import function
+  - ~~Create import function~~
     - ~~Request file from URL passed in (start with json)~~    
     - ~~Write data to db and collection~~
     - ~~Add to doc types database~~

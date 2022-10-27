@@ -4,16 +4,9 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
     let rval = { ok: false, message: "No Error Message Set" };
      
      /*Get an Authorization object - should be standard in any non private function*/
-     // const authorization = await context.functions.execute("newAuthorization", context.user.id);
-     // if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
-     
-     if(namespace == undefined || importdoctypename == undefined || importurl == undefined || listviewfields == undefined)
-    {
-      namespace = "sample.people";
-      importdoctypename = "People";
-      importurl = "https://filesamples.com/samples/code/json/sample2.json";
-      listviewfields = "firstName,lastName,details";
-    }
+     const authorization = await context.functions.execute("newAuthorization", context.user.id);
+     if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
+    
 
      
      if(importurl.slice(-4).toLowerCase() != 'json' )
