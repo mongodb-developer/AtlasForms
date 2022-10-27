@@ -131,14 +131,16 @@ appropriate message.
 - ~~DocTypeSchema should be in doctype record~~
 
 - ~~Range Queries (> and < support)~~
-- Fuzzy (Atlas) Search
+- ~~Fuzzy (Atlas) Search~~
   
 - Linking 
   - Follow Links
   - Add Links
 
+- Generate demo setup - full set of picklists, bootstrap functions?
 - Error Handling review, Refactor, lint,tidy code
 - All Strings in a consts class, inc errors and fieldnames
+- 
 *** V1 at this point for reInvent ***
 
 
