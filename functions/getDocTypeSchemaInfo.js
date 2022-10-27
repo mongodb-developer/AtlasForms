@@ -8,25 +8,25 @@ a given collection. As it stands we just look at some of the existing docs*/
 
 
 exports = async function (docType) {
-  
-  /*Get an Authorization object - should be standard in any non private function*/
-  const authorization = await context.functions.execute("newAuthorization",context.user.id);
-  if( authorization == null ) { return {ok: false,  message: "User no Authorized" }; }
-  
-  //TODO - Change this to a specific security check that let's us manipulate the schema per person */
-  //For now it's see the whole schema if you can read the doc.
-  
-   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE,docType);
-   if(canSeeDoctype.granted == false) {
-      return {ok:false,message:canSeeDoctype.message};
-  }
-      
-  
+
+    /*Get an Authorization object - should be standard in any non private function*/
+    const authorization = await context.functions.execute("newAuthorization", context.user.id);
+    if (authorization == null) { return { ok: false, message: "User no Authorized" }; }
+
+    //TODO - Change this to a specific security check that let's us manipulate the schema per person */
+    //For now it's see the whole schema if you can read the doc.
+
+    const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE, docType);
+    if (canSeeDoctype.granted == false) {
+        return { ok: false, message: canSeeDoctype.message };
+    }
+
+
     /*Dynamically load some shared code*/
     utilityFunctions = await context.functions.execute("utility_functions");
-    const {namespace} = docType;
-    
-    if (["__atlasforms.doctypes","__atlasforms.picklists"].includes(namespace)) {
+    const { namespace } = docType;
+
+    if (["__atlasforms.doctypes", "__atlasforms.picklists"].includes(namespace)) {
         return { ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace) };
     }
 
@@ -77,7 +77,7 @@ async function generateDefaultSchemaInfo(namespace) {
     }
 
     const templateDoc = {};
-  
+
     for (let exampleDoc of exampleDocs) {
         addDocumentToTemplate(exampleDoc, templateDoc);
     }
@@ -97,28 +97,28 @@ async function generateDefaultSchemaInfo(namespace) {
 /* Also tries to estimate max length of strings */
 
 function addDocumentToTemplate(doc, templateDoc) {
-    
+
     //If doc is a simple scalar return the type
 
     if (typeof doc != 'object') {
         /*This is scalars in an array*/
         let doctype = typeof (doc)
-        if(doctype == 'string') {
-          doctype = `${doctype}:${doc.length}`
+        if (doctype == 'string') {
+            doctype = `${doctype}:${doc.length}`
         }
         return doctype;
     }
 
     // Iterate through the members adding each to the typemap
     for (let key of Object.keys(doc)) {
-        
+
         if (typeof doc[key] == "object") {
 
             let bsonType = utilityFunctions.getBsonType(doc[key]);
             if (['array', 'document'].includes(bsonType) == false) {
-               /* This is for Scalars which are bson objects like Date */
+                /* This is for Scalars which are bson objects like Date */
                 templateDoc[key] = bsonType;
-              
+
 
             } else
                 if (bsonType == 'array') {
@@ -148,30 +148,30 @@ function addDocumentToTemplate(doc, templateDoc) {
                 }
         } else {
             /* This is for scalar members of an object*/
-            
+
             let docType = typeof (doc[key])
-            const oldType =  templateDoc[key] 
-           
-            
+            const oldType = templateDoc[key]
+
+
             //Add length to strings - take largest we find
             if (docType == "string") {
-                const len =  doc[key].length;
-                if(oldType != undefined) {
-                  const parts = oldType.split(':')
+                const len = doc[key].length;
+                if (oldType != undefined) {
+                    const parts = oldType.split(':')
 
-                  if(parts.length == 2) {
-                    if(len > parts[1]) {
-                      docType =`${docType}:${len}`
-                    } else  {
-                      docType = oldType;
+                    if (parts.length == 2) {
+                        if (len > parts[1]) {
+                            docType = `${docType}:${len}`
+                        } else {
+                            docType = oldType;
+                        }
                     }
-                  }
                 } else {
-                  docType =`${docType}:${len}`
-                } 
-            } 
+                    docType = `${docType}:${len}`
+                }
+            }
             templateDoc[key] = docType
-           
+
         }
     }
     return templateDoc;
@@ -182,11 +182,11 @@ function addDocumentToTemplate(doc, templateDoc) {
 
 function getSystemDocTypeSchemaInfo(namespace) {
     if (namespace == "__atlasforms.doctypes") {
-        return { _id: "objectid", namespace: "string", title: "string", schema: "string", listViewFields: ["string"] };
+        return { _id: "objectid", namespace: "string", title: "string", schema: "string:1000", listViewFields: ["string"] };
 
     }
-    
-    if(namespace == '__atlasforms.picklists') {
-       return { _id: "objectid", database: "string", collection: "string", fieldname: "string", values: ["string"] };
+
+    if (namespace == '__atlasforms.picklists') {
+        return { _id: "objectid", database: "string", collection: "string", fieldname: "string", values: ["string"] };
     }
 }

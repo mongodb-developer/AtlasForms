@@ -31,23 +31,24 @@
             <div class="header">
 
                 <div class="left">
-                    <!-- odd binding as we do work on change to lookup details-->
-
                     <select class="doctypeselect" v-show="!currentDocLocked" name="docType" @change="selectDocType"
                         v-model="selectedDocType">
                         <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                     </select>
                     <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
+                        v-show="!currentDocLocked" class="headerbutton" @click="newRecord()"> Create </button>
+                    <input v-show="!currentDocLocked" class="searchbar" v-model="textquery" type="text" />
+                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
                         v-show="!currentDocLocked" class="headerbutton" @click="runQuery()"> Search </button>
-                    <button v-show="!currentDocLocked" :disabled="!selectedDocType.namespace" class="headerbutton"
+                        <button v-show="!currentDocLocked" :disabled="!selectedDocType.namespace" class="headerbutton"
                         @click="clearForm()"> Clear </button>
+                   
                     <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id == null"
                         v-show="!currentDocLocked" class="headerbutton" @click="editRecord()"> Edit </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit()"> Save Edits </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit(true)"> Cancel Edits
                     </button>
-                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
-                        v-show="!currentDocLocked" class="headerbutton" @click="newRecord()"> Create </button>
+                    
                 </div>
                 <div class="right">
                     <button v-show="!currentDocLocked" class="headerbutton" @click="logOut()"> Logout </button>
@@ -64,29 +65,33 @@
                                 :style="{width: (98/listViewFields.length) +'vw'}">{{formatFieldname(fieldname)}}</div>
                         </th>
                     </tr>
-                    <tr class="listview" :class="{selected:(result == currentDoc)}" v-for="result in results">
+                    <tr  :class="'listview '+ (( result == currentDoc && result.doc._id ) ? 'highlightitem' : '')" v-for="result in results">
                         <td @click="resultClick(result)" class="listview" v-for="fieldname in listViewFields">
-                            <div class="listviewitem"> {{ getFieldValue(result,fieldname) }} </div>
+                            <div class="listviewitem">{{ getFieldValue(result,fieldname) }} </div>
                         </td>
                     </tr>
                 </table>
             </div>
 
 
-            <!-- The code below may look daunting but it's relatively simple-->
-            <!-- Iterate over keys in the template and print the values from the document-->
-            <!-- Special cases are basially repeats for nested docs and arrays-->
-            <!-- there is no easy recursive definition option so that's why it's not pretty-->
+            <!-- The code below iterates over the 'Schema' in selectedDocTypeSchema-->
+            <!-- There is no recursion support so we explicity support only certain-->
+            <!-- levels of depth Top level Arrays and Arrays in top level nesteddocuments -->
+            <!-- can contain documents or scalars. Anything beyone that gets rendered as text-->
+            
+
+            <!-- We fetch the value for each named field if we have one otherwise blank -->
+            <!-- We keep track of any edits in fieldEdits - this isn't what Vue or any other reactive-->
+            <!-- framework expacts by default as there is no model backing each member so we have -->
+            <!-- slightly higher code complexity, sorry. -->
 
             <div class="formview_control">
                 <div class='form_container'>
-                    <!-- For each K,V pair in document-->
-                    <!-- In the line below we add class 'newline' if value is a document or array
-                      sorry that the code is ugly, put it in a function if it bothers you -->
+
                     <div class="dynamicformitem" v-for="(valtype,name) in selectedDocTypeSchema "
                         :set="value=getFieldValue(currentDoc,name)">
 
-                        <!-- Nested Document -  We are only supprting one level of nesting here -->
+                        <!-- Nested Document -->
                         <template v-if="getBsonType(valtype) == 'document'">
 
                             <div class="subdocumentlabel">{{formatFieldname(name)}}:</div>
@@ -94,7 +99,6 @@
                             <div class='form_container nested'>
                                 <div  class="dynamicformitem" v-for="(innervaltype,innername) in valtype "
                                     :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
-                                    <!-- Not supporting nested objects currently -->
                                     
                                     <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
 
@@ -129,7 +133,7 @@
                                                         :id=`${name}.${innername}.${arrayidx}.${elementname}`
                                                             :class="'dynamicformvalue' + classFromType(innervaltype)"
                                                             :data-bsontype="innervaltype" 
-                                                            :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])?nv:elementvalue" 
+                                                            :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])!=undefined?nv:elementvalue" 
                                                             type="text"
                                                             :list=`${name}.${innername}.${elementname}_picklist` v-on:input="formValueChange"/>
                                                         <datalist :id=`${name}.${innername}.${elementname}_picklist`>
@@ -163,7 +167,7 @@
                                                                 :id=`${name}.${innername}.${arrayidx}`
                                                                 :class="'dynamicformvalue' + classFromType(innervaltype)"
                                                                 :data-bsontype="innervaltype"
-                                                                :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])?nv:arrayElement" 
+                                                                :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])!=undefined?nv:arrayElement" 
                                                                  type="text"
                                                                 :list=`${name}.${innername}_picklist`  v-on:input="formValueChange" />
                                                             <datalist :id=`${name}.${innername}_picklist`>
@@ -209,7 +213,7 @@
                                             <!-- Has a picklist-->
                                             <input :disabled="editing == false" :id=`${name}.${innername}`
                                                 :class="'dynamicformvalue' + classFromType(valtype)"
-                                                :data-bsontype="valtype" :value="(nv=fieldEdits[`${name}.${innername}`])?nv:value"  type="text"
+                                                :data-bsontype="valtype" :value="(nv=fieldEdits[`${name}.${innername}`])!=undefined?nv:value"  type="text"
                                                 :list=`${name}.${innername}_picklist`  v-on:input="formValueChange"  />
                                             <datalist :id=`${name}.${innername}_picklist`>
                                                 <option
@@ -269,7 +273,7 @@
                                                         <input :disabled="editing == false"
                                                             :id=`${name}.${arrayidx}.${innername}`
                                                             :class="'dynamicformvalue' + classFromType(innervaltype)"
-                                                            :data-bsontype="innervaltype"  :value="(nv=fieldEdits[`${name}.${arrayidx}.${innername}`])?nv:innervalue" 
+                                                            :data-bsontype="innervaltype"  :value="(nv=fieldEdits[`${name}.${arrayidx}.${innername}`])!=undefined?nv:innervalue" 
                                                             type="text" :list=`${name}.${innername}_picklist`  v-on:input="formValueChange" />
                                                         <datalist :id=`${name}.${innername}_picklist`>
                                                             <option
@@ -302,7 +306,7 @@
                                                 <!-- Has a picklist-->
                                             
                                                <input :disabled="editing == false" :class="'dynamicformvalue inlist '"
-                                                    :data-bsontype="valtype" :value="(nv=fieldEdits[`${name}.${arrayidx}`])?nv:arrayElement" type="text"
+                                                    :data-bsontype="valtype" :value="(nv=fieldEdits[`${name}.${arrayidx}`])!=undefined?nv:arrayElement" type="text"
                                                     :list=`${name}_picklist` :id=`${name}.${arrayidx}`  v-on:input="formValueChange"  />
                                                 <datalist :id=`${name}_picklist`>
                                                     <option v-for="option in selectedDocType?.picklists?.[name]">
@@ -342,7 +346,7 @@
                                 <!-- Has a picklist-->
                                 <input :disabled="editing == false" :id="name"
                                     :class="'dynamicformvalue' + classFromType(valtype)" :data-bsontype="valtype"
-                                     :value="(nv=fieldEdits[name])?nv:value" type="text" :list=`${name}_picklist` v-on:input="formValueChange"  />
+                                     :value="(nv=fieldEdits[name])!=undefined?nv:value" type="text" :list=`${name}_picklist` v-on:input="formValueChange"  />
                                 <datalist :id=`${name}_picklist`>
                                     <option v-for="option in selectedDocType?.picklists?.[name]">{{option}}</option>
                                 </datalist>

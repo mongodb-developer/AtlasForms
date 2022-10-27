@@ -110,12 +110,12 @@ appropriate message.
 - 
 - Basic Import (Luce)
   - Ask for ~~db.collection~~, ~~Name~~, ~~URL~~, ~~Fields for Listview~~ on form
-  - [x]  Add  page with form for entry values needed
-    - [x]  Namespace
-    - [x]  Title
-    - [x]  Listviewfields
-    - [x]  URL
-    - [ ]  Create import function
+  - ~~Add  page with form for entry values needed~~
+    - ~~Namespace~~
+    - ~~Title~~
+    - ~~Listviewfields~~
+    - ~~URL~~
+    - Create import function
         - [ ]  Request file from URL passed in (start with json)
             - [ ]  If success
                 - [ ]  Check all listviewfield present in file (see what happens if they don’t match first)
@@ -130,13 +130,15 @@ appropriate message.
                 - [ ]  Display modal to report error  
 - ~~DocTypeSchema should be in doctype record~~
 
-- Range Queries
+- ~~Range Queries (> and < support)~~
 - Fuzzy (Atlas) Search
   
 - Linking 
   - Follow Links
   - Add Links
 
+- Error Handling review, Refactor, lint,tidy code
+- All Strings in a consts class, inc errors and fieldnames
 *** V1 at this point for reInvent ***
 
 
