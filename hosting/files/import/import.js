@@ -32,9 +32,10 @@ function importOnLoad() {
 
 async function importDocType(namespace,importdoctypename,importurl,listviewfields) {
     try {
-      let { ok, message } = await vueApp.realmApp.currentUser.functions.importDocType(namespace,importdoctypename,importurl,listviewfields)
+      let { ok, message } = await vueApp.realmApp.currentUser.functions.importDocType(namespace,importdoctypename,importurl,listviewfields);
+      vueApp.message =  message;
     }
     catch(e) {
-
+      vueApp.message = message;
     }
 }
