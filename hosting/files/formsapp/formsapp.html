@@ -49,6 +49,7 @@
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit()"> Save Edits </button>
                     <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit(true)"> Cancel Edits
                     </button>
+                    <button v-show="showImport" class="headerbutton" @click="importDoc()">Import</button>
                     
                 </div>
                 <div class="right">
