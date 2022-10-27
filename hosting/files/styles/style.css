@@ -1,93 +1,57 @@
 /* Minimalist CSS using only standard CSS not any library like bootstrap,
 wanted this to have minimal opinion on using external libraries */
 
-/* TODO: Replace all px with em or vw*/
+/* Very  global style elements like default font and colours */
 
-/* Very  global style elements */
+/* Defining a set of variables to make tweaking simple */
 
 * {
-    background-color: #F8F8F8;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: black;
-    font-size: 12pt;
+    --darkest-color: black;
+    --lightest-color: white;
+    --disabled-control-background: aliceblue;
+    --form-element-divider: aliceblue;
+    --light-brand-color: rgb(191, 220, 246);
+    --bright-brand-color: rgb(108, 158, 251);
+    --bright-brand-contrast: rgb(143, 139, 139);
+    font-size: medium;
+    border: none;
+    border-radius: 0.5em;
+    font-weight: 400;
+    color: var(--darkest-color);
+  
 }
 
+input,
+select {
+    min-height: 2em;
+}
+
+button {
+    background-color: var(--bright-brand-color);
+    color: var(--darkest-color);
+}
+
+button:disabled {
+    background-color: var(--disabled-control-background);
+    color: var(--bright-brand-contrast);
+}
+
+body {
+    background-color: var(--light-brand-color)
+}
 
 html {
     overflow: hidden;
 }
 
-/* All labels on forms includign login */
-.formlabel {
-    padding: 10px;
-}
-
-.headerbutton {
-    padding: 5px 10px 5px 10px;
-    background-color: white;
-    border-top: none;
-    border: none;
-    border-bottom: 1px solid #bbb;;
-    border-left: 1px solid  #bbb;;
-    border-radius: 4px;
-    margin: 0.5em;
-    min-width: 100px;
-}
-
-.searchbar {
-    padding: 5px 10px 5px 10px;
-    background-color: white;
-  
-    border: none;
-    border-top: 1px solid #bbb;;
-    border-right: 1px solid #bbb;;
-    border-radius: 4px;
-    margin: 0.5em;
-    margin-left: 3em;
-    width: 20vw;
-    min-width: 100px;
-}
-
-/* Buttons on forms */
-
 .formbutton {
-    padding: 5px 10px 5px 10px;
-    background-color: white;
-    background-color: white;
-
-    border: none;
-    border-bottom: 1px solid #bbb;;
-    border-left: 1px solid #bbb;
-    border-radius: 4px;
-    margin-top: 10px;
-    min-width: 100px;
+    padding: 0.1em 0.2em 0.1em 0.2em;
+    margin-top: 0.5em;
+   
+    min-width: 8em;
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-/*All data entry on forms including login etc. */
-.formwriteable {
-    /*border: 1px solid black;*/
-    background-color: white;
-    border: none;
-    border-bottom: 1px solid #DDD;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
-}
-
-.dynamicformvalue:not([contenteditable="true"]) {
-    background-color: #F0F0F0;
-}
-
-.dynamicformvaluedate:disabled {
-    background-color: lightgray;
-    color: grey
-}
-
-button:disabled {
-    color: lightgrey;
-}
-
-.highlightitem {
-    border: 2px solid black !important;
-}
+  }
+  

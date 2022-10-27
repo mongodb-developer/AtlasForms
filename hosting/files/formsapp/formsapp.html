@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../styles/style.css">
     <!--Layout and UI for this-->
     <link rel="stylesheet" href="formsapp_layout.css">
+    <link rel="stylesheet" href="listview.css">
     <link rel="stylesheet" href="dynamicform.css">
     <!-- Installation specific parameters-->
     <script src="/appConfig.js"></script>
@@ -131,7 +132,7 @@
                                                         v-else-if="selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
                                                         <input :disabled="editing == false"
                                                         :id=`${name}.${innername}.${arrayidx}.${elementname}`
-                                                            :class="'dynamicformvalue' + classFromType(innervaltype)"
+                                                            :class="'dynamicformvalue inlist ' + classFromType(innervaltype)"
                                                             :data-bsontype="innervaltype" 
                                                             :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])!=undefined?nv:elementvalue" 
                                                             type="text"
@@ -150,14 +151,14 @@
                                                                 :contenteditable="editing?true:null"
                                                                 :class="'dynamicformvalue inlist '   + classFromType(innervaltype) ">
                                                                 {{elementvalue}} </div>
-                                                            <br />
+                                                          
                                                         </div>
                                                     </template>
                                                     <template v-else> <!-- Scalar in an array in a document -->
                                                         <!-- Date -->
                                                         <input v-if="innervaltype == 'date'" v-on:input="formValueChange"
                                                             :id=`${name}.${innername}.${arrayidx}`
-                                                            :data-bsontype="innervaltype" class="dynamicformvaluedate inlist"
+                                                            :data-bsontype="innervaltype" class="dynamicformvaluedate inlist "
                                                             :disabled="editing == false" type="datetime-local"
                                                             :value="toDateTime(arrayElement)">
                                                         <!-- Picklist-->
@@ -165,7 +166,7 @@
                                                             v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
                                                             <input :disabled="editing == false"
                                                                 :id=`${name}.${innername}.${arrayidx}`
-                                                                :class="'dynamicformvalue' + classFromType(innervaltype)"
+                                                                :class="'dynamicformvalue  inlist'"
                                                                 :data-bsontype="innervaltype"
                                                                 :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])!=undefined?nv:arrayElement" 
                                                                  type="text"
@@ -184,7 +185,7 @@
                                                             :contenteditable="editing?true:null"
                                                             class="dynamicformvalue inlist">
                                                             {{arrayElement}} </div>
-                                                        <br />
+                                                      
                                                     </template>
 
                                                     <div class="arraybuttons">
@@ -228,7 +229,7 @@
                                             :data-bsontype="valtype" :contenteditable="editing?true:null"
                                             :class="'dynamicformvalue' + classFromType(valtype)">
                                             {{value}} </div>
-                                        <br />
+                                      
                                     </template>
                                 </div>
                             </div>
@@ -336,7 +337,7 @@
 
                         <!-- Simple Top Level Fields, Render According to type (Date, Typeable) and if they have a picklist-->
                         <template v-else>
-                            <div class="dynamicformlabel">{{formatFieldname(name)}}:</div>
+                            <div class="dynamicformlabel">{{formatFieldname(name)}} <span class="doclink" @click="followLink(name)" v-if="getLink(name)">🔗</span></div>
                             <!-- Date-->
                             <input v-if="valtype == 'date'" :data-bsontype="valtype" v-on:input="formValueChange"
                                 class="dynamicformvaluedate" :disabled="editing == false" type="datetime-local"
@@ -355,7 +356,7 @@
                             <div v-else v-on:input="formValueChange" :id="name" :data-bsontype="valtype"
                                 :contenteditable="editing ? true : null"
                                 :class="'dynamicformvalue' + classFromType(valtype)">{{value}} </div>
-                            <br />
+                           
                         </template>
                     </div>
                 </div>
