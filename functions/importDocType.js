@@ -6,9 +6,7 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
      /*Get an Authorization object - should be standard in any non private function*/
      const authorization = await context.functions.execute("newAuthorization", context.user.id);
      if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
-    
-
-     
+         
      if(importurl.slice(-4).toLowerCase() != 'json' )
      {
        rval = { ok: false, message: "URL not a json file" };
