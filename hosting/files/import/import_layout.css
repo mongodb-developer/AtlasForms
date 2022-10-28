@@ -12,13 +12,14 @@
     right: 0;
     margin: auto;
     display: grid;
+    row-gap: 1ch;
     grid-auto-rows: minmax(min-content, max-content);
     grid-template-areas:
         "namespacelab namespacetxt"
         "namelab nametxt"    
         "importurllab importurltxt"
         "listviewfieldslab listviewfieldstxt"
-        "importbut returntoformbut"
+        "returntoformbut importbut"
         "importmsg importmsg"        
 }
 
