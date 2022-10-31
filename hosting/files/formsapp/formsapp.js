@@ -144,7 +144,7 @@ async function newRecord() {
 
 async function resultClick(result) {
   if (result.downloaded == false) {
-
+     console.log(result);
     /* Download the full doc when we select it*/
     const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(
       vueApp.selectedDocType
@@ -293,6 +293,7 @@ function deleteArrayElement(name, index) {
 }
 
 async function runQuery() {
+
   try {
     //Send the fieldEdits to the server, we will process to the correct data type there
     //Avoid any injection also all will be strings at this point.
@@ -302,10 +303,11 @@ async function runQuery() {
       projection[fieldname] = 1
     }
 
-
+   
     const { ok, message, results } = await vueApp.realmApp.currentUser.functions.queryDocType(vueApp.selectedDocType
       , vueApp.fieldEdits, projection,vueApp.textquery);
 
+  
     if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
       vueApp.wrappedResults = [];
@@ -398,10 +400,45 @@ function getLink(fieldname) {
   return false;
 }
 
-function followLink(fieldname) {
+
+ async function autoSearch(namespace,query){
+
+  if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
+    vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
+    await vueApp.selectDocType();
+    vueApp.fieldEdits=query;
+    
+    vueApp.editing = true; //Can edit in empty form
+    await vueApp.runQuery();
+    console.log(vueApp.results[0]);
+    await resultClick(vueApp.results[0])
+  } else {
+    console.log("no vueApp yet, trying again")
+    setTimeout(()=>{autoSearch(namespace,query)},100)
+  }
+}
+
+async function followLink(fieldname) {
   const linkInfo = getLink(fieldname);
   console.log(linkInfo);
-}
+  //TODO check we are allowed to do this
+
+  //Open a new Tab If we don't have one for this entity type from here
+  let remote  = vueApp.childTabs[fieldname] ;
+
+  const query = {[linkInfo.tofield]:vueApp.currentDoc.doc[linkInfo.fromField]};
+  console.log(query);
+  if(remote == undefined || remote.closed) {
+    remote = window.open(window.location.href, 'fieldname');
+      vueApp.childTabs[fieldname] = remote;
+      remote.addEventListener('load',async ()=>{ await remote.autoSearch(linkInfo.namespace,query);}, true);
+   } else {
+    await remote.autoSearch(linkInfo.namespace,query);
+    
+   }
+  }
+  
+
 
 async function formsOnLoad() {
   const { createApp } = Vue
@@ -435,7 +472,8 @@ async function formsOnLoad() {
         modal_content: "test",
         show_modal: false,
         textquery: "",
-        showImport: false
+        showImport: false,
+        childTabs :{}
       }
     },
     mounted() {
