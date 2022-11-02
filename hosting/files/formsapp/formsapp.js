@@ -342,6 +342,14 @@ async function selectDocType() {
     // It would be simple to cache this info client end if we want to
     const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType);
 
+    // We only want to show the import button when the doctypes dropdown is selected
+    if(vueApp.selectedDocType.title == 'AF_Doctypes') {
+           vueApp.showImport = true;
+    }
+    else {
+      vueApp.showImport = false;
+    }
+
     vueApp.fieldEdits = {};
     vueApp.listViewFields = [];
     vueApp.results = Array(10).fill({}) //Empty and show columnheaders
@@ -372,6 +380,10 @@ async function selectDocType() {
     console.error(e)
     vueApp.selectedDocType = {}
   }
+}
+
+function importDoc() {
+  window.location.replace("../import/import.html");
 }
 
 
@@ -444,8 +456,7 @@ async function formsOnLoad() {
       logOut, selectDocType, formValueChange, runQuery, clearForm,
       editRecord, newRecord, toDateTime, getBsonType, watchColumnResizing,
       getFieldValue, formatFieldname, sortListviewColumn, commitEdit,
-      resultClick, deleteArrayElement, addArrayElement, classFromType,getLink,followLink
-
+      resultClick, deleteArrayElement, addArrayElement, classFromType, importDoc,getLink,followLink
     },
     data() {
       return {
@@ -461,6 +472,7 @@ async function formsOnLoad() {
         modal_content: "test",
         show_modal: false,
         textquery: "",
+        showImport: false,
         childTabs :{}
       }
     },

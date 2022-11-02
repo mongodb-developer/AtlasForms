@@ -34,13 +34,16 @@ appropriate message.
   - 
   
 ## Questions
+  - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters
+  - How Best oto handle date fields, are date pickers good
   - How do we *best* handle date not datetime?
+  - Will we add support for Range queries? If so how >5 in a text box
+  - How *critical* are dropdown picklists - Very!
+   
+## Known BUGS to fix
 
-## IMPORTANT BUGS to fix
-
-   - Server conversion of NUmbers is converting all to double!!
    - Last listview column needs to fill to end.
-   - Do we handle arrays of non string scalars? - test that and fix as required
+   - Do we handle arrays of non string scalarrs? - test that and fix as required
    - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
    - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
 
@@ -93,22 +96,26 @@ appropriate message.
 - Authorization [John Working on This now]
   - ~~User Details (and user editing?)~~
   - ~~Concepts of 'UserAdmin'~~
-  - ~~Pre Operation Trigger - allows cancellation or modification.~~
-  - ~~Read (Field Based)~~
-  - ~~Update (Field Based)~~
+  - Pre Operation Trigger - allows cancellation or modification.
+  - Read (Field Based)
+  - Update (Field Based)
 
-- ~~*Picklists* ~~
-  - ~~Picklist Config~~
-  - ~~Picklist Determination~~
+- *Picklists* (Key feature) (John)
+  - Picklist Config?
+  - Picklist Determination
   
 - ~~*Make it look nicer*~~~
-
+- Error Handling review, Refactor, lint,tidy code
+- All Strings in a consts class, inc errors and fieldnames
+- 
 - Basic Import (Luce)
-  - Ask for db.collection, Name, URL, Fields for Listview on form
-  - Empty existing if it exists (use $out in aggregation)
-  - Load the data
-  - May have 16MB limit for now!
-  -  
+  - ~~Add  page with form for entry values needed~~  
+  - ~~Create import function~~
+    - ~~Request file from URL passed in (start with json)~~    
+    - ~~Write data to db and collection~~
+    - ~~Add to doc types database~~
+    - ~~Add message to report success or error~~
+    - ~~Display button to navigate to formsapp~~
 - ~~DocTypeSchema should be in doctype record~~
 
 - ~~Range Queries (> and < support)~~
