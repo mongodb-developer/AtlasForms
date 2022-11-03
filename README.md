@@ -108,7 +108,7 @@ appropriate message.
 - Error Handling review, Refactor, lint,tidy code
 - All Strings in a consts class, inc errors and fieldnames
 - 
-- Basic Import (Luce)
+- ~~Basic Import (Luce)~~
   - ~~Add  page with form for entry values needed~~  
   - ~~Create import function~~
     - ~~Request file from URL passed in (start with json)~~    
@@ -127,6 +127,13 @@ appropriate message.
   - Add Links (Does this need done)
   
 - Bootstrap for CSS? (1 day sprint to see if this is quick)
+  - ~~Login~~
+  - ~~New User~~
+  - ~~Reset Password~~
+  - ~~Import~~
+  - Forms App
+
+
 - Generate demo setup - full set of picklists, bootstrap functions?
 - Error Handling review, Refactor, lint,tidy code
 - All Strings in a consts class, inc errors and fieldnames
