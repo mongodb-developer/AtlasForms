@@ -122,9 +122,11 @@ appropriate message.
 - ~~Fuzzy (Atlas) Search~~
   
 - Linking 
-  - Follow Links
-  - Add Links
-
+  - ~~Follow Links~~
+    - Add to non top level fields. 
+  - Add Links (Does this need done)
+  
+- Bootstrap for CSS? (1 day sprint to see if this is quick)
 - Generate demo setup - full set of picklists, bootstrap functions?
 - Error Handling review, Refactor, lint,tidy code
 - All Strings in a consts class, inc errors and fieldnames
