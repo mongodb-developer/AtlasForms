@@ -1,55 +1,69 @@
-<!DOCTYPE html>
-
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title> Atlas Forms</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Atlas Forms - Import</title>
+    <!-- Include the latest Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <!-- Include the latest Realm Web SDK from CDN-->
     <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
     <!-- Using vue.js in as lightweight way as possible-->
     <script src="https://unpkg.com/vue@3"></script>
-    <!--  Style sheet  -->
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="./import_layout.css">
     <!-- Installation specific parameters-->
     <script src="/appConfig.js"></script>
-    <!-- code for our import page -->
+    <!-- code for our login page -->
     <script src="./import.js"></script>
 </head>
-
 
 <body onLoad="importOnLoad()">
     <div id="importapp">
         <div class="importlayout">
-            <label for="namespace" class="formlabel namespacelab">Namespace (db.collection):</label>
-            <input type="text" class="formwriteable namespacetxt"
-                placeholder="Enter Namespace eg. sample_airbnb.listingsAndReviews" v-model="namespace" name="namespace"
-                required><br />
-
-            <label for="importdoctypename" class="formlabel namelab">Name:</label>
-            <input type="text" class="formwriteable nametxt" placeholder="Enter Name eg. Holiday Accomodations..."
-                v-model="importdoctypename" name="importdoctypename" required><br />
-
-            <label for="importurl" class="formlabel importurllab">URL of file for import:</label>
-            <input type="url" class="formwriteable importurltxt" placeholder="Enter URL..." v-model="importurl"
-                name="importurl" required><br />
-
-            <label for="listviewfields" class="formlabel listviewfieldslab">Fields to display in list view (comma
-                separated):</label>
-            <input type="text" class="formwriteable listviewfieldstxt" placeholder="Enter Listview fields..."
-                v-model="listviewfields" name="listviewfields" required></br>
-
-            <div class="importbut">
-                <button class="formbutton" @click="importDocType(namespace,importdoctypename,importurl,listviewfields)">Import</button>
-            </div>
-
-            <div class="returntoformbut">
-                <button class="formbutton" v-show="!isBusy" @click="navToForm()">Return to Form</button>
-            </div>
-
-            <div class="importmsg">
+            <form class="form-horizontal h-50 w-50 m-auto border" title="Import Data Form">
+                <div class="form-group m-2">
+                    <label for="namespace" class="control-label col-sm-6 h4">Namespace (db.collection):</label>
+                    <div class="col-sm-10" title="Namespace Entry">
+                        <input type="text" class="form-control" id="namespace"
+                            placeholder="Enter Namespace eg. sample_airbnb.listingsAndReviews" v-model="namespace"
+                            tabindex="0" required>
+                    </div>
+                </div>
+                <div class="form-group m-2">
+                    <label for="importdoctypename" class="control-label col-sm-6 h4">Name:</label>
+                    <div class="col-sm-10" title="Name Entry">
+                        <input type="text" class="form-control" id="importdoctypename"
+                            placeholder="Enter Name eg. Holiday Accomodations..." v-model="importdoctypename" required>
+                    </div>
+                </div>
+                <div class="form-group m-2">
+                    <label for="importurl" class="control-label col-sm-6 h4">URL of JSON file for import:</label>
+                    <div class="col-sm-10" title="Import URL Entry">
+                        <input type="url" class="form-control" id="importurl" placeholder="Enter URL..."
+                            v-model="importurl" required>
+                    </div>
+                </div>
+                <div class="form-group m-2">
+                    <label for="listviewfields" class="control-label col-sm-6 h4">Fields to display in list view (comma
+                        separated):</label>
+                    <div class="col-sm-10" title="Listview Fields Entry">
+                        <input type="text" class="form-control" id="listviewfields"
+                            placeholder="Enter Listview fields..." v-model="listviewfields" required>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <div class="col-sm-offset-2 col-sm-10"
+                        title="Import From URL Button">
+                        <input type="button" class="btn btn-primary m-2" id="importbut" value="Import"
+                        @click="importDocType(namespace,importdoctypename,importurl,listviewfields)"/>                     
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input v-show="!isBusy" type="button" class="btn btn-warning m-2" @click="navToForm()" value="Return to Form" />
+                </div>
+            </form>
+            <div class="text-center text-danger h5">
                 {{message}}
             </div>
         </div>
