@@ -32,6 +32,18 @@ function importOnLoad() {
 }
 
 async function importDocType(namespace,importdoctypename,importurl,listviewfields) {
+
+  if(!namespace.includes('.')) {
+    vueApp.message = "Namespace not properly defined";
+    return;
+   }
+       
+   if(importurl.slice(-4).toLowerCase() != 'json' )
+   {
+     vueApp.message = "URL not a json file";
+     return;
+   }
+
     try {
       vueApp.isBusy = true;
       let { ok, message } = await vueApp.realmApp.currentUser.functions.importDocType(namespace,importdoctypename,importurl,listviewfields);
@@ -43,7 +55,7 @@ async function importDocType(namespace,importdoctypename,importurl,listviewfield
       vueApp.listviewfields = "";
     }
     catch(e) {
-      vueApp.message = message;
+      vueApp.message = e;
     }
 }
 
