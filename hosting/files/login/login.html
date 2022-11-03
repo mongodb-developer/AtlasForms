@@ -40,11 +40,7 @@
                     <div class="col-sm-offset-2 col-sm-10 align-content-center justify-content-center"
                         title="Login Button">
                         <input type="button" class="btn btn-primary m-2" id="loginButton" value="Login" :disabled='email.length==0 || password.length==0'
-                        @click="passwordLogin(email,password)"/>
-
-                        <!-- <button type="submit" class="btn btn-primary m-2"
-                            :disabled='email.length==0 || password.length==0'
-                            @click="passwordLogin(email,password)">Login</button> -->
+                        @click="passwordLogin(email,password)"/>                     
                     </div>
                 </div>
                 <div class="form-group">
