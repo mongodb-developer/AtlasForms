@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Atlas Forms</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include the latest Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <!-- Include the latest Realm Web SDK from CDN-->
     <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
     <!-- Using vue.js in as lightweight way as possible-->
     <script src="https://unpkg.com/vue@3"></script>
-    <!--  Style sheet  -->
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="./login_layout.css">
     <!-- Installation specific parameters-->
     <script src="/appConfig.js"></script>
     <!-- code for our login page -->
@@ -20,33 +19,44 @@
 </head>
 
 <body onLoad="loginOnLoad()">
-    <div class="login" id="loginapp">
+    <div id="loginapp">
         <div class="loginlayout">
+            <form class="form-horizontal h-50 w-50 m-auto border" title="Login Form">
+                <div class="form-group m-2">
+                    <label class="control-label col-sm-2 h4" for="email">Email:</label>
+                    <div class="col-sm-10" title="Email Entry">
+                        <input type="email" class="form-control" id="email" placeholder="Enter email.." v-model="email"
+                            tabindex="0" required>
+                    </div>
+                </div>
+                <div class="form-group m-2">
+                    <label class="control-label col-sm-2 h4" for="pwd">Password:</label>
+                    <div class="col-sm-10" title="Password Entry">
+                        <input type="password" class="form-control" id="pwd" placeholder="Enter password.."
+                            v-model="password" required>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <div class="col-sm-offset-2 col-sm-10 align-content-center justify-content-center"
+                        title="Login Button">
+                        <input type="button" class="btn btn-primary m-2" id="loginButton" value="Login" :disabled='email.length==0 || password.length==0'
+                        @click="passwordLogin(email,password)"/>
 
-            <label for="email" class="formlabel userlab">Email</label>
-            <input type="text" class="formwriteable usertxt" placeholder="Enter Email" v-model="email"
-                name="email" required><br />
+                        <!-- <button type="submit" class="btn btn-primary m-2"
+                            :disabled='email.length==0 || password.length==0'
+                            @click="passwordLogin(email,password)">Login</button> -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary m-2" @click="newUser()" value="New User" />
+                    <input type="button" class="btn btn-primary m-2" @click="resetPassword()" value="Reset Password"/>
 
-            <label for="password" class="formlabel passlab">Password</label>
-            <input type="password" class="formwriteable passtxt" placeholder="Enter Password" v-model="password"
-                name="password" required><br />
-
-            <div class="loginbut formbutton">
-                <button class="formbutton" :disabled='email.length==0 || password.length==0' @click="passwordLogin(email,password)">Login</button>
-            </div>
-
-            
-            <button class="newuser formbutton"  @click="newUser()"> New User </button>
-            <button class="resetpass formbutton"  @click="resetPassword()"> Reset Password </button>
-            <div class="loginmsg">
+                </div>
+            </form>
+            <div class="text-center text-danger h5">
                 {{message}}
             </div>
-           
-           
         </div>
     </div>
+
 </body>
-
-</html>
-
-</html>

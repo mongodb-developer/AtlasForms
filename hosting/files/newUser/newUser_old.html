@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> Atlas Forms - New User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include the latest Realm Web SDK from CDN-->
+    <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+    <!-- Using vue.js in as lightweight way as possible-->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!--  Style sheet  -->
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="./newuser_layout.css">
+    <!-- Installation specific parameters-->
+    <script src="/appConfig.js"></script>
+    <!-- code for our login page -->
+    <script src="./newUser.js"></script>
+</head>
+
+<body onLoad="newUserOnLoad()">
+    <div class="newuser" id="app">
+        <div class="newuserlayout">
+
+            <label for="email" class="formlabel userlab">Email</label>
+            <input type="text" class="formwriteable usertxt" placeholder="Enter email" v-model="email"
+                name="email" required><br />
+
+            <label for="password" class="formlabel passlab">Password</label>
+            <input type="password" class="formwriteable passtxt" placeholder="Enter Password" v-model="password"
+                name="password" required><br />
+
+            <label for="password2" class="formlabel pass2lab">Password Again</label>
+            <input type="password" class="formwriteable pass2txt" placeholder="Enter Password again" v-model="password2"
+                name="password2" required><br />
+
+                
+            <button class="newuser formbutton" @click="registerNewUser(email,password,password2)"> Create User </button>
+            <button class="cancel formbutton" @click="cancel()"> Cancel </button>
+
+            <div class="message">
+                {{message}}
+            </div>
+
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+</html>

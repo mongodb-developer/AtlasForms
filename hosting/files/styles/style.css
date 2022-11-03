@@ -13,13 +13,14 @@ wanted this to have minimal opinion on using external libraries */
     --form-element-divider: aliceblue;
     --light-brand-color: rgb(191, 220, 246);
     --bright-brand-color: rgb(108, 158, 251);
-    --bright-brand-contrast: rgb(143, 139, 139);
-    font-size: medium;
+    --bright-brand-contrast: rgb(143, 139, 139);    
+    font-size: 1rem;
     border: none;
     border-radius: 0.5em;
     font-weight: 400;
     color: var(--darkest-color);
-  
+    box-sizing: border-box;
+    margin: 0;
 }
 
 input,
