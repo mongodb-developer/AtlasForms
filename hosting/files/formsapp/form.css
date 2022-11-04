@@ -1,0 +1,141 @@
+.af_listview {
+    max-height: 15em ;
+    height: 15em;
+    border-collapse: collapse;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Controls on our dynamic form */
+.af_forminput {
+    min-width: calc(19vw - 1em);
+    min-height: 2.3em;  
+}
+
+.af_form {
+    align-items: start;
+}
+.af_editdiv {
+    max-height: 5em; /* The largest it will appear based on content*/
+    white-space: pre-wrap;
+    resize: both;   
+    overflow: auto;
+}
+
+/* This means a manual resize can override the inital max-height*/
+.af_editdiv[style*="height"] {
+    max-height: unset;
+}
+
+/* 1, 2 or 5 wide Boxes */
+
+.af_small:not([style*="height"]) {
+    width: calc(19vw - 1em);
+}
+
+.af_medium:not([style*="height"]){
+    width: calc(38vw - 1em) !important;
+}
+
+.af_large:not([style*="height"]) {
+    width: calc(95vw - 1em);
+}
+
+/* Added to Arrays and Sub objects to force them to take a new row*/
+.af_newline:not([style*="height"]){
+    clear: both;
+    width: calc(100vw - (100vw - 100%) - 1em); /*Subtract the scroll bar width*/
+}
+
+.af_listviewheader {
+    resize: horizontal;
+    overflow: hidden;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-transform: capitalize;
+}
+.af_formview {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100vh - 21em);
+
+}
+.af_fieldlabel {
+    overflow: hidden;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-transform: capitalize;
+}
+
+.af_nestlabel {
+    width: calc(6vw - 1em);
+}
+
+
+.af_subdocument {
+    width: 97vw;
+    left: -2em;
+    align-items: start;
+}
+
+.af_inlist {
+   
+}
+
+/* The scrollable div arrays are inside */
+
+.af_arrayscroller {
+    max-height: 15em;
+    resize: both;
+    overflow: auto;
+    max-width: 99vw;
+    margin-left: -0.6em;
+}
+
+/* Allow arrays to be resized beyond initial content/size */
+
+.af_arrayscroller[style*="height"] {
+    max-height: unset;
+}
+
+
+
+/* The Modal (background) */
+.af_modal {
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+  }
+  
+  /* Modal Content/Box */
+  .af_modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 3em;
+    width: 80vw;
+    /* Could be more or less, depending on screen size */
+  }
+  
+
+/* The Close Button */
+.af_closebutton {
+    float: right;
+    font-size: 2em;
+    font-weight: bold;
+  }
+  
+  .af_closebutton:hover,
+  .af_closebutton:focus {
+    text-decoration: none;
+    cursor: pointer;
+  }

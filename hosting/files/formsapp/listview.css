@@ -2,7 +2,7 @@
 /* CSS Styling for the results list */
 
 div.listview {
-    max-height: 15em;
+    max-height: 25vh;
     border-collapse: collapse;
     overflow-y: auto;
     overflow-x: hidden;

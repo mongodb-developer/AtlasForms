@@ -4,17 +4,16 @@ let vueApp;
 
 function classFromType(valtype) {
 
-  let rval = "smallitem";
+  let rval = "af_small";
 
   //Document and Array field wrappers have their own class
   if (['document', 'array'].includes(getBsonType(valtype))) {
-    rval = " newline"
+    rval = " af_newline"
   } else {
     if (valtype.startsWith("string")) {
       const size = valtype.split(':')[1];
-      if (size > 30) { rval = "mediumitem" };
-      if (size > 150) { rval = "largeitem" };
-
+      if (size > 30) { rval = "af_medium" };
+      if (size > 150) { rval = "af_large" };
     }
   }
   return " " + rval /* Non Strings can be type small */
@@ -47,6 +46,7 @@ async function getListOfDocTypes() {
 function formAlert(message) {
   vueApp.show_modal = true;
   vueApp.modal_content = message ? message : "[Error Message Missing !]"
+
 }
 
 async function clearForm() {
@@ -119,6 +119,7 @@ async function commitEdit(cancel) {
     //Tell them Why not
     //TODO - Perhaps offer a 'Steal Lock' option in future depending
     //How long it's been locked for
+    console.log(appStrings.AF_DOC_CANNOT_LOCK(commitResult.message))
     formAlert(appStrings.AF_DOC_CANNOT_LOCK(commitResult.message))
   }
 }
@@ -352,7 +353,7 @@ async function selectDocType() {
 
     vueApp.fieldEdits = {};
     vueApp.listViewFields = [];
-    vueApp.results = Array(10).fill({}) //Empty and show columnheaders
+    vueApp.results = Array(7).fill({}) //Empty and show columnheaders
     vueApp.currentDoc = { doc: {} }
     await Vue.nextTick();
     if (!ok) {
