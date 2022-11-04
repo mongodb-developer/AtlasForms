@@ -13,11 +13,10 @@
     <!-- Using vue.js in as lightweight way as possible-->
     <script src="https://unpkg.com/vue@3"></script>
     <!--  Style sheet  -->
-    <link rel="stylesheet" href="../styles/style.css">
-    <!--Layout and UI for this-->
-    <link rel="stylesheet" href="formsapp_layout.css">
-    <link rel="stylesheet" href="listview.css">
-    <link rel="stylesheet" href="dynamicform.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="form.css">
+
     <!-- Installation specific parameters-->
     <script src="/appConfig.js"></script>
     <script src="./string_formating.js"></script>
@@ -26,53 +25,87 @@
     <script src="./formsapp.js"></script>
 </head>
 
-<body onLoad="formsOnLoad()">
+<body onLoad="formsOnLoad()" style="overflow-y: hidden">
     <div id="formsapp">
-        <div class="formsappouterlayout">
-            <div class="header">
+        <div class="container-fluid">
+            <!-- Navbar Buttons-->
+            <div class="row">
+                <div class="col">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+                        <span class="navbar-brand">Atlas Forms</span>
+                        <form class="form-inline my-2 my-lg-0 ">
+                            <select class="form-control mr-sm-2" v-show="!currentDocLocked" name="docType"
+                                @change="selectDocType" v-model="selectedDocType">
+                                <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
+                            </select>
 
-                <div class="left">
-                    <select class="doctypeselect" v-show="!currentDocLocked" name="docType" @change="selectDocType"
-                        v-model="selectedDocType">
-                        <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
-                    </select>
-                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
-                        v-show="!currentDocLocked" class="headerbutton" @click="newRecord()"> Create </button>
-                    <input v-show="!currentDocLocked" class="searchbar" v-model="textquery" type="text" />
-                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
-                        v-show="!currentDocLocked" class="headerbutton" @click="runQuery()"> Search </button>
-                        <button v-show="!currentDocLocked" :disabled="!selectedDocType.namespace" class="headerbutton"
-                        @click="clearForm()"> Clear </button>
-                   
-                    <button :disabled="!selectedDocType.namespace || currentDoc?.doc?._id == null"
-                        v-show="!currentDocLocked" class="headerbutton" @click="editRecord()"> Edit </button>
-                    <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit()"> Save Edits </button>
-                    <button v-show="currentDocLocked" class="headerbutton" @click="commitEdit(true)"> Cancel Edits
-                    </button>
-                    <button v-show="showImport" class="headerbutton" @click="importDoc()">Import</button>
-                    
+                            <button type="button" :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
+                                v-show="!currentDocLocked" class="btn btn-primary ml-5" @click="newRecord()"> Create
+                            </button>
+                            <div class="input-group ml-5">
+                                <input v-show="!currentDocLocked" class="form-control " v-model="textquery"
+                                    type="text" />
+                                <div class="input-group-append">
+                                    <button type="button"
+                                        :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
+                                        v-show="!currentDocLocked" class="btn btn-primary" @click="runQuery()"> Search
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <button type="button" v-show="!currentDocLocked" :disabled="!selectedDocType.namespace"
+                                class="btn btn-primary ml-5" @click="clearForm()"> Clear </button>
+
+                            <button type="button" :disabled="!selectedDocType.namespace || currentDoc?.doc?._id == null"
+                                v-show="!currentDocLocked" class="btn btn-primary ml-5" @click="editRecord()"> Edit
+                            </button>
+
+                            <button type="button" v-show="currentDocLocked" class="btn btn-primary"
+                                @click="commitEdit()"> Save Edits
+                            </button>
+                            <button type="button" v-show="currentDocLocked" class="btn btn-primary"
+                                @click="commitEdit(true)"> Cancel
+                                Edits
+                            </button>
+                            <button type="button" v-show="showImport" class="btn btn-primary"
+                                @click="importDoc()">Import</button>
+
+
+
+                            <button type="button" v-show="!currentDocLocked" class="btn btn-warning ml-5"
+                                @click="logOut()">
+                                Logout </button>
+
+                        </form>
+                    </nav>
+
                 </div>
-                <div class="right">
-                    <button v-show="!currentDocLocked" class="headerbutton" @click="logOut()"> Logout </button>
-                </div>
+
             </div>
 
-            <div class="listview_control">
-                <!-- This data *is* a table and so HTML Table is fine to use-->
-                <table class="listview" id="listviewheaderrow">
-                    <tr>
-                        <th @click="sortListviewColumn(fieldname)" class="listview"
-                            v-for="(fieldname,idx) in listViewFields">
-                            <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="listviewheader"
-                                :style="{width: (98/listViewFields.length) +'vw'}">{{formatFieldname(fieldname)}}</div>
-                        </th>
-                    </tr>
-                    <tr  :class="'listview '+ (( result == currentDoc && result.doc._id ) ? 'highlightitem' : '')" v-for="result in results">
-                        <td @click="resultClick(result)" class="listview" v-for="fieldname in listViewFields">
-                            <div class="listviewitem">{{ getFieldValue(result,fieldname) }} </div>
-                        </td>
-                    </tr>
-                </table>
+
+            <!-- List view fo results-->
+            <div class="row ">
+                <div class="col af_listview">
+                    <!-- This data *is* a table and so HTML Table is fine to use-->
+                    <table class="table table-bordered" id="listviewheaderrow">
+                        <tr class="table-primary">
+                            <th @click="sortListviewColumn(fieldname)" class=""
+                                v-for="(fieldname,idx) in listViewFields">
+                                <div :id="'lh_'+fieldname" :ref="watchColumnResizing" class="af_listviewheader"
+                                    :style="{width: (98/listViewFields.length) +'vw'}">{{formatFieldname(fieldname)}}
+                                </div>
+                            </th>
+                        </tr>
+                        <tr :class="(( result == currentDoc && result.doc._id ) ? 'af_highlightitem' : '')"
+                            v-for="result in results">
+                            <td @click="resultClick(result)" v-for="fieldname in listViewFields">
+                                <div>{{ getFieldValue(result,fieldname) }} </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
 
@@ -80,203 +113,175 @@
             <!-- There is no recursion support so we explicity support only certain-->
             <!-- levels of depth Top level Arrays and Arrays in top level nesteddocuments -->
             <!-- can contain documents or scalars. Anything beyone that gets rendered as text-->
-            
+
 
             <!-- We fetch the value for each named field if we have one otherwise blank -->
             <!-- We keep track of any edits in fieldEdits - this isn't what Vue or any other reactive-->
             <!-- framework expacts by default as there is no model backing each member so we have -->
             <!-- slightly higher code complexity, sorry. -->
 
-            <div class="formview_control">
-                <div class='form_container'>
+            <div class="row bg-light border-top ">
+                <div class="col af_formview">
+                    <form class="form-inline  align-items-start">
+                        <div class="form-group m-2" v-for="(valtype,name) in selectedDocTypeSchema "
+                            :set="value=getFieldValue(currentDoc,name)">
 
-                    <div class="dynamicformitem" v-for="(valtype,name) in selectedDocTypeSchema "
-                        :set="value=getFieldValue(currentDoc,name)">
+                            <!-- Nested Document -->
+                            <template v-if="getBsonType(valtype) == 'document'">
+                                <div class="d-flex flex-column align-items-start align-top">
 
-                        <!-- Nested Document -->
-                        <template v-if="getBsonType(valtype) == 'document'">
+                                    <label class=" af_fieldlabel" :for="name">{{formatFieldname(name)}}
+                                    </label>
 
-                            <div class="subdocumentlabel">{{formatFieldname(name)}}:</div>
+                                    <div class="form-inline border af_subdocument">
 
-                            <div class='form_container nested'>
-                                <div  class="dynamicformitem" v-for="(innervaltype,innername) in valtype "
-                                    :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
-                                    
-                                    <div class="dynamicformlabel">{{formatFieldname(innername)}}:</div>
+                                        <div class="form-group m-2 mt-0" v-for="(innervaltype,innername) in valtype "
+                                            :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
 
-                                    <!-- Is it An Array in a Document? -->
-                                    <template v-if="getBsonType(innervaltype) == 'array'">
-                                        <div class='dynamicformitem arrayscroller'>
-                                            <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
+                                            <div class="d-flex flex-column align-items-start align-top">
+
+
+                                                <label class="af_fieldlabel"
+                                                    :for="innername">{{formatFieldname(innername)}}
+                                                    <span class="ml-2" @click="followLink(innername)"
+                                                        v-if="!editing && getLink(innername)">🔗</span>
+                                                </label>
+
+                                                <!-- Is it An Array in a Document? -->
+                                                <template v-if="getBsonType(innervaltype) == 'array'">
+                                                    <div class='af_arrayscroller border '>
+                                                        <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
                                                 (typeof selectedDocTypeSchema[name][innername][0] == 'string' ? [''] : [{__xyzzy__:1}] )"
-                                                class="form_container arrayelement ">
+                                                            class="m-2">
 
-                                                <template
-                                                    v-if="!(fieldEdits[`${name}.${innername}.${arrayidx}`] == `$$REMOVE`)">
-                                                    <!-- Document in an Array in a Document-->
-                                                    <template v-if="getBsonType(arrayElement) == 'document'">
-                                                        <div class="dynamicformitem"
-                                                            v-for="(elementvaltype,elementname) in selectedDocTypeSchema[name][innername][0]"
-                                                            :set="elementvalue = getFieldValue({doc:arrayElement},elementname)">
+                                                            <template
+                                                                v-if="!(fieldEdits[`${name}.${innername}.${arrayidx}`] == `$$REMOVE`)">
+                                                                <!-- Document in an Array in a Document-->
+                                                                <template
+                                                                    v-if="getBsonType(arrayElement) == 'document'">
+                                                                    <div class="border mt-2">
+                                                                        <div class="form-group m-2"
+                                                                            v-for="(elementvaltype,elementname) in selectedDocTypeSchema[name][innername][0]"
+                                                                            :set="elementvalue = getFieldValue({doc:arrayElement},elementname)">
+                                                                            <div
+                                                                                class="d-flex flex-column align-items-start align-top">
 
-                                                            <div class="dynamicformlabel">
-                                                                {{formatFieldname(elementname)}}:</div>
-                                                            <!-- Date -->
-                                                            <input v-if="innervaltype == 'date'" v-on:input="formValueChange"
-                                                                :id=`${name}.${innername}.${arrayidx}.${elementname}`
-                                                                :data-bsontype="innervaltype"
-                                                                class="dynamicformvaluedate inlist"
-                                                                :disabled="editing == false" type="datetime-local"
-                                                                :value="toDateTime(elementvalue)">
-                                                             <!-- Picklist-->
-                                                        <div
-                                                        v-else-if="selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
-                                                        <input :disabled="editing == false"
-                                                        :id=`${name}.${innername}.${arrayidx}.${elementname}`
-                                                            :class="'dynamicformvalue inlist ' + classFromType(innervaltype)"
-                                                            :data-bsontype="innervaltype" 
-                                                            :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])!=undefined?nv:elementvalue" 
-                                                            type="text"
-                                                            :list=`${name}.${innername}.${elementname}_picklist` v-on:input="formValueChange"/>
-                                                        <datalist :id=`${name}.${innername}.${elementname}_picklist`>
-                                                            <option
-                                                                v-for="option in selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
-                                                                {{option}}
-                                                            </option>
-                                                        </datalist>
-                                                    </div>
-                                                    <!-- Text/Number -->
-                                                            <div v-else v-on:input="formValueChange"
-                                                                :id=`${name}.${innername}.${arrayidx}.${elementname}`
-                                                                :data-bsontype="innervaltype"
-                                                                :contenteditable="editing?true:null"
-                                                                :class="'dynamicformvalue inlist '   + classFromType(innervaltype) ">
-                                                                {{elementvalue}} </div>
-                                                          
+                                                                                <label class="af_fieldlabel"
+                                                                                    :for="elementname">{{formatFieldname(elementname)}}
+                                                                                    <span class="ml-2"
+                                                                                        @click="followLink(elementname)"
+                                                                                        v-if="!editing && getLink(elementname)">🔗</span>
+                                                                                </label>
+
+                                                                                <!-- Date -->
+                                                                                <input v-if="innervaltype == 'date'"
+                                                                                    v-on:input="formValueChange"
+                                                                                    :id=`${name}.${innername}.${arrayidx}.${elementname}`
+                                                                                    :data-bsontype="innervaltype"
+                                                                                    class="form-control af_forminput af_inlist"
+                                                                                    :disabled="editing == false"
+                                                                                    type="datetime-local"
+                                                                                    :value="toDateTime(elementvalue)">
+                                                                                <!-- Picklist-->
+                                                                                <template
+                                                                                    v-else-if="selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
+                                                                                    <input :disabled="editing == false"
+                                                                                        :id=`${name}.${innername}.${arrayidx}.${elementname}`
+                                                                                        class="form-control af_forminput af_inlist"
+                                                                                        :data-bsontype="innervaltype"
+                                                                                        :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])!=undefined?nv:elementvalue"
+                                                                                        type="text"
+                                                                                        :list=`${name}.${innername}.${elementname}_picklist`
+                                                                                        v-on:input="formValueChange" />
+                                                                                    <datalist
+                                                                                        :id=`${name}.${innername}.${elementname}_picklist`>
+                                                                                        <option
+                                                                                            v-for="option in selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
+                                                                                            {{option}}
+                                                                                        </option>
+                                                                                    </datalist>
+                                                                                </template>
+                                                                                <!-- Text/Number -->
+                                                                                <div v-else v-on:input="formValueChange"
+                                                                                    :id=`${name}.${innername}.${arrayidx}.${elementname}`
+                                                                                    :data-bsontype="innervaltype"
+                                                                                    :contenteditable="editing?true:null"
+                                                                                    class="form-control af_forminput af_editdiv af_inlist ">
+                                                                                    {{elementvalue}} </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </template>
+                                                                <template v-else>
+                                                                    <!-- Scalar in an array in a document -->
+                                                                    <!-- Date -->
+                                                                    <input v-if="innervaltype == 'date'"
+                                                                        v-on:input="formValueChange"
+                                                                        :id=`${name}.${innername}.${arrayidx}`
+                                                                        :data-bsontype="innervaltype"
+                                                                        class="form-control af_forminput  af_inlist "
+                                                                        :disabled="editing == false"
+                                                                        type="datetime-local"
+                                                                        :value="toDateTime(arrayElement)">
+                                                                    <!-- Picklist-->
+                                                                    <div
+                                                                        v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                        <input :disabled="editing == false"
+                                                                            :id=`${name}.${innername}.${arrayidx}`
+                                                                            class="form-control af_forminput  af_inlist"
+                                                                            :data-bsontype="innervaltype"
+                                                                            :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])!=undefined?nv:arrayElement"
+                                                                            type="text"
+                                                                            :list=`${name}.${innername}_picklist`
+                                                                            v-on:input="formValueChange" />
+                                                                        <datalist :id=`${name}.${innername}_picklist`>
+                                                                            <option
+                                                                                v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                                {{option}}
+                                                                            </option>
+                                                                        </datalist>
+                                                                    </div>
+                                                                    <!-- Text/Number -->
+                                                                    <div v-else v-on:input="formValueChange"
+                                                                        :id=`${name}.${innername}.${arrayidx}`
+                                                                        :data-bsontype="innervaltype"
+                                                                        :contenteditable="editing?true:null"
+                                                                        class="form-control af_forminput af_editdiv af_inlist">
+                                                                        {{arrayElement}} </div>
+
+                                                                </template>
+
+                                                                <div class="af_arraybuttons">
+                                                                    <span class="float-right fs-4 fw-bold"
+                                                                        v-on:click="addArrayElement(`${name}.${innername}`)"
+                                                                        v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                                                    <span
+                                                                        v-on:click="deleteArrayElement(`${name}.${innername}`,arrayidx)"
+                                                                        class="float-right fs-4 fw-bold">&otimes;</span>
+
+                                                                </div>
+                                                            </template>
                                                         </div>
-                                                    </template>
-                                                    <template v-else> <!-- Scalar in an array in a document -->
-                                                        <!-- Date -->
-                                                        <input v-if="innervaltype == 'date'" v-on:input="formValueChange"
-                                                            :id=`${name}.${innername}.${arrayidx}`
-                                                            :data-bsontype="innervaltype" class="dynamicformvaluedate inlist "
-                                                            :disabled="editing == false" type="datetime-local"
-                                                            :value="toDateTime(arrayElement)">
-                                                        <!-- Picklist-->
-                                                        <div
-                                                            v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                            <input :disabled="editing == false"
-                                                                :id=`${name}.${innername}.${arrayidx}`
-                                                                :class="'dynamicformvalue  inlist'"
-                                                                :data-bsontype="innervaltype"
-                                                                :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])!=undefined?nv:arrayElement" 
-                                                                 type="text"
-                                                                :list=`${name}.${innername}_picklist`  v-on:input="formValueChange" />
-                                                            <datalist :id=`${name}.${innername}_picklist`>
-                                                                <option
-                                                                    v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                                    {{option}}
-                                                                </option>
-                                                            </datalist>
-                                                        </div>
-                                                        <!-- Text/Number -->
-                                                        <div v-else v-on:input="formValueChange"
-                                                            :id=`${name}.${innername}.${arrayidx}`
-                                                            :data-bsontype="innervaltype"
-                                                            :contenteditable="editing?true:null"
-                                                            class="dynamicformvalue inlist">
-                                                            {{arrayElement}} </div>
-                                                      
-                                                    </template>
-
-                                                    <div class="arraybuttons">
-                                                        <span class="smallbutton"
-                                                            v-on:click="addArrayElement(`${name}.${innername}`)"
-                                                            v-if="!value || arrayidx==value?.length -1">&oplus;</span>
-                                                        <span
-                                                            v-on:click="deleteArrayElement(`${name}.${innername}`,arrayidx)"
-                                                            class="smallbutton">&otimes;</span>
-
                                                     </div>
-                                                </template>
-                                            </div>
-                                        </div>
-                                    </template>
-                                    <template v-else>
-                                        <!-- A Field inside a Document (subdoc.value)-->
-                                        <!-- Date-->
-                                        <input v-on:input="formValueChange" :id=`${name}.${innername}`
-                                            v-if="valtype == 'date'" :data-bsontype="valtype"
-                                            class="dynamicformvaluedate" :disabled="editing == false"
-                                            type="datetime-local" :value="toDateTime(value)">
+                                                </template> <!-- Arrays -->
+                                                <template v-else>
+                                                    <!-- A Field inside a Document (subdoc.value)-->
+                                                    <!-- Date-->
+                                                    <input v-on:input="formValueChange" :id=`${name}.${innername}`
+                                                        v-if="innervaltype == 'date'" :data-bsontype="innervaltype"
+                                                        class="form-control af_forminput" :disabled="editing == false"
+                                                        type="datetime-local" :value="toDateTime(value)">
 
-                                        <!-- Picklist-->
-                                        <div v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                            <!-- Has a picklist-->
-                                            <input :disabled="editing == false" :id=`${name}.${innername}`
-                                                :class="'dynamicformvalue' + classFromType(valtype)"
-                                                :data-bsontype="valtype" :value="(nv=fieldEdits[`${name}.${innername}`])!=undefined?nv:value"  type="text"
-                                                :list=`${name}.${innername}_picklist`  v-on:input="formValueChange"  />
-                                            <datalist :id=`${name}.${innername}_picklist`>
-                                                <option
-                                                    v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                    {{option}}
-                                                </option>
-                                            </datalist>
-                                        </div>
-
-                                        <!-- Text/Number -->
-                                        <div v-else v-on:input="formValueChange" :id=`${name}.${innername}`
-                                            :data-bsontype="valtype" :contenteditable="editing?true:null"
-                                            :class="'dynamicformvalue' + classFromType(valtype)">
-                                            {{value}} </div>
-                                      
-                                    </template>
-                                </div>
-                            </div>
-                        </template>
-
-                        <!-- Array -->
-                        <template v-else-if="getBsonType(valtype) == 'array'">
-                            <div class="subdocumentlabel">{{formatFieldname(name)}}:
-                            </div>
-                            <div class="dynamicformitem arrayscroller">
-                                <!-- If the Array is Empty we still need to show at least one member-->
-                                <!-- to allow for searching or adding a first element -->
-                                <!-- BUG? What about an array of non string types-->
-                                <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
-                                         (typeof selectedDocTypeSchema[name][0] == 'string' ? [''] : [{__xyzzy__:1}] )"
-                                    class='form_container arrayelement'>
-                                    <!-- With an Array, for each array memeber we repeat the top level code-->
-                                    <!-- Not adding code for nested arrays but will support arrays of objects-->
-
-                                    <!-- Hide the Elelement if its been deleted in edits-->
-                                    <template v-if="!(fieldEdits[`${name}.${arrayidx}`] == `$$REMOVE`)">
-                                        <!-- An Object in Top level Array (array.N.fieldname)-->
-                                        <template v-if="getBsonType(arrayElement) == 'document'">
-                                            <div class="inlist">
-                                                <div :class="'dynamicformitem '"
-                                                    v-for="(innervaltype,innername) in selectedDocTypeSchema[name][0]"
-                                                    :set="innervalue = getFieldValue({doc:arrayElement},innername)">
-
-                                                    <div class="dynamicformlabel"> {{formatFieldname(innername)}}:</div>
-                                                    <!-- Date -->
-                                                    <input v-if="innervaltype == 'date'" v-on:input="formValueChange"
-                                                        :id=`${name}.${arrayidx}.${innername}`
-                                                        :data-bsontype="innervaltype" class="dynamicformvaluedate"
-                                                        :disabled="editing == false" type="datetime-local"
-                                                        :value="toDateTime(innervalue)">
-
-
-                                                    <!-- Picklist -->
+                                                    <!-- Picklist-->
                                                     <div
                                                         v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
                                                         <!-- Has a picklist-->
-                                                        <input :disabled="editing == false"
-                                                            :id=`${name}.${arrayidx}.${innername}`
-                                                            :class="'dynamicformvalue' + classFromType(innervaltype)"
-                                                            :data-bsontype="innervaltype"  :value="(nv=fieldEdits[`${name}.${arrayidx}.${innername}`])!=undefined?nv:innervalue" 
-                                                            type="text" :list=`${name}.${innername}_picklist`  v-on:input="formValueChange" />
+                                                        <input :disabled="editing == false" :id=`${name}.${innername}`
+                                                            :class="' form-control ' +  classFromType(innervaltype) + ' af_forminput '"
+                                                            :data-bsontype="innervaltype"
+                                                            :value="(nv=fieldEdits[`${name}.${innername}`])!=undefined?nv:value"
+                                                            type="text" :list=`${name}.${innername}_picklist`
+                                                            v-on:input="formValueChange" />
                                                         <datalist :id=`${name}.${innername}_picklist`>
                                                             <option
                                                                 v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
@@ -285,94 +290,216 @@
                                                         </datalist>
                                                     </div>
 
-                                                    <!-- Text / Number -->
-                                                    <div v-else v-on:input="formValueChange"
-                                                        :id=`${name}.${arrayidx}.${innername}`
+                                                    <!-- Text/Number -->
+                                                    <div v-else v-on:input="formValueChange" :id=`${name}.${innername}`
                                                         :data-bsontype="innervaltype"
                                                         :contenteditable="editing?true:null"
-                                                        :class="'dynamicformvalue' + classFromType(innervaltype)">
-                                                        {{innervalue}}
+                                                        :class="' form-control ' +  classFromType(innervaltype) + ' af_forminput af_editdiv '">
+                                                        {{value}}
                                                     </div>
-                                                </div>
-                                        </template>
-                                        <!-- Scalar in an Top level Array-->
-                                        <template v-else>
-                                            <!-- Date-->
-                                            <input v-if="valtype == 'Date'" :data-bsontype="valtype"
-                                                v-on:input="formValueChange" :id=`${name}.${arrayidx}`
-                                                class="dynamicformvaluedate inlist" :disabled="editing == false"
-                                                type="datetime-local" :value="toDateTime(arrayElement)">
 
-                                            <!-- Picklist-->
-                                            <div v-else-if="selectedDocType?.picklists?.[name]">
-                                                <!-- Has a picklist-->
-                                            
-                                               <input :disabled="editing == false" :class="'dynamicformvalue inlist '"
-                                                    :data-bsontype="valtype" :value="(nv=fieldEdits[`${name}.${arrayidx}`])!=undefined?nv:arrayElement" type="text"
-                                                    :list=`${name}_picklist` :id=`${name}.${arrayidx}`  v-on:input="formValueChange"  />
-                                                <datalist :id=`${name}_picklist`>
-                                                    <option v-for="option in selectedDocType?.picklists?.[name]">
-                                                        {{option}}</option>
-                                                </datalist>
+                                                </template>
                                             </div>
-                                            <!-- Text/Number -->
-                                            <div v-else v-on:input="formValueChange" :id=`${name}.${arrayidx}`
-                                                :contenteditable="editing?true:null" :data-bsontype="valtype"
-                                                class="dynamicformvalue inlist">
-                                                {{arrayElement}} </div>
-                                        </template>
-                                        <!-- We need to be able to add and remove elements at all times-->
-                                        <!-- we may be doing data entry or querying multiple values -->
-                                        <div class="arraybuttons">
-                                            <span class="smallbutton" v-on:click="addArrayElement(name)"
-                                                v-if="!value || arrayidx==value?.length -1">&oplus;</span>
-                                            <span v-on:click="deleteArrayElement(name,arrayidx)"
-                                                class="smallbutton">&otimes;</span>
-
                                         </div>
-
-                                    </template>
+                                    </div>
                                 </div>
-                            </div>
-                        </template>
+                            </template>
 
-                        <!-- Simple Top Level Fields, Render According to type (Date, Typeable) and if they have a picklist-->
-                        <template v-else>
-                            <div class="dynamicformlabel">{{formatFieldname(name)}} <span class="doclink" @click="followLink(name)" v-if="!editing && getLink(name)">🔗</span></div>
-                            <!-- Date-->
-                            <input v-if="valtype == 'date'" :data-bsontype="valtype" v-on:input="formValueChange"
-                                class="dynamicformvaluedate" :disabled="editing == false" type="datetime-local"
-                                :value="toDateTime(value)" :id="name">
-                            <!-- Picklist-->
-                            <div v-else-if="selectedDocType?.picklists?.[name]">
-                                <!-- Has a picklist-->
-                                <input :disabled="editing == false" :id="name"
-                                    :class="'dynamicformvalue' + classFromType(valtype)" :data-bsontype="valtype"
-                                     :value="(nv=fieldEdits[name])!=undefined?nv:value" type="text" :list=`${name}_picklist` v-on:input="formValueChange"  />
-                                <datalist :id=`${name}_picklist`>
-                                    <option v-for="option in selectedDocType?.picklists?.[name]">{{option}}</option>
-                                </datalist>
-                            </div>
+                            <!-- Arrays At top Level -->
+                            <template v-else-if="getBsonType(valtype) == 'array'">
+                                <div class="d-flex flex-column align-items-start align-top">
+                                    <label class=" af_fieldlabel" :for="name">{{formatFieldname(name)}} </label>
+                                    <div class="af_arrayscroller border ml">
+                                        <!-- If the Array is Empty we still need to show at least one member-->
+                                        <!-- to allow for searching or adding a first element -->
+                                        <!-- BUG? What about an array of non string types-->
+                                        <div v-for="(arrayElement,arrayidx) in value?.length>0 ? value :
+                                         (typeof selectedDocTypeSchema[name][0] == 'string' ? [''] : [{__xyzzy__:1}] )"
+                                            class="m-2">
+                                            <!-- With an Array, for each array memeber we repeat the top level code-->
+                                            <!-- Not adding code for nested arrays but will support arrays of objects-->
+
+                                            <!-- Hide the Elelement if its been deleted in edits-->
+                                            <template v-if="!(fieldEdits[`${name}.${arrayidx}`] == `$$REMOVE`)">
+                                                <!-- An Object in Top level Array (array.N.fieldname)-->
+                                                <template v-if="getBsonType(arrayElement) == 'document'">
+                                                    <div class="af_inlist">
+                                                        <form class="form-inline border">
+                                                            <div class="form-group m-2 "
+                                                                v-for="(innervaltype,innername) in selectedDocTypeSchema[name][0]"
+                                                                :set="innervalue = getFieldValue({doc:arrayElement},innername)">
+                                                                <div
+                                                                    class="d-flex flex-column align-items-start align-top">
+
+                                                                    <label class="af_fieldlabel"
+                                                                        :for="name">{{formatFieldname(innername)}}
+                                                                        <span class="ml-2"
+                                                                            @click="followLink(innername)"
+                                                                            v-if="!editing && getLink(innername)">🔗</span>
+
+                                                                    </label>
+
+                                                                    <!-- Date -->
+                                                                    <input v-if="innervaltype == 'date'"
+                                                                        v-on:input="formValueChange"
+                                                                        :id=`${name}.${arrayidx}.${innername}`
+                                                                        :data-bsontype="innervaltype"
+                                                                        class="form-control af_forminput"
+                                                                        :disabled="editing == false"
+                                                                        type="datetime-local"
+                                                                        :value="toDateTime(innervalue)">
+
+
+                                                                    <!-- Picklist -->
+                                                                    <div
+                                                                        v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                        <!-- Has a picklist-->
+                                                                        <input :disabled="editing == false"
+                                                                            :id=`${name}.${arrayidx}.${innername}`
+                                                                            :class="' form-control ' +  classFromType(innervaltype) + ' af_forminput '"
+                                                                            :data-bsontype="innervaltype"
+                                                                            :value="(nv=fieldEdits[`${name}.${arrayidx}.${innername}`])!=undefined?nv:innervalue"
+                                                                            type="text"
+                                                                            :list=`${name}.${innername}_picklist`
+                                                                            v-on:input="formValueChange" />
+                                                                        <datalist :id=`${name}.${innername}_picklist`>
+                                                                            <option
+                                                                                v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                                {{option}}
+                                                                            </option>
+                                                                        </datalist>
+                                                                    </div>
+
+                                                                    <!-- Text / Number -->
+                                                                    <div v-else v-on:input="formValueChange"
+                                                                        :id=`${name}.${arrayidx}.${innername}`
+                                                                        :data-bsontype="innervaltype"
+                                                                        :contenteditable="editing?true:null"
+                                                                        :class="' form-control ' +  classFromType(innervaltype) + ' af_forminput af_editdiv '">
+
+                                                                        {{innervalue}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                        <!-- We need to be able to add and remove elements at all times-->
+                                                        <!-- we may be doing data entry or querying multiple values -->
+                                                        <div class="af_arraybuttons ">
+
+                                                            <span class="float-right fs-4 fw-bold "
+                                                                v-on:click="addArrayElement(name)"
+                                                                v-if="!value || arrayidx==value?.length-1">&oplus;</span>
+                                                            <span v-on:click="deleteArrayElement(name,arrayidx)"
+                                                                class="float-right fs-4 fw-bold">&otimes;</span>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                </template>
+                                                <!-- Scalar in an Top level Array-->
+                                                <template v-else>
+                                                    <!-- Date-->
+                                                    <input v-if="valtype == 'Date'" :data-bsontype="valtype"
+                                                        v-on:input="formValueChange" :id=`${name}.${arrayidx}`
+                                                        class="form-control af_forminput af_inlist"
+                                                        :disabled="editing == false" type="datetime-local"
+                                                        :value="toDateTime(arrayElement)">
+
+                                                    <!-- Picklist-->
+                                                    <template v-else-if="selectedDocType?.picklists?.[name]">
+                                                        <!-- Has a picklist-->
+
+                                                        <input :disabled="editing == false"
+                                                            class="form-control af_forminput af_inlist"
+                                                            :data-bsontype="valtype"
+                                                            :value="(nv=fieldEdits[`${name}.${arrayidx}`])!=undefined?nv:arrayElement"
+                                                            type="text" :list=`${name}_picklist`
+                                                            :id=`${name}.${arrayidx}` v-on:input="formValueChange" />
+                                                        <datalist :id=`${name}_picklist`>
+                                                            <option
+                                                                v-for="option in selectedDocType?.picklists?.[name]">
+                                                                {{option}}</option>
+                                                        </datalist>
+                                        </div>
+                            </template>
                             <!-- Text/Number -->
-                            <div v-else v-on:input="formValueChange" :id="name" :data-bsontype="valtype"
-                                :contenteditable="editing ? true : null"
-                                :class="'dynamicformvalue' + classFromType(valtype)">{{value}} </div>
-                           
-                        </template>
-                    </div>
+                            <div v-else v-on:input="formValueChange" :id=`${name}.${arrayidx}`
+                                :contenteditable="editing?true:null" :data-bsontype="valtype"
+                                class="form-control af_forminput af_editdiv af_inlist">
+                                {{arrayElement}} </div>
+
+                            <!-- We need to be able to add and remove elements at all times-->
+                            <!-- we may be doing data entry or querying multiple values -->
+                            <div class="af_arraybuttons">
+
+                                <span class="float-right fs-4 fw-bold " v-on:click="addArrayElement(name)"
+                                    v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                <span v-on:click="deleteArrayElement(name,arrayidx)"
+                                    class="float-right fs-4 fw-bold">&otimes;</span>
+
+                            </div>
+                            </template>
+                            </template>
+                        </div>
                 </div>
             </div>
+            </template>
 
-        </div>
-        <div v-show="show_modal" id="myModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span v-on:click="show_modal=false" class="close">&times;</span>
-                <p> {{modal_content}} </p>
-            </div>
+            <!-- Simple Top Level Fields, Render According to type (Date, Typeable) and if they have a picklist-->
+            <template v-else>
 
+                <div class="d-flex flex-column align-items-start align-top">
+
+                    <label class="af_fieldlabel" :for="name">{{formatFieldname(name)}} <span class="ml-2"
+                            @click="followLink(name)" v-if="!editing && getLink(name)">🔗</span> </label>
+
+                    <!-- Date-->
+                    <input v-if="valtype == 'date'" :data-bsontype="valtype" v-on:input="formValueChange"
+                        class="form-control af_forminput" :disabled="editing == false" type="datetime-local"
+                        :value="toDateTime(value)" :id="name">
+                    <!-- Picklist-->
+                    <div v-else-if="selectedDocType?.picklists?.[name]">
+                        <!-- Has a picklist-->
+                        <input :disabled="editing == false" :id="name" class="form-control af_forminput"
+                            :data-bsontype="valtype" :value="(nv=fieldEdits[name])!=undefined?nv:value" type="text"
+                            :list=`${name}_picklist` v-on:input="formValueChange" />
+                        <datalist :id=`${name}_picklist`>
+                            <option v-for="option in selectedDocType?.picklists?.[name]">{{option}}
+                            </option>
+                        </datalist>
+                    </div>
+                    <!-- Text/Number -->
+
+                    <div v-else v-on:input="formValueChange" :id="name" :data-bsontype="valtype"
+                        :contenteditable="editing ? true : null"
+                        :class="' form-control ' +  classFromType(valtype) + ' af_forminput af_editdiv '">
+                        {{value}} </div>
+                </div>
+
+            </template>
         </div>
+        </form>
     </div>
+
+
+    </div>
+
+
+
+    <div v-show="show_modal" id="myOldModal" class="af_modal">
+        <!-- Modal content -->
+        <div class="af_modal-content border text-danger ">
+            <span v-on:click="show_modal=false" class="af_closebutton">&times;</span>
+            <p> {{modal_content}} </p>
+        </div>
+
+    </div>
+
+
+    </div>
+    </div>
+
 
 </body>
 
