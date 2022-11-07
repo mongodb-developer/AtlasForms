@@ -42,11 +42,11 @@ appropriate message.
    
 ## Known BUGS to fix
 
-   - Last listview column needs to fill to end.
-   - Do we handle arrays of non string scalarrs? - test that and fix as required
-   - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
+   - - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
    - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
-
+   - Last listview column should to fill to end.
+   - Do we handle arrays of non string scalarrs? - test that and fix as required
+   
 
 ## Work in Progress / TODO / Ideas
 
@@ -96,13 +96,13 @@ appropriate message.
 - Authorization [John Working on This now]
   - ~~User Details (and user editing?)~~
   - ~~Concepts of 'UserAdmin'~~
-  - Pre Operation Trigger - allows cancellation or modification.
+  - ~~Pre Operation Trigger - allows cancellation or modification.~~
   - Read (Field Based)
-  - Update (Field Based)
+  - ~~Update (Field Based)~~
 
 - *Picklists* (Key feature) (John)
-  - Picklist Config?
-  - Picklist Determination
+  - ~~Picklist Config?~~
+  - ~~Picklist Determination~~
   
 - ~~*Make it look nicer*~~~
 - Error Handling review, Refactor, lint,tidy code
@@ -123,7 +123,7 @@ appropriate message.
   
 - Linking 
   - ~~Follow Links~~
-    - Add to non top level fields. 
+    - ~~Add to non top level fields.~~ 
   - Add Links (Does this need done)
   
 - Bootstrap for CSS? (1 day sprint to see if this is quick)
@@ -131,13 +131,29 @@ appropriate message.
   - ~~New User~~
   - ~~Reset Password~~
   - ~~Import~~
-  - Forms App
+  - ~~Forms App~~
 
+
+- Add an optional authorization for signup
+  - In ours if you have mongodb.com address then you get superuser
+  - Although we don't want others to implement that.
+- Fix Bugs noted above
+- create function  to auto generate *all* picklists for a source.
+  - Hook into import?? Or provide button to run somewhere?
+- Add an authorizarion hook *per document* on read
+
+- Find a wat to Lint the JS for
+  - use await not then
+  - non ES6 style?
+  - camel case
+  - use of global vars
+  - unchecked returns 
+  - All Strings in a consts class, inc errors and fieldnames client and server.
 
 - Generate demo setup - full set of picklists, bootstrap functions?
 - Error Handling review, Refactor, lint,tidy code
-- All Strings in a consts class, inc errors and fieldnames
-- 
+
+  
 *** V1 at this point for reInvent ***
 
 
