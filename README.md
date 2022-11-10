@@ -41,7 +41,6 @@ appropriate message.
   - How *critical* are dropdown picklists - Very!
    
 ## Known BUGS to fix
-   - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
    - Last listview column should to fill to end.
    - Do we handle arrays of non string scalarrs? - test that and fix as required
    - Outside of edit, you can click + on array elements but the newly created elements aren't editable
