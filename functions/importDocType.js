@@ -4,8 +4,13 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
     let rval = { ok: false, message: "No Error Message Set" };
      
      /*Get an Authorization object - should be standard in any non private function*/
-     const authorization = await context.functions.execute("newAuthorization", context.user.id);
-     if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
+    // const authorization = await context.functions.execute("newAuthorization", context.user.id);
+    // if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
+    
+    namespace = "sample.dictionary";
+    importdoctypename = "English";
+    importurl = "https://raw.githubusercontent.com/adambom/dictionary/master/graph.json";
+    listviewfields = "FUN";
      
     let filetoimport = await fetchFile(importurl);
      try {
@@ -24,26 +29,28 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
          const emptyCollPipeline = [{$indexStats: {}}, {$match: {luce:"awesome"}}, {$out: collection}];
          await importcoll.aggregate(emptyCollPipeline).toArray();
        
+       /* We want to better handle errors with insert.
+          1. If the file is an array then import many then add to doc types and return success and catch insert errors.
+          2. If the file is an object then create empty array, push object into array, insert array then add to doc types and return success and catch insert errors.
+          3. If neither then simply return error message.
+       */
         if(Array.isArray(filetoimport)) {
-           importcoll.insertMany(filetoimport);
+           await importcoll.insertMany(filetoimport);
+           return { ok: true, message: "Successfully imported file." };
+          
         }
-        else {
-          const newArrayToInsert = [];
-          newArrayToInsert.push(filetoimport);
-          importcoll.insertMany(newArrayToInsert);
+        else if(typeof filetoimport === 'object') {
+          await importcoll.insertOne(filetoimport);
+          return { ok: true, message: "Successfully imported file." };
         }
-         
         
-         await addToDocTypes(namespace,importdoctypename,listviewfields);
-         
-         rval = { ok: true, message: "Succesfully imported to collection" };
+        else {
+          return { ok: false, message: 'Unsupported import type' };
+        }
      }
      catch (e) {
-         console.log(`Error inserting imported file: ${e}`);
- 
          return { ok: false, message: `Error inserting imported file: ${e}` }
      }
-     return rval;
  }
  
  async function fetchFile(fileUrl) {
@@ -51,8 +58,13 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
          const response = await context.http.get({
              url: fileUrl
          });
-         
-         return JSON.parse(response.body.text());
+        if(typeof(response.body.text() === 'object')) {
+      
+           return EJSON.parse(response.body.text());
+        } 
+        else {
+          return EJSON.parse(response.body.text());
+        }
  
      } catch (e) {
          console.log(`Error: ${e}`);

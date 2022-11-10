@@ -105,7 +105,7 @@ appropriate message.
   - ~~Picklist Config?~~
   - ~~Picklist Determination~~
   
-- ~~*Make it look nicer*~~~
+- ~~*Make it look nicer*~~
 - Error Handling review, Refactor, lint,tidy code
 - All Strings in a consts class, inc errors and fieldnames
 - 

@@ -37,12 +37,6 @@ async function importDocType(namespace,importdoctypename,importurl,listviewfield
     vueApp.message = "Namespace not properly defined";
     return;
    }
-       
-   if(importurl.slice(-4).toLowerCase() != 'json' )
-   {
-     vueApp.message = "URL not a json file";
-     return;
-   }
 
     try {
       vueApp.isBusy = true;
