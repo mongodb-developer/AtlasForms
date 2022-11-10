@@ -51,7 +51,7 @@ function castDocToType(doc, objSchema, forQuery) {
       //Now based on that convert value and add to our new query
       try {
         let correctlyTypedValue = correctValueType(stripped, subobj)
-        if (correctlyTypedValue != null && correctlyTypedValue != "") {
+        if (correctlyTypedValue != null) {
           
           typedDoc[fieldName] = correctlyTypedValue
           if (forQuery && operators && operators.length==2) {
