@@ -42,10 +42,11 @@ appropriate message.
    
 ## Known BUGS to fix
 
-   - - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
+   - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
    - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
    - Last listview column should to fill to end.
    - Do we handle arrays of non string scalarrs? - test that and fix as required
+   - Outside of edit, you can click + on array elements but the newly created elements aren't editable
    
 
 ## Work in Progress / TODO / Ideas
@@ -142,6 +143,12 @@ appropriate message.
   - Hook into import?? Or provide button to run somewhere?
 - Add an authorizarion hook *per document* on read
 
+- Generate demo setup - full set of picklists, bootstrap functions?
+- Error Handling review, Refactor, lint,tidy code
+
+  
+*** V1 at this point for reInvent ***
+
 - Find a wat to Lint the JS for
   - use await not then
   - non ES6 style?
@@ -150,12 +157,11 @@ appropriate message.
   - unchecked returns 
   - All Strings in a consts class, inc errors and fieldnames client and server.
 
-- Generate demo setup - full set of picklists, bootstrap functions?
-- Error Handling review, Refactor, lint,tidy code
+- Hide buttons
+  - If a user doesn't have the permissions to do something, hide the buttons related to that, eg. no write permissions should mean edit  and create are hidden
 
-  
-*** V1 at this point for reInvent ***
-
+- Delete
+ - Users with the correct permissions should have the ability to delete a document
 
 - Mobile Layout CSS/swipes
 
