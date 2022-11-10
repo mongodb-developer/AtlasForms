@@ -41,8 +41,6 @@ appropriate message.
   - How *critical* are dropdown picklists - Very!
    
 ## Known BUGS to fix
-
-   - Edit/Select contents, press delete (Empty field) - doesn't work, have to replace with a space.
    - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
    - Last listview column should to fill to end.
    - Do we handle arrays of non string scalarrs? - test that and fix as required
