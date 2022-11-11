@@ -54,6 +54,11 @@
     word-wrap: break-word;
     text-transform: capitalize;
 }
+
+.af_listviewheader_last {
+  resize: none;
+}
+
 .af_formview {
     overflow-y: auto;
     overflow-x: hidden;
