@@ -13,6 +13,7 @@ class Authorization {
     this.READ_DOCTYPE = "READ"; /* User can see a given doctype */
     this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
     this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
+    this.READ_DOCUMENT = "READDOC"; /* User can read a specific document, only custom fn */
   }
 
   async lookupUser(user) {

@@ -56,6 +56,7 @@ exports = async function (docType, query, projection, textquery) {
   const authorization = await context.functions.execute("newAuthorization", context.user.id);
   if (authorization == null) { return { ok: false, message: "User no Authorized" }; }
 
+  //Check we can see this type at all - if we can see it we can read it.
   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE, docType);
   if (canSeeDoctype.granted == false) {
     return { ok: false, message: canSeeDoctype.message };
@@ -112,7 +113,7 @@ exports = async function (docType, query, projection, textquery) {
     let doc;
     do {
       doc = await cursor.next();
-      //TODO - Add AUTHZ check here
+      const canSeeDocument = await authorization.authorize(authorization.READ_DOCUMENT, docType, doc);
       results.push(doc);
     }
     while( results.length < MAX_RESULTS && doc != undefined);
