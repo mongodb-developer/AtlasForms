@@ -27,6 +27,11 @@
     max-height: unset;
 }
 
+.af_editdiv:not([contenteditable="true"]) {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
 /* 1, 2 or 5 wide Boxes */
 
 .af_small:not([style*="height"]) {
