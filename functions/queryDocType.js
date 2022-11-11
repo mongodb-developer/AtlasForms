@@ -86,11 +86,11 @@ exports = async function (docType, query, projection, textquery) {
 
  
  /* Previously we applied $limit/limit() to the queries however as we are now trying to getDocTypeSchemaInfo
- MAX_RESULTS *after* we apply authorization we instead keep track of result size */
- 
+ MAX_RESULTS *after* we apply authorization we instead keep track of result size , we alo dont use toArray() now*/
+     let results = [];
   try {
-    let results = [];
-    let cursor = {}
+
+    let cursor;
     // If we have a text query then send this via Atlas search
     if(textquery) {
       const atlasSearch = { $search : {  index: 'default', text: { query: textquery ,path: {'wildcard': '*'}}}};
@@ -121,6 +121,7 @@ exports = async function (docType, query, projection, textquery) {
     console.error(e);
     return { ok: false, message: `Error in Querying ${e}`, results: [] }
   }
+  
   return {ok:true,results}
 
 };
