@@ -98,7 +98,7 @@
                                 </div>
                             </th>
                         </tr>
-                        <tr :class="(( result == currentDoc && result.doc._id ) ? 'af_highligh titem' : '')"
+                        <tr :class="(( result == currentDoc && result.doc._id ) ? ' table-active' : '')"
                             v-for="result in results">
                             <td @click="resultClick(result)" v-for="fieldname in listViewFields">
                                 <div>{{ getFieldValue(result,fieldname) }} </div>
@@ -254,10 +254,10 @@
                                                                 <div class="af_arraybuttons">
                                                                     <span class="float-right fs-4 fw-bold"
                                                                         v-on:click="addArrayElement(`${name}.${innername}`)"
-                                                                        v-if="!value || arrayidx==value?.length -1">&oplus;</span>
+                                                                        v-show="editing && (!value || arrayidx==value?.length -1)">&oplus;</span>
                                                                     <span
                                                                         v-on:click="deleteArrayElement(`${name}.${innername}`,arrayidx)"
-                                                                        class="float-right fs-4 fw-bold">&otimes;</span>
+                                                                        v-show="editing" class="float-right fs-4 fw-bold">&otimes;</span>
 
                                                                 </div>
                                                             </template>
@@ -388,8 +388,8 @@
 
                                                             <span class="float-right fs-4 fw-bold "
                                                                 v-on:click="addArrayElement(name)"
-                                                                v-if="!value || arrayidx==value?.length-1">&oplus;</span>
-                                                            <span v-on:click="deleteArrayElement(name,arrayidx)"
+                                                                v-show="editing && (!value || arrayidx==value?.length-1)">&oplus;</span>
+                                                            <span v-show="editing" v-on:click="deleteArrayElement(name,arrayidx)"
                                                                 class="float-right fs-4 fw-bold">&otimes;</span>
 
                                                         </div>
@@ -434,8 +434,8 @@
                             <div class="af_arraybuttons">
 
                                 <span class="float-right fs-4 fw-bold " v-on:click="addArrayElement(name)"
-                                    v-if="!value || arrayidx==value?.length -1">&oplus;</span>
-                                <span v-on:click="deleteArrayElement(name,arrayidx)"
+                                    v-show="editing && (!value || arrayidx==value?.length -1)">&oplus;</span>
+                                <span v-show="editing" v-on:click="deleteArrayElement(name,arrayidx)"
                                     class="float-right fs-4 fw-bold">&otimes;</span>
 
                             </div>

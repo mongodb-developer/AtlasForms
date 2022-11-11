@@ -34,14 +34,14 @@ appropriate message.
   - 
   
 ## Questions
-  - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters
+  - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters maybe.
   - How Best oto handle date fields, are date pickers good
   - How do we *best* handle date not datetime?
   - Will we add support for Range queries? If so how >5 in a text box
   - How *critical* are dropdown picklists - Very!
    
 ## Known BUGS to fix
-   - Last listview column should to fill to end.
+   - ~~~Last listview column should to fill to end.~~~
    - Do we handle arrays of non string scalarrs? - test that and fix as required
    - Outside of edit, you can click + on array elements but the newly created elements aren't editable
    
