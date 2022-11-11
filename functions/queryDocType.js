@@ -111,9 +111,9 @@ exports = async function (docType, query, projection, textquery) {
     }
     let doc;
     do {
-      console.log(JSON.stringify(doc))
       doc = await cursor.next();
-      results.push[doc];
+      //TODO - Add AUTHZ check here
+      results.push(doc);
     }
     while( results.length < MAX_RESULTS && doc != undefined);
       
