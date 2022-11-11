@@ -10,7 +10,7 @@ class Authorization {
     this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
     this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
     this.PICKLIST_MANAGER = "PICKLIST_MANAGER"; /* Can edit dropdown*/
-    this.READ_DOCTYPE = "READ"; /* User can see a given doctype */
+    this.READ_DOCTYPE = "ACCESS"; /* User can see a given doctype */
     this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
     this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
     this.READ_DOCUMENT = "READDOC"; /* User can read a specific document (Can query)*/
