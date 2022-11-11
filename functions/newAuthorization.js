@@ -10,9 +10,10 @@ class Authorization {
     this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
     this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
     this.PICKLIST_MANAGER = "PICKLIST_MANAGER"; /* Can edit dropdown*/
-    this.READ_DOCTYPE = "READ"; /* User can see a given doctype */
+    this.READ_DOCTYPE = "ACCESS"; /* User can see a given doctype */
     this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
     this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
+    this.READ_DOCUMENT = "READDOC"; /* User can read a specific document (Can query)*/
   }
 
   async lookupUser(user) {
@@ -38,7 +39,7 @@ class Authorization {
 
     if (this.userRecord.isSuperUser) {
 
-      grant.granted = true;
+      grant.granted = true; /* Could still be denied by function*/
     }
 
     /*****************************/
@@ -50,7 +51,7 @@ class Authorization {
     //Simple one - Check user record permissions - This is a global permissions
     //If we cannot do this we cannot see the doctype
 
-    if ([this.READ_DOCTYPE, this.EDIT_DOCTYPE, this.CREATE_DOCTYPE].includes(type)) {
+    if ([this.READ_DOCTYPE, this.READ_DOCUMENT, this.EDIT_DOCTYPE, this.CREATE_DOCTYPE].includes(type)) {
       grant.message = "Not Allowed";
       for (const permission of this.userRecord.permissions) {
         if (permission.item == docType.namespace &&
@@ -60,8 +61,11 @@ class Authorization {
         }
       }
     }
+    
+    
 
     /* Execute a custom function for each operations/namspace combo*/
+    /*This can override the default*/
 
     try {
       if (docType) {
@@ -69,7 +73,7 @@ class Authorization {
         const fname = `verify_${type}_${docType.namespace.replace(/\./g, '_')}`
         const verify_fn = context.functions.execute(fname);
         if (verify_fn) {
-          verify_fn(grant, targetRecord, ...args);
+          verify_fn(grant, targetRecord, ...args); 
         }
       }
     } catch (e) {

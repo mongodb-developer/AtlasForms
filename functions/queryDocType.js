@@ -56,6 +56,7 @@ exports = async function (docType, query, projection, textquery) {
   const authorization = await context.functions.execute("newAuthorization", context.user.id);
   if (authorization == null) { return { ok: false, message: "User no Authorized" }; }
 
+  //Check we can see this type at all - if we can see it we can read it.
   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE, docType);
   if (canSeeDoctype.granted == false) {
     return { ok: false, message: canSeeDoctype.message };
@@ -84,9 +85,13 @@ exports = async function (docType, query, projection, textquery) {
   /* Handle Arrays correctly*/
   typedQuery = rewriteArrayQuery(typedQuery);
 
-
+ 
+ /* Previously we applied $limit/limit() to the queries however as we are now trying to getDocTypeSchemaInfo
+ MAX_RESULTS *after* we apply authorization we instead keep track of result size , we alo dont use toArray() now*/
+  let results = [];
   try {
-    
+
+    let cursor;
     // If we have a text query then send this via Atlas search
     if(textquery) {
       const atlasSearch = { $search : {  index: 'default', text: { query: textquery ,path: {'wildcard': '*'}}}};
@@ -95,20 +100,33 @@ exports = async function (docType, query, projection, textquery) {
       if(typedQuery && Object.keys(typedQuery).length > 0) {
         pipeline.push({$match:typedQuery})
       }
-      pipeline.push({$limit:MAX_RESULTS})
+    
       console.log(`Atlas Search: ${JSON.stringify(typedQuery, null, 2)}`)
-      const cursor = await collection.aggregate(pipeline)
-      const results = await cursor.toArray();
-      return { ok: true, results };//TODO - Return an OK/Fail
+       cursor = await collection.aggregate(pipeline)
+     
+    
     } else {
     console.log(`Query: ${JSON.stringify(typedQuery, null, 2)}`)
-    const cursor = await collection.find(typedQuery, projection).limit(MAX_RESULTS); 
-    const results = await cursor.toArray();
-    return { ok: true, results };//TODO - Return an OK/Fail
+     cursor = await collection.find(typedQuery, projection); 
+
     }
+    let doc;
+    do {
+      doc = await cursor.next();
+      const canSeeDocument = await authorization.authorize(authorization.READ_DOCUMENT, docType, doc);
+      console.log(JSON.stringify(canSeeDocument));
+      if(canSeeDocument?.granted == true) {
+        results.push(doc);
+      }
+    }
+    while( results.length < MAX_RESULTS && doc != undefined);
+      
+    
   } catch (e) {
     console.error(e);
     return { ok: false, message: `Error in Querying ${e}`, results: [] }
   }
+  
+  return {ok:true,results}
 
 };
