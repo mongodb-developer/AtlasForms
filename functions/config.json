@@ -83,5 +83,10 @@
         "name": "verify_EDIT___atlasforms_doctypes",
         "private": true,
         "run_as_system": true
+    },
+    {
+        "name": "verify_READDOC_sample_airbnb_listingsAndReviews",
+        "private": true,
+        "run_as_system": true
     }
 ]
