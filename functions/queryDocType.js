@@ -114,6 +114,7 @@ exports = async function (docType, query, projection, textquery) {
     do {
       doc = await cursor.next();
       const canSeeDocument = await authorization.authorize(authorization.READ_DOCUMENT, docType, doc);
+      console.log(JSON.stringify(canSeeDocument));
       if(canSeeDocument) {
         results.push(doc);
       }
