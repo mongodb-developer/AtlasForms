@@ -1,35 +1,6 @@
 [
     {
-        "name": "importDocType",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "commitEdit",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getPicklists",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "utility_functions",
-        "private": false,
-        "disable_arg_logs": true
-    },
-    {
         "name": "newAuthorization",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "internalCommitEdit",
         "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -44,18 +15,6 @@
         "run_as_system": true
     },
     {
-        "name": "ADMIN_PicklistGenerator",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getDocTypeSchemaInfo",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "createDocument",
         "private": false,
         "run_as_system": true,
@@ -68,13 +27,20 @@
         "disable_arg_logs": true
     },
     {
-        "name": "verify_EDIT___atlasforms_doctypes",
+        "name": "ADMIN_PicklistGenerator",
         "private": true,
-        "run_as_system": true
+        "run_as_system": true,
+        "disable_arg_logs": true
     },
     {
-        "name": "getListOfDoctypes",
+        "name": "commitEdit",
         "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "internalCommitEdit",
+        "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
     },
@@ -83,5 +49,39 @@
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
+    },
+    {
+        "name": "utility_functions",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getListOfDoctypes",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getPicklists",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "importDocType",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getDocTypeSchemaInfo",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "verify_EDIT___atlasforms_doctypes",
+        "private": true,
+        "run_as_system": true
     }
 ]

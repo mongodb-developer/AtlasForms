@@ -62,6 +62,7 @@ class Authorization {
     }
 
     /* Execute a custom function for each operations/namspace combo*/
+    /*This can override the default*/
 
     try {
       if (docType) {
