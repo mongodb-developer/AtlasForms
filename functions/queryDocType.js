@@ -87,7 +87,7 @@ exports = async function (docType, query, projection, textquery) {
  
  /* Previously we applied $limit/limit() to the queries however as we are now trying to getDocTypeSchemaInfo
  MAX_RESULTS *after* we apply authorization we instead keep track of result size , we alo dont use toArray() now*/
-     let results = [];
+  let results = [];
   try {
 
     let cursor;
@@ -111,6 +111,7 @@ exports = async function (docType, query, projection, textquery) {
     }
     let doc;
     do {
+      console.log(JSON.stringify(doc))
       doc = await cursor.next();
       results.push[doc];
     }
