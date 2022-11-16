@@ -2,7 +2,8 @@
 //Convert DB fieldname to nice visual
 
 function formatFieldname(name){
-   return name.replace(/[\._]/g,' ');
+  // Sometimes names can arrive as numbers so always convert names to string first.  
+   return String(name).replace(/[\._]/g,' ');
  }
 
 
