@@ -1,8 +1,8 @@
 {
-    "app_id": "atlasforms-qvbdx",
+    "app_id": "atlasforms-fiewc",
     "config_version": 20210101,
     "name": "AtlasForms",
     "location": "US",
     "provider_region": "aws-us-east-1",
-    "deployment_model": "GLOBAL" 
+    "deployment_model": "GLOBAL"
 }
