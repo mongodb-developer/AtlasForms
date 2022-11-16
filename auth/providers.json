@@ -1,23 +1,13 @@
 {
-    "anon-user": {
-        "name": "anon-user",
-        "type": "anon-user",
-        "disabled": true
-    },
-    "api-key": {
-        "name": "api-key",
-        "type": "api-key",
-        "disabled": true
-    },
     "local-userpass": {
         "name": "local-userpass",
         "type": "local-userpass",
         "config": {
             "autoConfirm": false,
             "confirmEmailSubject": "Confirm your  email for Atlas Forms user registration.",
-            "emailConfirmationUrl": "https://atlasforms-jgtbe.mongodbstitch.com/newUser/confirmEmail.html",
+            "emailConfirmationUrl": "https://atlasforms-ztybm.mongodbstitch.com/newUser/confirmEmail.html",
             "resetPasswordSubject": "Request to reset your Atlas Forms password.",
-            "resetPasswordUrl": "https://atlasforms-jgtbe.mongodbstitch.com/resetPassword/resetPassword.html",
+            "resetPasswordUrl": "https://atlasforms-ztybm.mongodbstitch.com/resetPassword/resetPassword.html",
             "runConfirmationFunction": false,
             "runResetFunction": false
         },
