@@ -7,10 +7,6 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
     // const authorization = await context.functions.execute("newAuthorization", context.user.id);
     // if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
     
-    namespace = "sample.dictionary";
-    importdoctypename = "English";
-    importurl = "https://raw.githubusercontent.com/adambom/dictionary/master/graph.json";
-    listviewfields = "FUN";
      
     let filetoimport = await fetchFile(importurl);
      try {

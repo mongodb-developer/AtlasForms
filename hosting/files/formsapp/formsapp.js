@@ -339,6 +339,9 @@ async function runQuery() {
 //User has changed the dropdown for the document type
 async function selectDocType() {
   vueApp.columnResizeObserver.disconnect()
+  await clearForm();
+  vueApp.results = Array(7).fill({}) // Adds nice visual lines to empty listviewfields
+
   try {
     // It would be simple to cache this info client end if we want to
     const { ok, docTypeSchemaInfo, message } = await vueApp.realmApp.currentUser.functions.getDocTypeSchemaInfo(vueApp.selectedDocType);
@@ -351,11 +354,6 @@ async function selectDocType() {
       vueApp.showImport = false;
     }
 
-    vueApp.fieldEdits = {};
-    vueApp.listViewFields = [];
-    vueApp.results = Array(7).fill({}) //Empty and show columnheaders
-    vueApp.currentDoc = { doc: {} }
-    await Vue.nextTick();
     if (!ok) {
       formAlert(appStrings.AF_SERVER_ERROR(message));
       vueApp.selectedDocType = {}

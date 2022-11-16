@@ -34,18 +34,14 @@ appropriate message.
   - 
   
 ## Questions
-  - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters
+  - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters maybe.
   - How Best oto handle date fields, are date pickers good
   - How do we *best* handle date not datetime?
   - Will we add support for Range queries? If so how >5 in a text box
   - How *critical* are dropdown picklists - Very!
    
 ## Known BUGS to fix
-   - Enter Jaws in movies title, change to Airbnb & Jaws value is in neighbourhood owner!
-   - Last listview column should to fill to end.
-   - Do we handle arrays of non string scalarrs? - test that and fix as required
-   - Outside of edit, you can click + on array elements but the newly created elements aren't editable
-   
+
 
 ## Work in Progress / TODO / Ideas
 
@@ -104,9 +100,7 @@ appropriate message.
   - ~~Picklist Determination~~
   
 - ~~*Make it look nicer*~~
-- Error Handling review, Refactor, lint,tidy code
-- All Strings in a consts class, inc errors and fieldnames
-- 
+
 - ~~Basic Import (Luce)~~
   - ~~Add  page with form for entry values needed~~  
   - ~~Create import function~~
@@ -123,8 +117,7 @@ appropriate message.
 - Linking 
   - ~~Follow Links~~
     - ~~Add to non top level fields.~~ 
-  - Add Links (Does this need done)
-  
+
 - Bootstrap for CSS? (1 day sprint to see if this is quick)
   - ~~Login~~
   - ~~New User~~
@@ -136,7 +129,7 @@ appropriate message.
 - Add an optional authorization for signup
   - In ours if you have mongodb.com address then you get superuser
   - Although we don't want others to implement that.
-- Fix Bugs noted above
+
 - create function  to auto generate *all* picklists for a source.
   - Hook into import?? Or provide button to run somewhere?
 - Add an authorizarion hook *per document* on read
@@ -144,8 +137,13 @@ appropriate message.
 - Generate demo setup - full set of picklists, bootstrap functions?
 - Error Handling review, Refactor, lint,tidy code
 
+- All Strings in a consts class, inc errors and fieldnames
+  
+
   
 *** V1 at this point for reInvent ***
+
+Test with - https://github.com/jdorfman/awesome-json-datasets
 
 - Find a wat to Lint the JS for
   - use await not then
@@ -161,7 +159,7 @@ appropriate message.
 - Delete
  - Users with the correct permissions should have the ability to delete a document
 
-- Mobile Layout CSS/swipes
+- Mobile Layout CSS/swipes (Lots of this bootstrap gives us)
 
 - Listview
   - Choose Columns from Cient
@@ -179,3 +177,5 @@ appropriate message.
 - Printing (Stylesheet)
 - Charts?
 - Acessability
+- Add Links (Does this need done)
+  

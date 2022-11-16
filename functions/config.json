@@ -1,35 +1,6 @@
 [
     {
-        "name": "importDocType",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "commitEdit",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getPicklists",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "utility_functions",
-        "private": false,
-        "disable_arg_logs": true
-    },
-    {
         "name": "newAuthorization",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "internalCommitEdit",
         "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -44,8 +15,25 @@
         "run_as_system": true
     },
     {
-        "name": "ADMIN_PicklistGenerator",
-        "private": true,
+        "name": "createDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getListOfDoctypes",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "utility_functions",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getPicklists",
+        "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
@@ -56,7 +44,30 @@
         "disable_arg_logs": true
     },
     {
-        "name": "createDocument",
+        "name": "ADMIN_PicklistGenerator",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "verify_READDOC_sample_airbnb_listingsAndReviews",
+        "private": true,
+        "run_as_system": true
+    },
+    {
+        "name": "importDocType",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "internalCommitEdit",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "commitEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -71,12 +82,6 @@
         "name": "verify_EDIT___atlasforms_doctypes",
         "private": true,
         "run_as_system": true
-    },
-    {
-        "name": "getListOfDoctypes",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
     },
     {
         "name": "queryDocType",
