@@ -26,6 +26,7 @@ exports = async function (docType) {
     utilityFunctions = await context.functions.execute("utility_functions");
     const { namespace } = docType;
 
+    //Not users - see comment below
     if (["__atlasforms.doctypes", "__atlasforms.picklists"].includes(namespace)) {
         return { ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace) };
     }
@@ -35,6 +36,11 @@ exports = async function (docType) {
     try {
         const docTypeInfo = await docTypeCollection.findOne({ namespace });
         if (docTypeInfo == null) {
+            //Users as an exception it should be admin customisable to add info like manager or telephone
+            //But by default it shoudl use the system definition
+            if(namespace == "__atlasforms.users") {
+                return { ok: true, docTypeSchemaInfo: getSystemDocTypeSchemaInfo(namespace) };
+            }
             return { ok: false, message: `Cannot find doctype description for ${namespace}` };
         }
         if (docTypeInfo.schema == null || docTypeInfo.schema.length < 3) {
@@ -189,5 +195,12 @@ function getSystemDocTypeSchemaInfo(namespace) {
 
     if (namespace == '__atlasforms.picklists') {
         return { _id: "objectid", database: "string", collection: "string", fieldname: "string", values: ["string"] };
+    }
+    
+    if(namespace == '__atlasforms.users') {
+      return {"_id":"string:24","type":"string:6","data":{"email":"string:23"},
+      "permissions":[{"item":"string:0","permissions":"string:0"}],
+      "isSuperUser":"boolean","custom_data":{},
+      "identities":[{"id":"string:24","provider_type":"string:14"}],"createdate":"date"}
     }
 }

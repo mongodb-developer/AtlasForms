@@ -21,31 +21,7 @@
         "disable_arg_logs": true
     },
     {
-        "name": "lockDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "ADMIN_PicklistGenerator",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "commitEdit",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "internalCommitEdit",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "queryDocType",
+        "name": "getListOfDoctypes",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -56,19 +32,7 @@
         "disable_arg_logs": true
     },
     {
-        "name": "getListOfDoctypes",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "getPicklists",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "importDocType",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -80,13 +44,49 @@
         "disable_arg_logs": true
     },
     {
-        "name": "verify_EDIT___atlasforms_doctypes",
+        "name": "ADMIN_PicklistGenerator",
         "private": true,
-        "run_as_system": true
+        "run_as_system": true,
+        "disable_arg_logs": true
     },
     {
         "name": "verify_READDOC_sample_airbnb_listingsAndReviews",
         "private": true,
         "run_as_system": true
+    },
+    {
+        "name": "importDocType",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "internalCommitEdit",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "commitEdit",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "lockDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "verify_EDIT___atlasforms_doctypes",
+        "private": true,
+        "run_as_system": true
+    },
+    {
+        "name": "queryDocType",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]
