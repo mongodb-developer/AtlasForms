@@ -4,5 +4,5 @@
     "name": "AtlasForms",
     "location": "US",
     "provider_region": "aws-us-east-1",
-    "deployment_model": "GLOBAL"
+    "deployment_model": "GLOBAL" 
 }
