@@ -151,3 +151,8 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  /* The import button*/
+  .af_importbutton {
+    margin-left: 0.5em;
+  }

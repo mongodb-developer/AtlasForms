@@ -52,16 +52,22 @@
                             placeholder="Enter Listview fields..." v-model="listviewfields" required>
                     </div>
                 </div>
-                <div class="form-group text-center">
+                <div class="form-group text-center" v-show="!isBusy">
                     <div class="col-sm-offset-2 col-sm-10"
                         title="Import From URL Button">
-                        <input type="button" class="btn btn-primary m-2" id="importbut" value="Import"
+                        <input  v-show="!isBusy" type="button" class="btn btn-primary m-2" id="importbut" value="Import"
                         @click="importDocType(namespace,importdoctypename,importurl,listviewfields)"/>                     
+                    </div>
+                </div>
+                <div class="form-group text-center" v-show="isBusy">
+                    <div class="col-sm-offset-2 col-sm-10"
+                        title="Import loading">
+                        <div class="spinner-border " role="status"></div>                 
                     </div>
                 </div>
                 <div class="form-group">
                     <input v-show="!isBusy" type="button" class="btn btn-warning m-2" @click="navToForm()" value="Return to Form" />
-                </div>
+                </div>         
             </form>
             <div class="text-center text-danger h5">
                 {{message}}
