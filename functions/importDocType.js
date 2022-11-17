@@ -4,8 +4,8 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
     let rval = { ok: false, message: "No Error Message Set" };
      
      /*Get an Authorization object - should be standard in any non private function*/
-    // const authorization = await context.functions.execute("newAuthorization", context.user.id);
-    // if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
+    const authorization = await context.functions.execute("newAuthorization", context.user.id);
+    if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
     
      
     let filetoimport = await fetchFile(importurl);
@@ -32,11 +32,13 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
        */
         if(Array.isArray(filetoimport)) {
            await importcoll.insertMany(filetoimport);
+           await addToDocTypes(namespace,importdoctypename,listviewfields);
            return { ok: true, message: "Successfully imported file." };
           
         }
         else if(typeof filetoimport === 'object') {
           await importcoll.insertOne(filetoimport);
+          await addToDocTypes(namespace,importdoctypename,listviewfields);
           return { ok: true, message: "Successfully imported file." };
         }
         
@@ -83,7 +85,7 @@ exports = async function (namespace, importdoctypename, importurl, listviewfield
          listViewFields: fields
        };
      
-       doctypescoll.replaceOne({title: title}, newDocType, {upsert: true});
+       await doctypescoll.replaceOne({title: title}, newDocType, {upsert: true});
        rval = {ok: true, message: `Successfully added new doc type`};
      }
      

@@ -74,22 +74,29 @@ async function generateDefaultSchemaInfo(namespace) {
 
     const removeLockingFields = { __locked: 0, __lockedby: 0, __lockedtime: 0 };
 
-    //TODO - Add try/catch
-    const exampleDocs = await collection.find({}, removeLockingFields).limit(10).toArray();
+    try {
+        const exampleDocs = await collection.find({}, removeLockingFields).limit(10).toArray();
 
-    if (exampleDocs.length == 0) {
-        console.log("No example doc");
-        return { ok: false, message: `No example document for namespace ${namespace}` };
+        if (exampleDocs.length == 0) {
+            console.log("No example doc");
+            return { ok: false, message: `No example document for namespace ${namespace}` };
+        }
+
+        const templateDoc = {};
+
+        for (let exampleDoc of exampleDocs) {
+            addDocumentToTemplate(exampleDoc, templateDoc);
+        }
+
+        console.log(JSON.stringify(templateDoc, null, 2));
+        return templateDoc;
+
     }
 
-    const templateDoc = {};
-
-    for (let exampleDoc of exampleDocs) {
-        addDocumentToTemplate(exampleDoc, templateDoc);
+    catch (e) {
+        console.error(e);
+        return { ok: false, message: `Error Generating Default Schema Info: ${e}` };
     }
-
-    console.log(JSON.stringify(templateDoc, null, 2));
-    return templateDoc;
 
 }
 
@@ -104,8 +111,12 @@ async function generateDefaultSchemaInfo(namespace) {
 
 function addDocumentToTemplate(doc, templateDoc) {
 
-    //If doc is a simple scalar return the type
+    // If the doc is null, we don't know the data type so we don't want to add it.
+    if (doc === null) {
+        return;
+    }
 
+    //If doc is a simple scalar return the type
     if (typeof doc != 'object') {
         /*This is scalars in an array*/
         let doctype = typeof (doc)
