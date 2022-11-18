@@ -14,6 +14,11 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 Change xxxab to your own appid throught this repo and import.
 
+## Known BUGS to fix
+- Needs a Delete Button
+- Need to verify field contents in AF_Doctypes
+- Offer sensible message if appid not set.
+
 ## Code Overview
 
 ## Decision Log
@@ -42,7 +47,6 @@ appropriate message.
   - Will we add support for Range queries? If so how >5 in a text box
   - How *critical* are dropdown picklists - Very!
    
-## Known BUGS to fix
 
 
 ## Work in Progress / TODO / Ideas
