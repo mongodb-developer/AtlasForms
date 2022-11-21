@@ -12,7 +12,7 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 ## Installation
 
-Change qvbdx to your own appid throught this repo and import.
+Change fiewc to your own appid throught this repo and import.
 
 ## Code Overview
 
