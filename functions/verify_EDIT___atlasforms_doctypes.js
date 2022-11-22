@@ -26,12 +26,12 @@ function verify(grant,targetRecord,proposedEdit)
           }
       }
         
-        if(proposed.title == undefined || proposedEdit.title == null || proposedEdit.title=="") {
+        if(proposedEdit.title == undefined || proposedEdit.title == null || proposedEdit.title=="") {
             grant.message = `Title is mandatory`;
             grant.granted=false;
         }
         
-       if(proposed.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="") {
+       if(proposedEdit.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="") {
             grant.message = `Namespace is mandatory`;
             grant.granted=false;
         }
