@@ -10,6 +10,8 @@ function verify(grant,targetRecord,proposedEdit)
 {
     grant.granted=true;
     grant.message = `Because it's against the rules.`
+    
+    try {
     if(proposedEdit && proposedEdit.schema ) {
       try{
         if(proposedEdit.schema.length >3)
@@ -33,11 +35,14 @@ function verify(grant,targetRecord,proposedEdit)
         grant.granted=false;
     }
     
-    if(proposed.namespace.split('.').length != 2) {
+    if(proposedEdit.namespace.split('.').length != 2) {
        grant.message = `Namespace must be database.collection`;
         grant.granted=false;
     }
-    
+    } catch(e) {
+      console.log(e);
+      grant.granted = false; //Fail on error
+    }
     //console.log(JSON.stringify(proposedEdit));
     return true; //True - it made a change
 }
