@@ -9,38 +9,38 @@
 function verify(grant,targetRecord,proposedEdit)
 {
     grant.granted=true;
-    grant.message = `Because it's against the rules.`
+    grant.message = ``
     
     try {
     if(proposedEdit && proposedEdit.schema ) {
       try{
-        if(proposedEdit.schema.length >3)
-        {
-          JSON.parse(proposedEdit.schema)
+          if(proposedEdit.schema.length >3)
+          {
+            JSON.parse(proposedEdit.schema)
+          }
+        } catch(e) {
+          console.log("NOPE Bad Schema!")
+          grant.message = `Schema is invalid JSON - ${e}`;
+          grant.granted=false;
         }
-      } catch(e) {
-        console.log("NOPE Bad Schema!")
-        grant.message = `Schema is invalid JSON - ${e}`;
-        grant.granted=false;
       }
-    }
-    
-    if(proposed.title == undefined || proposedEdit.title == null || proposedEdit.title=="") {
-        grant.message = `Title is mandatory`;
-        grant.granted=false;
-    }
-    
-   if(proposed.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="") {
-        grant.message = `Namespace is mandatory`;
-        grant.granted=false;
-    }
-    
-    if(proposedEdit.namespace.split('.').length != 2) {
-       grant.message = `Namespace must be database.collection`;
-        grant.granted=false;
-    }
+      
+      if(proposed.title == undefined || proposedEdit.title == null || proposedEdit.title=="") {
+          grant.message = `Title is mandatory`;
+          grant.granted=false;
+      }
+      
+     if(proposed.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="") {
+          grant.message = `Namespace is mandatory`;
+          grant.granted=false;
+      }
+      
+      if(proposedEdit.namespace.split('.').length != 2) {
+         grant.message = `Namespace must be database.collection`;
+          grant.granted=false;
+      }
     } catch(e) {
-      console.log(e);
+      grant.message = ""
       grant.granted = false; //Fail on error
     }
     //console.log(JSON.stringify(proposedEdit));
