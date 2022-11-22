@@ -425,7 +425,8 @@ async function followLink(fieldname) {
   //Open a new Tab If we don't have one for this entity type from here
   let remote  = vueApp.childTabs[fieldname] ;
 
-  const query = {[linkInfo.tofield]:vueApp.currentDoc.doc[linkInfo.fromField]};
+  const value = getFieldValue(vueApp.currentDoc,linkInfo.fromField);
+  const query = {[linkInfo.tofield]:value};
   console.log(query);
   if(remote == undefined || remote.closed) {
     remote = window.open(window.location.href, 'fieldname');
@@ -433,7 +434,6 @@ async function followLink(fieldname) {
       remote.addEventListener('load',async ()=>{ await remote.autoSearch(linkInfo.namespace,query);}, true);
    } else {
     await remote.autoSearch(linkInfo.namespace,query);
-    
    }
   }
   
