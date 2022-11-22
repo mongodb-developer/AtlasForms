@@ -28,17 +28,17 @@ function verify(grant,targetRecord,proposedEdit)
       
       console.log(JSON.stringify(targetRecord));
         
-        if(proposedEdit && (proposedEdit.title == undefined || proposedEdit.title == null || proposedEdit.title=="")) {
+        if(proposedEdit && proposedEdit.title == "") {
             grant.message = `Title is mandatory`;
             grant.granted=false;
         }
         
-       if(proposedEdit && (proposedEdit.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="")) {
+       if(proposedEdit &&  proposedEdit.namespace=="") {
             grant.message = `Namespace is mandatory`;
             grant.granted=false;
         }
         
-        if(proposedEdit && proposedEdit.namespace.split('.').length != 2) {
+        if(proposedEdit && proposedEdit.namespace && proposedEdit.namespace.split('.').length != 2) {
            grant.message = `Namespace must be database.collection`;
             grant.granted=false;
         }
