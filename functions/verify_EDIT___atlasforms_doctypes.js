@@ -25,6 +25,8 @@ function verify(grant,targetRecord,proposedEdit)
             grant.granted=false;
           }
       }
+      
+      console.log(JSON.stringify(targetRecord));
         
         if(proposedEdit && (proposedEdit.title == undefined || proposedEdit.title == null || proposedEdit.title=="")) {
             grant.message = `Title is mandatory`;
