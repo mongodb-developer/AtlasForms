@@ -13,7 +13,7 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 ## Installation
 
 
-Change gvbdx to your own appid throught this repo and import.
+Change qvbdx to your own appid throught this repo and import.
 
 ## Known BUGS to fix
 - Needs a Delete Button
