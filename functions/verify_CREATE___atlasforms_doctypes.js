@@ -45,13 +45,17 @@ function verify(grant,proposedEdit)
         }
         
         if(proposedEdit) {
-          
+          console.log(JSON.stringify(proposedEdit));
           for(let edit in proposedEdit) {
             
-            if( edit.startsWith("listviewfields.") && proposedEdit[edit].includes("\n"))
+            if( edit.startsWith("listviewfields.") )
             {
-              grant.granted = false;
-              grant.message += ` ${edit} ${proposedEdit[edit]} has a newline in it, this is not allowed `
+              console.log(edit,proposedEdit[edit]);
+                if( proposedEdit[edit].includes("\n"))
+                {
+                grant.granted = false;
+               grant.message += ` ${edit} ${proposedEdit[edit]} has a newline in it, this is not allowed `
+             }
             }
           }
         }
