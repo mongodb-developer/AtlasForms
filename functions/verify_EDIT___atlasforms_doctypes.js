@@ -26,17 +26,17 @@ function verify(grant,targetRecord,proposedEdit)
           }
       }
         
-        if(proposedEdit.title == undefined || proposedEdit.title == null || proposedEdit.title=="") {
+        if(proposedEdit && (proposedEdit.title == undefined || proposedEdit.title == null || proposedEdit.title=="")) {
             grant.message = `Title is mandatory`;
             grant.granted=false;
         }
         
-       if(proposedEdit.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="") {
+       if(proposedEdit && (proposedEdit.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="")) {
             grant.message = `Namespace is mandatory`;
             grant.granted=false;
         }
         
-        if(proposedEdit.namespace.split('.').length != 2) {
+        if(proposedEdit && proposedEdit.namespace.split('.').length != 2) {
            grant.message = `Namespace must be database.collection`;
             grant.granted=false;
         }
