@@ -14,6 +14,9 @@ exports = async function (arg) {
   const nonSystemDocTypes = await docTypeCollection.find({}).toArray();
   for (const docType of nonSystemDocTypes) {
 
+    if(docType.namespace == undefined || docType.namespace == "" || docType.namespace == null) continue;
+    if(docType.title == undefined || docType.title == "" || docType.title == null) continue;
+     
     if (!docType.namespace.startsWith("__atlasforms")) {
       const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE, docType);
       if (canSeeDoctype.granted) {
