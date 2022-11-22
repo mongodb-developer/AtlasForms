@@ -45,7 +45,9 @@ function verify(grant,proposedEdit)
         }
         
         if(proposedEdit) {
+          
           for(let edit in proposedEdit) {
+            
             if( edit.startsWith("listviewfields.") && proposedEdit[edit].includes("\n"))
             {
               grant.granted = false;
