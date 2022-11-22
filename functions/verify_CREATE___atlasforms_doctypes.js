@@ -11,6 +11,7 @@ function verify(grant,proposedEdit)
     grant.granted=true;
     grant.message = ``
     console.log("Custom Validator for docType Create")
+    //An exception/error should not grant access!!
     try {
   
       if(proposedEdit && proposedEdit.schema ) {
@@ -41,6 +42,16 @@ function verify(grant,proposedEdit)
         if(proposedEdit && proposedEdit.namespace && proposedEdit.namespace.split('.').length != 2) {
            grant.message = `Namespace must be database.collection`;
             grant.granted=false;
+        }
+        
+        if(proposedEdit) {
+          for(let edit of proposedEdit) {
+            if( edit.startsWith("listviewfields.") && proposedEdit[edit].includes("\n"))
+            {
+              grant.granted = false;
+              grant.message += ` ${edit} has a newline in it, this is not allowed `
+            }
+          }
         }
     
     } catch(e) {
