@@ -6,11 +6,11 @@
    you can also modify the arguments which vary by action */
    
    
-function verify(grant,targetRecord,proposedEdit)
+function verify(grant,proposedEdit)
 {
     grant.granted=true;
     grant.message = ``
-    
+    console.log("Custom Validator for docType Create")
     try {
   
       if(proposedEdit && proposedEdit.schema ) {
@@ -26,7 +26,7 @@ function verify(grant,targetRecord,proposedEdit)
           }
       }
       
-      console.log(JSON.stringify(targetRecord));
+
         
         if(proposedEdit && !proposedEdit.title ) {
             grant.message = `Title is mandatory`;
