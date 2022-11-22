@@ -22,6 +22,22 @@ function verify(grant,targetRecord,proposedEdit)
         grant.granted=false;
       }
     }
+    
+    if(proposed.title == undefined || proposedEdit.title == null || proposedEdit.title=="") {
+        grant.message = `Title is mandatory`;
+        grant.granted=false;
+    }
+    
+   if(proposed.namespace == undefined || proposedEdit.namespace == null || proposedEdit.namespace=="") {
+        grant.message = `Namespace is mandatory`;
+        grant.granted=false;
+    }
+    
+    if(proposed.namespace.split('.').length != 2) {
+       grant.message = `Namespace must be database.collection`;
+        grant.granted=false;
+    }
+    
     //console.log(JSON.stringify(proposedEdit));
     return true; //True - it made a change
 }

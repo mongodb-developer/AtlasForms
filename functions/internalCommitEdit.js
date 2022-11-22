@@ -23,7 +23,6 @@ exports = async function (docType, _id, untypedUpdates, asCreate) {
   const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
   const utilityFunctions = await context.functions.execute("utility_functions");
 
-  // TODO - verify we have permission to write to this (AUTHZ)
 
   let email = context.user.data.email;
 

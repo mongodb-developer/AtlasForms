@@ -1,38 +1,6 @@
 [
     {
-        "name": "internalCommitEdit",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getDocTypeSchemaInfo",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "newUserSignup",
-        "private": true
-    },
-    {
-        "name": "verify_READDOC_sample_airbnb_listingsAndReviews",
-        "private": true,
-        "run_as_system": true
-    },
-    {
-        "name": "utility_functions",
-        "private": false,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "createDocument",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getPicklists",
+        "name": "importDocType",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -40,6 +8,12 @@
     {
         "name": "newAuthorization",
         "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "createDocument",
+        "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
@@ -55,7 +29,7 @@
         "disable_arg_logs": true
     },
     {
-        "name": "importDocType",
+        "name": "getDocTypeSchemaInfo",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -63,6 +37,32 @@
     {
         "name": "lockDocument",
         "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "newUserSignup",
+        "private": true
+    },
+    {
+        "name": "utility_functions",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "ADMIN_PicklistGenerator",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "verify_READDOC_sample_airbnb_listingsAndReviews",
+        "private": true,
+        "run_as_system": true
+    },
+    {
+        "name": "internalCommitEdit",
+        "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
     },
@@ -79,8 +79,8 @@
         "disable_arg_logs": true
     },
     {
-        "name": "ADMIN_PicklistGenerator",
-        "private": true,
+        "name": "getPicklists",
+        "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
