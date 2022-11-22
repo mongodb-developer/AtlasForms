@@ -138,15 +138,16 @@
                                         <div class="form-group m-2 mt-0" v-for="(innervaltype,innername) in valtype "
                                             :set="value = getFieldValue(currentDoc,`${name}.${innername}`)">
 
-                                            <div class="d-flex flex-column align-items-start align-top">
-
+                                            <div v-if="getBsonType(innervaltype) != 'document'"  class="d-flex flex-column align-items-start align-top">
+                                         
 
                                                 <label class="af_fieldlabel"
                                                     :for="innername">{{formatFieldname(innername)}}
-                                                    <span class="ml-2" @click="followLink(innername)"
-                                                        v-if="!editing && getLink(innername)">🔗</span>
+                                                    <span class="ml-2" @click="followLink(`${name}.${innername}`)"
+                                                        v-if="!editing && getLink(`${name}.${innername}`)">🔗</span>
                                                 </label>
 
+                                         
                                                 <!-- Is it An Array in a Document? -->
                                                 <template v-if="getBsonType(innervaltype) == 'array'">
                                                     <div class='af_arrayscroller border '>
