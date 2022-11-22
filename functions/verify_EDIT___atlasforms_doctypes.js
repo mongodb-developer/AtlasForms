@@ -26,7 +26,6 @@ function verify(grant,targetRecord,proposedEdit)
           }
       }
       
-      console.log(JSON.stringify(targetRecord));
         
         if(proposedEdit && proposedEdit.title == "") {
             grant.message = `Title is mandatory`;
@@ -42,6 +41,23 @@ function verify(grant,targetRecord,proposedEdit)
            grant.message = `Namespace must be database.collection`;
             grant.granted=false;
         }
+        
+         if(proposedEdit) {
+        
+          for(let edit in proposedEdit) {
+            
+            if( edit.startsWith("listViewFields.") )
+            {
+ 
+                if( proposedEdit[edit].includes("\n"))
+                {
+                grant.granted = false;
+               grant.message += ` ${edit} ${proposedEdit[edit]} has a newline in it, this is not allowed `
+             }
+            }
+          }
+        }
+        
     
     } catch(e) {
       grant.message = `${e}`;

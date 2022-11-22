@@ -45,12 +45,9 @@ function verify(grant,proposedEdit)
         }
         
         if(proposedEdit) {
-          console.log(JSON.stringify(proposedEdit));
           for(let edit in proposedEdit) {
-            
             if( edit.startsWith("listViewFields.") )
             {
-              console.log(edit,proposedEdit[edit]);
                 if( proposedEdit[edit].includes("\n"))
                 {
                 grant.granted = false;
