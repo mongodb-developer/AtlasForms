@@ -403,7 +403,10 @@ function getLink(fieldname) {
  async function autoSearch(namespace,query){
 
   if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
-    vueApp.selectedDocType = vueApp.docTypes?.[0]; //Null on empty list
+
+    //Find the doctype for our namespace
+    
+    vueApp.selectedDocType = vueApp.docTypes?.find(e => e.namespace == namespace); //Null on empty list
     await vueApp.selectDocType();
     vueApp.fieldEdits=query;
     
