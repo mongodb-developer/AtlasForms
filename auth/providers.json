@@ -6,9 +6,9 @@
             "autoConfirm": false,
             "confirmEmailSubject": "Confirm your  email for Atlas Forms user registration.",
 
-            "emailConfirmationUrl": "https://atlasforms-xxxab.mongodbstitch.com/newUser/confirmEmail.html",
+            "emailConfirmationUrl": "https://atlasforms-fiewc.mongodbstitch.com/newUser/confirmEmail.html",
             "resetPasswordSubject": "Request to reset your Atlas Forms password.",
-            "resetPasswordUrl": "https://atlasforms-xxxab.mongodbstitch.com/resetPassword/resetPassword.html",
+            "resetPasswordUrl": "https://atlasforms-fiewc.mongodbstitch.com/resetPassword/resetPassword.html",
 
             "runConfirmationFunction": false,
             "runResetFunction": false
