@@ -131,10 +131,11 @@ exports = async function () {
    } else {
      return;
    }
-  console.log(`${values.length} unique elements from ${count} `);
+  console.log(` ${fieldname} ${values.length} unique elements from ${count} `);
   if (values.length < 250 && count > values.length * 3) {
     /* Delete any existing picklist record */
     console.log("Building a Picklist for it")
+    fieldname = fieldname.replace('[]','');
     const picklistCollection = context.services.get("mongodb-atlas").db("__atlasforms").collection("picklists");
     try {
       await picklistCollection.updateOne({ database, collection, fieldname }, { $set: { values } }, { upsert: true })
