@@ -74,17 +74,17 @@ class Authorization {
         //This is called even for superusers
         const fname = `verify_${type}_${docType.namespace.replace(/\./g, '_')}`
         //Cache the custom function for speed
-        if(customFunctions.fname == undefined) {
+        if(this.customFunctions.fname == undefined) {
           console.log("Check for custom authz fn")
-          customFunctions.fname == false;
+          this.customFunctions.fname == false;
           //Throws exception if it doesn't exist leaving as false
-          customFunctions.fname = context.functions.execute(fname);
+          this.customFunctions.fname = context.functions.execute(fname);
           
         }
         
-        if (customFunctions.fname) { 
+        if (this.customFunctions.fname) { 
           console.log("Custom Authz Check")
-          customFunctions.fname(grant, targetRecord, ...args); 
+          this.customFunctions.fname(grant, targetRecord, ...args); 
         }
       }
     } catch (e) {
