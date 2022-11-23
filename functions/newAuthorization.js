@@ -75,6 +75,7 @@ class Authorization {
         const fname = `verify_${type}_${docType.namespace.replace(/\./g, '_')}`
         //Cache the custom function for speed
         if(customFunctions.fname == undefined) {
+          console.log("Check for custom authz fn")
           customFunctions.fname == false;
           //Throws exception if it doesn't exist leaving as false
           customFunctions.fname = context.functions.execute(fname);
@@ -82,12 +83,13 @@ class Authorization {
         }
         
         if (customFunctions.fname) { 
+          console.log("Custom Authz Check")
           customFunctions.fname(grant, targetRecord, ...args); 
         }
       }
     } catch (e) {
       if (e.message.includes('function not found')) {
-        //console.log(`No Custom Permissions Function ${e}`)
+        console.log(`No Custom Authz Function ${e}`)
        
       } else {
         console.log(e);
