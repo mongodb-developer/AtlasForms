@@ -1,6 +1,13 @@
 # AtlasForms
 Forms Based UI for MongoDB Atlas
 
+# Docs
+
+Docs are being written in google Docs for now
+
+Getting Started: https://mdb.link/AtlasForms
+Manual: https://mdb.link/AtlasFormsManual
+
 
 ## Introduction
 
@@ -12,46 +19,58 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 ## Installation
 
-
-Change xxxab to your own appid throught this repo and import.
+Change fiewc to your own appid throught this repo and import.
+If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
 - Needs a Delete Button
 - Need to verify field contents in AF_Doctypes
-- Offer sensible message if appid not set.
+- Offer sensible message if appid not set
+
+## Improvements we could implelent
 
 
-## Code Overview
+- Error Handling review, Refactor, lint,tidy code
 
-## Decision Log
-
-_Here we note anything we made an explicit decision about in the design and why_
-
-30/9/2022 - Initial version is only supporting two levels of depth, so arrays and objects only at the top level or objects in a top level array. It is hard to render lower nicely in a basic GUI and also just not a nice schema. Objects might get extended one more level though.
-
-
-
-## Coding Standards
-
-  - All Server Side non private functions return ok(boolean) and message(string) which should be an end user
-appropriate message.
-  - variuable and function nameing are camelCase
-  - Things that can fail are wrapped in try catch
-  - ES6 syntax wherever possible
-  - Multiline comments should be in a single multiline-comment
-  - Use TODO: for things we need to get back to
-  - 
+- All Strings in a consts class, inc errors and fieldnames
   
-## Questions
-  - What shoudl _id look like, I like the idea of sequences and a fixed format TBH, if we are linking this matters maybe.
-  - How Best oto handle date fields, are date pickers good
-  - How do we *best* handle date not datetime?
-  - Will we add support for Range queries? If so how >5 in a text box
-  - How *critical* are dropdown picklists - Very!
-   
+
+- Find a wat to Lint the JS for
+  - use await not then
+  - non ES6 style?
+  - camel case
+  - use of global vars
+  - unchecked returns 
+  - All Strings in a consts class, inc errors and fieldnames client and server.
+
+- Hide buttons
+  - If a user doesn't have the permissions to do something, hide the buttons related to that, eg. no write permissions should mean edit  and create are hidden
+
+- Delete
+ - Users with the correct permissions should have the ability to delete a document
+
+- Mobile Layout CSS/swipes (Lots of this bootstrap gives us)
+
+- Listview
+  - Choose Columns from Cient
+
+- FormView
+    - Formview rememeber personal layout changes
+    - Controls
+      - boolean support (button/box)
+      - Constraints & Validation 
+        - On submit and on Change (Download JS to client??)
+    - Date Only Chooser
+    - 
+- Printing (Stylesheet)
+- Charts?
+- Acessability
+- Add Links (Does this need done)
+  
 
 
-## Work in Progress / TODO / Ideas
+
+## Work in Progress / Completed
 
 - Listview
   - ~~Resize Column~~
@@ -70,6 +89,7 @@ appropriate message.
     - ~~Nested~~
     - ~~Arrays (Add, Remove)~~
       - ~~On an Empty form display a Single Empty array element~~
+      - ~~Numbers~~
       
   - Query By Form
     - ~~Change capture~~
@@ -133,57 +153,7 @@ appropriate message.
   - ~~Import~~
   - ~~Forms App~~
 
+- ~~create function  to auto generate *all* picklists for a source.~~
 
-- Add an optional authorization for signup
-  - In ours if you have mongodb.com address then you get superuser
-  - Although we don't want others to implement that.
-
-- create function  to auto generate *all* picklists for a source.
-  - Hook into import?? Or provide button to run somewhere?
-- Add an authorizarion hook *per document* on read
-
-- Generate demo setup - full set of picklists, bootstrap functions?
-- Error Handling review, Refactor, lint,tidy code
-
-- All Strings in a consts class, inc errors and fieldnames
-  
-
-  
-*** V1 at this point for reInvent ***
-
-Test with - https://github.com/jdorfman/awesome-json-datasets
-
-- Find a wat to Lint the JS for
-  - use await not then
-  - non ES6 style?
-  - camel case
-  - use of global vars
-  - unchecked returns 
-  - All Strings in a consts class, inc errors and fieldnames client and server.
-
-- Hide buttons
-  - If a user doesn't have the permissions to do something, hide the buttons related to that, eg. no write permissions should mean edit  and create are hidden
-
-- Delete
- - Users with the correct permissions should have the ability to delete a document
-
-- Mobile Layout CSS/swipes (Lots of this bootstrap gives us)
-
-- Listview
-  - Choose Columns from Cient
-
-- FormView
-    - ~~Better Layout (Will be an ongoing battle)~~
-    - Formview rememeber personal layout changes
-    - Controls
-      - ~~Numbers~~
-      - boolean support (button/box)
-      - Constraints & Validation 
-        - On submit and on Change (Download JS to client??)
-
-    - Date Only Chooser
-- Printing (Stylesheet)
-- Charts?
-- Acessability
-- Add Links (Does this need done)
-  
+ 
+- ~~Add an authorizarion hook *per document* on read~~
