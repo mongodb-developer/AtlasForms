@@ -63,8 +63,7 @@ function verify(grant,targetRecord,proposedEdit)
       grant.message = `${e}`;
       grant.granted = false; //Fail on error
     }
-    
-    //console.log(JSON.stringify(proposedEdit));
+
     return true; //True - it made a change
 }
 
