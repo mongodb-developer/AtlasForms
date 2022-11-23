@@ -21,7 +21,7 @@ exports = async function (docType, untypedValues) {
   if (authorization == null) { return { ok: false, message: "User not Authorized" }; }
 
   //Verify user can edit this kind of document
-  const canCreateDoctype = await authorization.authorize(authorization.CREATE_DOCTYPE, docType);
+  const canCreateDoctype = await authorization.authorize(authorization.CREATE_DOCTYPE, docType,untypedValues);
   if (canCreateDoctype.granted == false) {
     return { ok: false, message: canCreateDoctype.message };
   }
