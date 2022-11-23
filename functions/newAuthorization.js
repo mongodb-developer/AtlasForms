@@ -81,7 +81,7 @@ class Authorization {
           
         }
         
-        if (customFunctions.fname) {
+        if (customFunctions.fname) { 
           customFunctions.fname(grant, targetRecord, ...args); 
         }
       }
