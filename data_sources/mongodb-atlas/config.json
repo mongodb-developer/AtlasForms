@@ -2,7 +2,7 @@
     "name": "mongodb-atlas",
     "type": "mongodb-atlas",
     "config": {
-        "clusterName": "AtlasCluster",
+        "clusterName": "SharedDemoApps",
         "readPreference": "primary",
         "wireProtocolEnabled": false
     },
