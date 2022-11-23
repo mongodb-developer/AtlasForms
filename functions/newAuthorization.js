@@ -79,11 +79,11 @@ class Authorization {
           this.customFunctions.fname == false;
           //Throws exception if it doesn't exist leaving as false
           this.customFunctions.fname = context.functions.execute(fname);
-          
+          console.log("Custom authz found");
         }
         
         if (this.customFunctions.fname) { 
-          console.log("Custom Authz Check")
+          //console.log("Custom Authz Check")
           this.customFunctions.fname(grant, targetRecord, ...args); 
         }
       }

@@ -51,7 +51,7 @@ function rewriteArrayQuery(typedQuery) {
 // returns everything as a string
 
 exports = async function (docType, query, projection, textquery) {
-
+  
   /*Get an Authorization object - should be standard in any non private function*/
   const authorization = await context.functions.execute("newAuthorization", context.user.id);
   if (authorization == null) { return { ok: false, message: "User no Authorized" }; }
@@ -93,6 +93,7 @@ exports = async function (docType, query, projection, textquery) {
 
     let cursor;
     // If we have a text query then send this via Atlas search
+    let timestart = new Date();
     if(textquery) {
       const atlasSearch = { $search : {  index: 'default', text: { query: textquery ,path: {'wildcard': '*'}}}};
       const pipeline = [atlasSearch];
@@ -110,6 +111,9 @@ exports = async function (docType, query, projection, textquery) {
      cursor = await collection.find(typedQuery, projection); 
 
     }
+    let timeend = new Date()
+    console.log(`find() took ${timeend-timestart}ms`)
+    timestart = new Date();
     let doc;
     do {
       doc = await cursor.next();
@@ -120,7 +124,8 @@ exports = async function (docType, query, projection, textquery) {
       }
     }
     while( results.length < MAX_RESULTS && doc != undefined);
-      
+    timeend = new Date();
+     console.log(`fetching took ${timeend-timestart}ms`)
     
   } catch (e) {
     console.error(e);
