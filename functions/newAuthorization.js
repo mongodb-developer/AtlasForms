@@ -14,6 +14,8 @@ class Authorization {
     this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
     this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
     this.READ_DOCUMENT = "READDOC"; /* User can read a specific document (Can query)*/
+    
+    this.customFunctions = {};
   }
 
   async lookupUser(user) {
@@ -71,14 +73,22 @@ class Authorization {
       if (docType) {
         //This is called even for superusers
         const fname = `verify_${type}_${docType.namespace.replace(/\./g, '_')}`
-        const verify_fn = context.functions.execute(fname);
-        if (verify_fn) {
-          verify_fn(grant, targetRecord, ...args); 
+        //Cache the custom function for speed
+        if(customFunctions.fname == undefined) {
+          customFunctions.fname == false;
+          //Throws exception if it doesn't exist leaving as false
+          customFunctions.fname = context.functions.execute(fname);
+          
+        }
+        
+        if (customFunctions.fname) {
+          customFunctions.fname(grant, targetRecord, ...args); 
         }
       }
     } catch (e) {
       if (e.message.includes('function not found')) {
         //console.log(`No Custom Permissions Function ${e}`)
+       
       } else {
         console.log(e);
       }
