@@ -10,7 +10,7 @@ function rewriteArrayQuery(typedQuery) {
   // { skills : { $elemMatch: { skill: "archery", level: 3}}}
   // We use $and for multiples
   const elementsToMatch = {};
-  for (let fieldName of Object.keys(typedQuery)) {
+  for (let fieldName of Object.keys(typedQuery)) { 
     const { arrayFieldName, index, elementFieldName, locationOfIndex } = utilityFunctions.refersToArrayElement(fieldName);
     if (locationOfIndex != -1) {
       if (!elementsToMatch[arrayFieldName]) { elementsToMatch[arrayFieldName] = []; }
@@ -51,7 +51,7 @@ function rewriteArrayQuery(typedQuery) {
 // returns everything as a string
 
 exports = async function (docType, query, projection, textquery) {
-  
+  let fnstarttime = new Date();
   /*Get an Authorization object - should be standard in any non private function*/
   const authorization = await context.functions.execute("newAuthorization", context.user.id);
   if (authorization == null) { return { ok: false, message: "User no Authorized" }; }
@@ -131,7 +131,8 @@ exports = async function (docType, query, projection, textquery) {
     console.error(e);
     return { ok: false, message: `Error in Querying ${e}`, results: [] }
   }
-  
+  let fnendtime = new Date();
+  console.log(`function took: ${fnendtime-fnstarttime}ms`)
   return {ok:true,results}
 
 };
