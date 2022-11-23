@@ -6,11 +6,12 @@
    you can also modify the arguments which vary by action */
    
    
-function verify(grant,targetRecord,proposedEdit)
+function verify(grant,proposedEdit)
 {
     grant.granted=true;
     grant.message = ``
-    
+    console.log("Custom Validator for docType Create")
+    //An exception/error should not grant access!!
     try {
   
       if(proposedEdit && proposedEdit.schema ) {
@@ -26,13 +27,14 @@ function verify(grant,targetRecord,proposedEdit)
           }
       }
       
+
         
-        if(proposedEdit && proposedEdit.title == "") {
+        if(proposedEdit && !proposedEdit.title ) {
             grant.message = `Title is mandatory`;
             grant.granted=false;
         }
         
-       if(proposedEdit &&  proposedEdit.namespace=="") {
+       if(proposedEdit &&  !proposedEdit.namespace ) {
             grant.message = `Namespace is mandatory`;
             grant.granted=false;
         }
@@ -42,13 +44,10 @@ function verify(grant,targetRecord,proposedEdit)
             grant.granted=false;
         }
         
-         if(proposedEdit) {
-        
+        if(proposedEdit) {
           for(let edit in proposedEdit) {
-            
             if( edit.startsWith("listViewFields.") )
             {
- 
                 if( proposedEdit[edit].includes("\n"))
                 {
                 grant.granted = false;
@@ -57,7 +56,6 @@ function verify(grant,targetRecord,proposedEdit)
             }
           }
         }
-        
     
     } catch(e) {
       grant.message = `${e}`;
