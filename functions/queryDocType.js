@@ -56,7 +56,7 @@ exports = async function (docType, query, projection, textquery) {
   const authorization = await context.functions.execute("newAuthorization", context.user.id);
   if (authorization == null) { return { ok: false, message: "User no Authorized" }; }
 
-  console.log(` 1: ${ fnstarttime - new Date()}ms `); 
+  console.log(` new Authorization: ${  new Date() - fnstarttime }ms `); 
   
   //Check we can see this type at all - if we can see it we can read it.
   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE, docType);
@@ -64,7 +64,7 @@ exports = async function (docType, query, projection, textquery) {
     return { ok: false, message: canSeeDoctype.message };
   }
   
-  console.log(`2: ${fnstarttime - new Date()}ms`);
+
   
 
   const MAX_RESULTS = 200; /* THink carefully if you really need this larger or not */
@@ -80,7 +80,7 @@ exports = async function (docType, query, projection, textquery) {
 
   const { docTypeSchemaInfo } = await context.functions.execute("getDocTypeSchemaInfo", docType);
   
-    console.log(`3: ${fnstarttime - new Date()}ms`);
+
 
   // Convert everything to the correct Javascript/BSON type 
   // As it's all sent as strings from the form, 
@@ -89,12 +89,12 @@ exports = async function (docType, query, projection, textquery) {
   const forQuery = true; // Used to tell it to convert > and < values
   let typedQuery = utilityFunctions.castDocToType(query, docTypeSchemaInfo, forQuery );
 
-  console.log(`4: ${fnstarttime - new Date()}ms`);
+
   
   /* Handle Arrays correctly*/
   typedQuery = rewriteArrayQuery(typedQuery);
 
-   console.log(`5: ${fnstarttime - new Date()}ms`);
+
    
  /* Previously we applied $limit/limit() to the queries however as we are now trying to getDocTypeSchemaInfo
  MAX_RESULTS *after* we apply authorization we instead keep track of result size , we alo dont use toArray() now*/
@@ -123,7 +123,7 @@ exports = async function (docType, query, projection, textquery) {
     }
     let timeend = new Date()
     console.log(`find() took ${timeend-timestart}ms`)
-      console.log(`6: ${fnstarttime - new Date()}ms`);
+
     timestart = new Date();
     let doc;
     do {

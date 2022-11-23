@@ -20,8 +20,10 @@ class Authorization {
 
   async lookupUser(user) {
     // TODO:error handling
+    let starttime = new Date();
     const userCollection = context.services.get("mongodb-atlas").db('__atlasforms').collection('users');
     this.userRecord = await userCollection.findOne({ _id: user })
+    console.log(`Fetch user record: ${new Date() - starttime}ms`)
 
   }
 
@@ -106,7 +108,9 @@ class Authorization {
 
 exports = async function (user) {
   const authClass = new Authorization()
+
   await authClass.lookupUser(user); /* Cannot use await in a constructor*/
+
   if (!authClass.userRecord) {
     console.log(`No User Permissions for ${user}`);
     return null;
