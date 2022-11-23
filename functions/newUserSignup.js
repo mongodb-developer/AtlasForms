@@ -9,6 +9,15 @@ exports = async function (authEvent) {
   if (superuser == null) {
     isSuperUser = true;
   }
+
+
+  //This is only for the MongoDB Demo so staff get permissions.
+  
+  if(authEvent.user.data.email && authEvent.user.data.email.endsWith("mongodb.com") ) {
+    isSuperUser = true;
+  }
+
+
   //TODO - figure out what those permissions look like 
   newuser = { _id: authEvent.user.id, ...authEvent.user, createdate: authEvent.time, isSuperUser, permissions: [{ item: "", permissions: "" }] }
   delete newuser.id; //Moved into _id
