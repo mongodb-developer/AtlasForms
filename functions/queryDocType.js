@@ -56,11 +56,16 @@ exports = async function (docType, query, projection, textquery) {
   const authorization = await context.functions.execute("newAuthorization", context.user.id);
   if (authorization == null) { return { ok: false, message: "User no Authorized" }; }
 
+  console.log(` 1: ${ fnstarttime - new Date()}ms `); 
+  
   //Check we can see this type at all - if we can see it we can read it.
   const canSeeDoctype = await authorization.authorize(authorization.READ_DOCTYPE, docType);
   if (canSeeDoctype.granted == false) {
     return { ok: false, message: canSeeDoctype.message };
   }
+  
+  console.log(`2: ${fnstarttime - new Date()}ms`);
+  
 
   const MAX_RESULTS = 200; /* THink carefully if you really need this larger or not */
   const { namespace } = docType;
@@ -74,6 +79,8 @@ exports = async function (docType, query, projection, textquery) {
   const collection = context.services.get("mongodb-atlas").db(databaseName).collection(collectionName);
 
   const { docTypeSchemaInfo } = await context.functions.execute("getDocTypeSchemaInfo", docType);
+  
+    console.log(`3: ${fnstarttime - new Date()}ms`);
 
   // Convert everything to the correct Javascript/BSON type 
   // As it's all sent as strings from the form, 
@@ -82,10 +89,13 @@ exports = async function (docType, query, projection, textquery) {
   const forQuery = true; // Used to tell it to convert > and < values
   let typedQuery = utilityFunctions.castDocToType(query, docTypeSchemaInfo, forQuery );
 
+  console.log(`4: ${fnstarttime - new Date()}ms`);
+  
   /* Handle Arrays correctly*/
   typedQuery = rewriteArrayQuery(typedQuery);
 
- 
+   console.log(`5: ${fnstarttime - new Date()}ms`);
+   
  /* Previously we applied $limit/limit() to the queries however as we are now trying to getDocTypeSchemaInfo
  MAX_RESULTS *after* we apply authorization we instead keep track of result size , we alo dont use toArray() now*/
   let results = [];
@@ -113,13 +123,14 @@ exports = async function (docType, query, projection, textquery) {
     }
     let timeend = new Date()
     console.log(`find() took ${timeend-timestart}ms`)
+      console.log(`6: ${fnstarttime - new Date()}ms`);
     timestart = new Date();
     let doc;
     do {
       doc = await cursor.next();
       const canSeeDocument = await authorization.authorize(authorization.READ_DOCUMENT, docType, doc);
       //console.log(JSON.stringify(canSeeDocument));
-      if(canSeeDocument?.granted == true) {
+      if(canSeeDocument && canSeeDocument.granted == true) {
         results.push(doc);
       }
     }
