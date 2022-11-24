@@ -19,7 +19,7 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 ## Installation
 
-Change fiewc to your own appid throught this repo and import.
+Change xxxab to your own appid throught this repo and import.
 If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
@@ -27,7 +27,7 @@ If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 - Need to verify field contents in AF_Doctypes
 - Offer sensible message if appid not set
 
-## Improvements we could implelent
+## Improvements we could implement
 
 
 - Error Handling review, Refactor, lint,tidy code
