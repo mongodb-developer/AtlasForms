@@ -377,6 +377,7 @@ function getLink (fieldname) {
   return false
 }
 
+// eslint-disable-next-line no-unused-vars
 async function autoSearch (namespace, query) {
   if (vueApp && vueApp.docTypes && vueApp.docTypes.length > 0) {
     vueApp.selectedDocType = vueApp.docTypes?.[0] // Null on empty list
@@ -412,7 +413,27 @@ async function followLink (fieldname) {
     await remote.autoSearch(linkInfo.namespace, query)
   }
 }
+async function deleteEdit () {
+  if (vueApp.currentDoc === {} || vueApp.currentDoc == null ||
+    vueApp.currentDoc === undefined || vueApp.currentDoc.doc._id == null || !vueApp.currentDocLocked) {
+    formAlert(appStrings.AF_NOT_LOCKED)
+    return
+  }
 
+  const deleteResult = await vueApp.realmApp.currentUser.functions.deleteEdit(vueApp.selectedDocType,
+    vueApp.currentDoc.doc._id)
+
+  if (deleteResult.ok) {
+    vueApp.currentDocLocked = false
+    clearForm()
+  } else {
+    // Tell them Why not
+    console.log(appStrings.AF_DOC_CANNOT_LOCK(deleteResult.message))
+    formAlert(appStrings.AF_DOC_CANNOT_LOCK(deleteResult.message))
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
 async function formsOnLoad () {
   const { createApp } = Vue
   const realmApp = new Realm.App({ id: atlasAppConfig.ATLAS_SERVICES_APPID })
@@ -446,7 +467,8 @@ async function formsOnLoad () {
       classFromType,
       importDoc,
       getLink,
-      followLink
+      followLink,
+      deleteEdit
     },
     data () {
       return {

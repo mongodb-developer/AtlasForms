@@ -32,6 +32,8 @@ If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 
 - Error Handling review, Refactor, lint,tidy code
+  - Make Errors and Messages seperate so message shown if provided regardless of error state
+  - Can then provide positive messages - your form submitted with reference ABC
 
 - All Strings in a consts class, inc errors and fieldnames
   
