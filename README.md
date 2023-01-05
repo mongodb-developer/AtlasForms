@@ -24,9 +24,10 @@ If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
 - ~~Import button shown on Edit Screen~~
-- Needs a Delete Button
-- Need to verify field contents more  in AF_Doctypes
-- Offer sensible message if appid not set
+- ~~Needs a Delete Button~~
+- ~~Need to verify field contents more  in AF_Doctypes~~
+- Offer sensible message if appid not set correctly.
+- Option for dropdowns not options.
 
 ## Improvements we could implelent
 

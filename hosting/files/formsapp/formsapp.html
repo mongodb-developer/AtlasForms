@@ -470,7 +470,8 @@
 
                                     <!-- Picklist-->
                                     <div v-else-if="selectedDocType?.picklists?.[name]">
-                                        <!-- Has a picklist-->
+                                        <!-- Has a picklist -->
+                                        <!-- is it editable -->
                                         <input :disabled="editing == false" :id="name" class="form-control af_forminput"
                                             :data-bsontype="valtype" :value="(nv=fieldEdits[name])!=undefined?nv:value"
                                             type="text" :list=`${name}_picklist` v-on:input="formValueChange" />
