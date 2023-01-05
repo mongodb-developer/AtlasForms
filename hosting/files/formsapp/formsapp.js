@@ -428,6 +428,7 @@ async function deleteEdit () {
     clearForm()
   } else {
     // Tell them Why not
+  
     console.log(appStrings.AF_DOC_CANNOT_LOCK(deleteResult.message))
     formAlert(appStrings.AF_DOC_CANNOT_LOCK(deleteResult.message))
   }
