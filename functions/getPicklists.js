@@ -20,8 +20,10 @@ exports = async function (docType) {
     const optional = {}
     for (const picklist of pickLists) {
       pickListObj[picklist.fieldname] = picklist.values
-      if (picklist.optional === true) {
-        optional[picklist.fieldname] = true;
+      if (picklist.optional === false) {
+        optional[picklist.fieldname] = false;
+      } else {
+        optional[picklist.fieldname] = true; //Default to optional 
       }
     }
     pickListObj._optional = optional;
