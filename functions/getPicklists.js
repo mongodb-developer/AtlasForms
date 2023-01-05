@@ -17,9 +17,14 @@ exports = async function (docType) {
     const [database, collection] = docType.namespace.split('.')
     const pickListCursor = await pickListsCollection.find({ database, collection }, { _id: 0 })
     const pickLists = await pickListCursor.toArray()
+    const optional = {}
     for (const picklist of pickLists) {
       pickListObj[picklist.fieldname] = picklist.values
+      if (picklist.optional === true) {
+        optional[picklist.fieldname] = true;
+      }
     }
+    pickListObj._optional = optional;
   } catch (e) {
     return { ok: false, message: e }
   }
