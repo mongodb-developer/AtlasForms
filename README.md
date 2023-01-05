@@ -23,7 +23,7 @@ Change fiewc to your own appid throught this repo and import.
 If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
-- Import button shown on Edit Screen
+- ~~Import button shown on Edit Screen~~
 - Needs a Delete Button
 - Need to verify field contents more  in AF_Doctypes
 - Offer sensible message if appid not set
