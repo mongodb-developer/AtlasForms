@@ -32,7 +32,7 @@ exports = async function (docType, _id, untypedUpdates) {
 
   try {
    const collection = context.services.get('mongodb-atlas').db(databaseName).collection(collectionName)
-   await dollection.deleteOne({_id})
+   await collection.deleteOne({_id})
    return { ok: true, message: "Record Deleted Sucessfully"}
    
   } catch (e) {
