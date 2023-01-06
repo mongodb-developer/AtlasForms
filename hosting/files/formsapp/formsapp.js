@@ -382,7 +382,9 @@ function getLink (fieldname) {
  async function autoSearch(namespace,query){
 
   if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
+
     vueApp.selectedDocType = vueApp.docTypes?.find(e => e.namespace == namespace); //Null on empty list
+
     await vueApp.selectDocType();
     vueApp.fieldEdits=query;
     
@@ -391,7 +393,7 @@ function getLink (fieldname) {
     console.log(vueApp.results[0]);
     await resultClick(vueApp.results[0])
   } else {
-    console.log('no vueApp yet, trying again')
+    console.log('no vueApp ready yet, trying again')
     setTimeout(() => { autoSearch(namespace, query) }, 100)
   }
 }
