@@ -26,14 +26,18 @@ Change xxxab to your own appid throught this repo and import.
 If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
-- Needs a Delete Button
-- Need to verify field contents in AF_Doctypes
-- Offer sensible message if appid not set
+- ~~Import button shown on Edit Screen~~
+- ~~Needs a Delete Button~~
+- ~~Need to verify field contents more  in AF_Doctypes~~
+- Offer sensible message if appid not set correctly.
+- Option for dropdowns not options.
 
 ## Improvements we could implement
 
 
 - Error Handling review, Refactor, lint,tidy code
+  - Make Errors and Messages seperate so message shown if provided regardless of error state
+  - Can then provide positive messages - your form submitted with reference ABC
 
 - All Strings in a consts class, inc errors and fieldnames
   

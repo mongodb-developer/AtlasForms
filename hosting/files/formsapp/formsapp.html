@@ -64,16 +64,18 @@
                             <button type="button" v-show="currentDocLocked" class="btn btn-primary"
                                 @click="commitEdit()"> Save Edits
                             </button>
-                            <button type="button" v-show="currentDocLocked" class="btn btn-primary"
-                                @click="commitEdit(true)"> Cancel
-                                Edits
+                            <button type="button" v-show="currentDocLocked" class="btn ml-5 btn-warning"
+                                @click="commitEdit(true)"> Cancel Edits
                             </button>
-                            <button type="button" v-show="showImport" class="btn btn-primary"
+                            <button type="button" v-show="currentDocLocked" class="btn ml-5 btn-danger"
+                                @click="deleteEdit()"> Delete Record
+                            </button>
+                            <button type="button" v-show="showImport && !currentDocLocked" class="btn btn-primary ml-10"
                                 @click="importDoc()">Import</button>
 
 
 
-                            <button type="button" v-show="!currentDocLocked" class="btn btn-warning ml-5"
+                            <button type="button" v-show="!currentDocLocked" class="btn btn-warning ml-5 float-end"
                                 @click="logOut()">
                                 Logout </button>
 
@@ -184,24 +186,41 @@
                                                                                     type="datetime-local"
                                                                                     :value="toDateTime(elementvalue)">
                                                                                 <!-- Picklist-->
-                                                                                <template
-                                                                                    v-else-if="selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
-                                                                                    <input :disabled="editing == false"
-                                                                                        :id=`${name}.${innername}.${arrayidx}.${elementname}`
-                                                                                        class="form-control af_forminput af_inlist"
-                                                                                        :data-bsontype="innervaltype"
-                                                                                        :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])!=undefined?nv:elementvalue"
-                                                                                        type="text"
-                                                                                        :list=`${name}.${innername}.${elementname}_picklist`
-                                                                                        v-on:input="formValueChange" />
-                                                                                    <datalist
-                                                                                        :id=`${name}.${innername}.${elementname}_picklist`>
-                                                                                        <option
-                                                                                            v-for="option in selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
-                                                                                            {{option}}
-                                                                                        </option>
-                                                                                    </datalist>
+
+
+
+                                                                                <template v-else-if="selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
+                                                                                
+                                                                                
+                                                                                    <template v-if="selectedDocType?.picklists?._optional?.[`${name}.${innername}.${elementname}`]">
+                                                                                        <!-- is it editable -->
+                                                                                
+                                                                                        <input :disabled="editing == false" :id=`${name}.${innername}.${arrayidx}.${elementname}`
+                                                                                            class="form-control af_forminput af_inlist" :data-bsontype="innervaltype"
+                                                                                            :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])!=undefined?nv:elementvalue" type="text"
+                                                                                            :list=`${name}.${innername}.${elementname}_picklist` v-on:input="formValueChange" />
+                                                                                        <datalist :id=`${name}.${innername}.${elementname}_picklist`>
+                                                                                            <option v-for="option in selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
+                                                                                                {{option}}
+                                                                                            </option>
+                                                                                        </datalist>
+                                                                                
+                                                                                    </template>
+                                                                                    <template v-else>
+                                                                                        <!-- TODO , Put this in the other dropdown places -->
+                                                                                        <select :disabled="editing == false" class="form-control" :id=`${name}.${innername}.${arrayidx}.${elementname}`
+                                                                                            name="docType" v-on:change="formValueChange" :data-bsontype="valtype"
+                                                                                            :value="(nv=fieldEdits[`${name}.${innername}.${elementname}`])!=undefined?nv:elementvalue">
+                                                                                            <option v-for="option in selectedDocType?.picklists?.[`${name}.${innername}.${elementname}`]">
+                                                                                                {{option}}
+                                                                                            </option>
+                                                                                        </select>
+                                                                                    </template>
+                                                                                
                                                                                 </template>
+
+
+
                                                                                 <!-- Text/Number -->
                                                                                 <div v-else v-on:input="formValueChange"
                                                                                     :id=`${name}.${innername}.${arrayidx}.${elementname}`
@@ -225,23 +244,36 @@
                                                                         type="datetime-local"
                                                                         :value="toDateTime(arrayElement)">
                                                                     <!-- Picklist-->
-                                                                    <div
-                                                                        v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                                        <input :disabled="editing == false"
-                                                                            :id=`${name}.${innername}.${arrayidx}`
-                                                                            class="form-control af_forminput  af_inlist"
-                                                                            :data-bsontype="innervaltype"
-                                                                            :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])!=undefined?nv:arrayElement"
-                                                                            type="text"
-                                                                            :list=`${name}.${innername}_picklist`
-                                                                            v-on:input="formValueChange" />
-                                                                        <datalist :id=`${name}.${innername}_picklist`>
-                                                                            <option
-                                                                                v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                                                {{option}}
-                                                                            </option>
-                                                                        </datalist>
+
+
+                                                                    <div v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                    
+                                                                        <template v-if="selectedDocType?.picklists?._optional?.[`${name}.${innername}`]">
+                                                                            <!-- is it editable -->
+                                                                            <input :disabled="editing == false" :id=`${name}.${innername}.${arrayidx}`
+                                                                                class="form-control af_forminput  af_inlist" :data-bsontype="innervaltype"
+                                                                                :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])!=undefined?nv:arrayElement" type="text"
+                                                                                :list=`${name}.${innername}_picklist` v-on:input="formValueChange" />
+                                                                            <datalist :id=`${name}.${innername}_picklist`>
+                                                                                <option v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                                    {{option}}
+                                                                                </option>
+                                                                            </datalist>
+                                                                            </template>
+                                                                            <template v-else>
+                                                                                <!-- TODO , Put this in the other dropdown places -->
+                                                                                <select :disabled="editing == false" class="form-control" :id=`${name}.${innername}` name="docType"
+                                                                                    v-on:change="formValueChange" :data-bsontype="valtype"
+                                                                                    :value="(nv=fieldEdits[`${name}.${innername}.${arrayidx}`])!=undefined?nv:arrayElement"
+                                                                                    >
+                                                                                    <option v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                                        {{option}}
+                                                                                    </option>
+                                                                                </select>
+                                                                            </template>
                                                                     </div>
+
+
                                                                     <!-- Text/Number -->
                                                                     <div v-else v-on:input="formValueChange"
                                                                         :id=`${name}.${innername}.${arrayidx}`
@@ -275,21 +307,32 @@
                                                         type="datetime-local" :value="toDateTime(value)">
 
                                                     <!-- Picklist-->
-                                                    <div
-                                                        v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                    <div v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
                                                         <!-- Has a picklist-->
-                                                        <input :disabled="editing == false" :id=`${name}.${innername}`
-                                                            :class="' form-control ' +  classFromType(innervaltype) + ' af_forminput '"
-                                                            :data-bsontype="innervaltype"
-                                                            :value="(nv=fieldEdits[`${name}.${innername}`])!=undefined?nv:value"
-                                                            type="text" :list=`${name}.${innername}_picklist`
-                                                            v-on:input="formValueChange" />
-                                                        <datalist :id=`${name}.${innername}_picklist`>
-                                                            <option
-                                                                v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                                {{option}}
-                                                            </option>
-                                                        </datalist>
+    
+                                                        <template v-if="selectedDocType?.picklists?._optional?.[`${name}.${innername}`]">
+                                                            <!-- is it editable -->
+                                                            <input :disabled="editing == false" :id=`${name}.${innername}`
+                                                                :class="' form-control ' +  classFromType(innervaltype) + ' af_forminput '" :data-bsontype="innervaltype"
+                                                                :value="(nv=fieldEdits[`${name}.${innername}`])!=undefined?nv:value" type="text"
+                                                                :list=`${name}.${innername}_picklist` v-on:input="formValueChange" />
+                                                            <datalist :id=`${name}.${innername}_picklist`>
+                                                                <option v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                    {{option}}
+                                                                </option>
+                                                            </datalist>
+                                                        </template>
+                                                        <template v-else>
+                                                            <!-- TODO , Put this in the other dropdown places -->
+                                                            <select :disabled="editing == false" class="form-control" :id=`${name}.${innername}` name="docType"
+                                                                v-on:change="formValueChange" :data-bsontype="valtype"
+                                                                :value="(nv=fieldEdits[`${name}.${innername}`])!=undefined?nv:value">
+                                                                <option v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                    {{option}}
+                                                                </option>
+                                                            </select>
+                                                        </template>
+                                                    
                                                     </div>
 
                                                     <!-- Text/Number -->
@@ -351,21 +394,32 @@
                                                                     <!-- Picklist -->
                                                                     <div
                                                                         v-else-if="selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                                        <!-- Has a picklist-->
-                                                                        <input :disabled="editing == false"
+                                                                        <template v-if="selectedDocType?.picklists?._optional?.[`${name}.${innername}`]">
+                                                                            <!-- is it editable --> 
+                                                                            <input :disabled="editing == false"   :id=`${name}.${arrayidx}.${innername}`
+                                                                                class="form-control af_forminput" :data-bsontype="valtype"
+                                                                                :value="(nv=fieldEdits[`${name}.${arrayidx}.${innername}`])!=undefined?nv:innervalue"
+                                                                                type="text"
+                                                                                :list=`${name}.${innername}_picklist` v-on:input="formValueChange" />
+                                                                                <datalist :id=`${name}.${innername}_picklist`>
+                                                                                    <option
+                                                                                        v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                                        {{option}}
+                                                                                    </option>
+                                                                                </datalist>
+                                                                        </template>
+                                                                        <template v-else>
+                                                                            <!-- TODO , Put this in the other dropdown places -->
+                                                                            <select :disabled="editing == false" class="form-control" 
                                                                             :id=`${name}.${arrayidx}.${innername}`
-                                                                            :class="' form-control ' +  classFromType(innervaltype) + ' af_forminput '"
-                                                                            :data-bsontype="innervaltype"
-                                                                            :value="(nv=fieldEdits[`${name}.${arrayidx}.${innername}`])!=undefined?nv:innervalue"
-                                                                            type="text"
-                                                                            :list=`${name}.${innername}_picklist`
-                                                                            v-on:input="formValueChange" />
-                                                                        <datalist :id=`${name}.${innername}_picklist`>
-                                                                            <option
-                                                                                v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
-                                                                                {{option}}
-                                                                            </option>
-                                                                        </datalist>
+                                                                             name="docType"
+                                                                                v-on:change="formValueChange" :data-bsontype="valtype"
+                                                                                :value="(nv=fieldEdits[`${name}.${arrayidx}.${innername}`])!=undefined?nv:innervalue">
+                                                                                <option v-for="option in selectedDocType?.picklists?.[`${name}.${innername}`]">
+                                                                                    {{option}}
+                                                                                </option>
+                                                                            </select>
+                                                                        </template>
                                                                     </div>
 
                                                                     <!-- Text / Number -->
@@ -408,20 +462,35 @@
                                                         <!-- Picklist-->
                                                         <template v-else-if="selectedDocType?.picklists?.[name]">
                                                             <!-- Has a picklist-->
+                                                            <template
+                                                                v-if="selectedDocType?.picklists?._optional?.[name]">
+                                                                <!-- is it editable -->
+                                                                <input :disabled="editing == false" :id=`${name}.${arrayidx}`
+                                                                    class="form-control af_forminput af_inlist"
+                                                                    :data-bsontype="valtype"
+                                                                    :value="(nv=fieldEdits[`${name}.${arrayidx}`])!=undefined?nv:arrayElement"
+                                                                    type="text" :list=`${name}_picklist`
+                                                                    v-on:input="formValueChange" />
+                                                                <datalist :id=`${name}_picklist`>
+                                                                    <option
+                                                                        v-for="option in selectedDocType?.picklists?.[name]">
+                                                                        {{option}}
+                                                                    </option>
+                                                                </datalist>
+                                                            </template>
+                                                            <template v-else>
 
-                                                            <input :disabled="editing == false"
-                                                                class="form-control af_forminput af_inlist"
-                                                                :data-bsontype="valtype"
-                                                                :value="(nv=fieldEdits[`${name}.${arrayidx}`])!=undefined?nv:arrayElement"
-                                                                type="text" :list=`${name}_picklist`
-                                                                :id=`${name}.${arrayidx}`
-                                                                v-on:input="formValueChange" />
-                                                            <datalist :id=`${name}_picklist`>
-                                                                <option
-                                                                    v-for="option in selectedDocType?.picklists?.[name]">
-                                                                    {{option}}</option>
-                                                            </datalist>
-
+                                                                <select :disabled="editing == false"
+                                                                    class="form-control" :id=`${name}.${arrayidx}` name="docType"
+                                                                    v-on:change="formValueChange"
+                                                                    :data-bsontype="valtype"
+                                                                    :value="(nv=fieldEdits[`${name}.${arrayidx}`])!=undefined?nv:arrayElement">
+                                                                    <option
+                                                                        v-for="option in selectedDocType?.picklists?.[name]">
+                                                                        {{option}}
+                                                                    </option>
+                                                                </select>
+                                                            </template>
                                                         </template>
                                                         <!-- Text/Number -->
                                                         <div v-else v-on:input="formValueChange"
@@ -466,17 +535,31 @@
                                         :disabled="editing == false" type="datetime-local" :value="toDateTime(value)"
                                         :id="name">
 
-                                    <!-- Picklist-->
+                                    <!-- Picklist, two versions-->
                                     <div v-else-if="selectedDocType?.picklists?.[name]">
-                                        <!-- Has a picklist-->
-                                        <input :disabled="editing == false" :id="name" class="form-control af_forminput"
-                                            :data-bsontype="valtype" :value="(nv=fieldEdits[name])!=undefined?nv:value"
-                                            type="text" :list=`${name}_picklist` v-on:input="formValueChange" />
-                                        <datalist :id=`${name}_picklist`>
-                                            <option v-for="option in selectedDocType?.picklists?.[name]">{{option}}
-                                            </option>
-                                        </datalist>
+                                        <!-- Has a picklist -->
+                                        <template v-if="selectedDocType?.picklists?._optional?.[name]">
+                                            <!-- is it editable -->
+                                            <input :disabled="editing == false" :id="name"
+                                                class="form-control af_forminput" :data-bsontype="valtype"
+                                                :value="(nv=fieldEdits[name])!=undefined?nv:value" type="text"
+                                                :list=`${name}_picklist` v-on:input="formValueChange" />
+                                            <datalist :id=`${name}_picklist`>
+                                                <option v-for="option in selectedDocType?.picklists?.[name]">{{option}}
+                                                </option>
+                                            </datalist>
+                                        </template>
+                                        <template v-else>
+                                            <!-- TODO , Put this in the other dropdown places -->
+                                            <select :disabled="editing == false" class="form-control" :id="name"
+                                                name="docType" v-on:change="formValueChange" :data-bsontype="valtype"
+                                                :value="(nv=fieldEdits[name])!=undefined?nv:value">
+                                                <option v-for="option in selectedDocType?.picklists?.[name]">{{option}}
+                                                </option>
+                                            </select>
+                                        </template>
                                     </div>
+                                    <!-- Add a Boolean control or Explicit True/False dropdown -->
 
                                     <!-- Text/Number -->
                                     <div v-else v-on:input="formValueChange" :id="name" :data-bsontype="valtype"

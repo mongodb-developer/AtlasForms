@@ -195,7 +195,7 @@ function getSystemDocTypeSchemaInfo (namespace) {
   }
 
   if (namespace === '__atlasforms.picklists') {
-    return { _id: 'objectid', database: 'string', collection: 'string', fieldname: 'string', values: ['string'] }
+    return { _id: 'objectid', database: 'string', collection: 'string', fieldname: 'string', values: ['string'] , optional: 'boolean'}
   }
 
   if (namespace === '__atlasforms.users') {
