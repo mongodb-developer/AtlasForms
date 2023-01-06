@@ -1,5 +1,8 @@
 # AtlasForms
-Forms Based UI for MongoDB Atlas
+
+Free, open source, serverless frontend for managing data in your Organisation. Automatically generated forms, Document data storage plugin/configurable security and business rules.
+
+![screenshot of atlas forms](https://github.com/mongodb-developer/AtlasForms/blob/main/AFScreenshot.png?raw=true)
 
 # Docs
 
@@ -19,7 +22,7 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 ## Installation
 
-Change fiewc to your own appid throught this repo and import.
+Change xxxab to your own appid throught this repo and import.
 If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
@@ -29,7 +32,7 @@ If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 - Offer sensible message if appid not set correctly.
 - Option for dropdowns not options.
 
-## Improvements we could implelent
+## Improvements we could implement
 
 
 - Error Handling review, Refactor, lint,tidy code

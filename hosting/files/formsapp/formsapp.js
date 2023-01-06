@@ -378,15 +378,17 @@ function getLink (fieldname) {
 }
 
 // eslint-disable-next-line no-unused-vars
-async function autoSearch (namespace, query) {
-  if (vueApp && vueApp.docTypes && vueApp.docTypes.length > 0) {
-    vueApp.selectedDocType = vueApp.docTypes?.[0] // Null on empty list
-    await vueApp.selectDocType()
-    vueApp.fieldEdits = query
 
-    vueApp.editing = true // Can edit in empty form
-    await vueApp.runQuery()
-    console.log(vueApp.results[0])
+ async function autoSearch(namespace,query){
+
+  if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
+    vueApp.selectedDocType = vueApp.docTypes?.find(e => e.namespace == namespace); //Null on empty list
+    await vueApp.selectDocType();
+    vueApp.fieldEdits=query;
+    
+    vueApp.editing = true; //Can edit in empty form
+    await vueApp.runQuery();
+    console.log(vueApp.results[0]);
     await resultClick(vueApp.results[0])
   } else {
     console.log('no vueApp yet, trying again')
