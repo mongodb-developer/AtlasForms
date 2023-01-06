@@ -1,6 +1,8 @@
 # AtlasForms
 Forms Based UI for MongoDB Atlas
 
+![screenshot of atlas forms](https://github.com/mongodb-developer/AtlasForms/blob/main/AFScreenshot.png?raw=true)
+
 # Docs
 
 Docs are being written in google Docs for now
