@@ -307,7 +307,7 @@ async function runQuery () {
     for (const doc of results) {
       wrappedResults.push({ downloaded, doc })
     }
-
+    console.log(wrappedResults)
     vueApp.results = wrappedResults
 
     if (results.length === 0) {
