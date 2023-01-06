@@ -277,7 +277,7 @@ function deleteArrayElement (name, index) {
   }
 
   if (removed === arrayLength) {
-    vueApp.addArrayElement(name)
+    vueApp.addArrayElement(name) 
   }
 }
 
