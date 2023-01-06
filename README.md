@@ -1,6 +1,6 @@
 # AtlasForms
 
-Serverless frontend for manageing data in you business. Automatically generated forms, Document data storage plugin/configurable security and business rules.
+Free, open source, serverless frontend for managing data in your Organisation. Automatically generated forms, Document data storage plugin/configurable security and business rules.
 
 ![screenshot of atlas forms](https://github.com/mongodb-developer/AtlasForms/blob/main/AFScreenshot.png?raw=true)
 
