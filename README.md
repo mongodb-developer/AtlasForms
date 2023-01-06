@@ -1,5 +1,6 @@
 # AtlasForms
-Forms Based UI for MongoDB Atlas
+
+Serverless frontend for manageing data in you business. Automatically generated forms, Document data storage plugin/configurable security and business rules.
 
 ![screenshot of atlas forms](https://github.com/mongodb-developer/AtlasForms/blob/main/AFScreenshot.png?raw=true)
 
