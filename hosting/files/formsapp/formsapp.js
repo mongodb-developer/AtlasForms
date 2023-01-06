@@ -165,7 +165,7 @@ function formValueChange (event) {
   let evalue = ''
 
   // If it'a a DIV take the text, if not take the value
-  if (element.nodeName === 'INPUT') {
+  if (element.nodeName === 'INPUT' || element.nodeName === 'SELECT') {
     evalue = element.value
     this.value = evalue
   } else {
