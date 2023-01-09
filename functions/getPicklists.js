@@ -31,8 +31,10 @@ exports = async function (docType) {
     
     // Special case for AF_Doctypes, optioanlly list the available collections
     if( docType.namespace === '__atlasforms.doctypes') {
-       pickListObj.namespace = []
+      pickListObj.namespace = []
+      pickListObj['links.namespace'] = []
       pickListObj._optional.namespace = true
+      pickListObj._optional['links.namespace'] = true
       const admin = context.services.get('mongodb-atlas').admin();
       const dbNames = admin.getDBNames();
       
@@ -44,6 +46,7 @@ exports = async function (docType) {
         for(const collName of collectionNames) {
              console.log(collName)
           pickListObj.namespace.push(`${dbName}.${collName}`) 
+          pickListObj['links.namespace'].push(`${dbName}.${collName}`) 
         }
       }
      
