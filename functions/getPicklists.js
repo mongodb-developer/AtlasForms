@@ -31,8 +31,18 @@ exports = async function (docType) {
     
     // Special case for AF_Doctypes, optioanlly list the available collections
     if( docType.namespace === '__atlasforms.doctypes') {
-      pickListObj.namespace = ['TODO']
+       pickListObj.namespace = []
       pickListObj._optional.namespace = true
+      const admin = mongodb.admin();
+      const dbNames = admin.getDBNames();
+      for( const dbName in dbNames) {
+        const db = mongodb.db(dbName);
+        const collectionNames = db.getCollectionNames();
+        for(const collName in collectionNames) {
+          pickListObj.namespace.push(`${dbName}.${collName}`) 
+        }
+      }
+     
     }
   } catch (e) {
     return { ok: false, message: e }
