@@ -383,6 +383,7 @@ function getLink (fieldname) {
 
   if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
 
+
     vueApp.selectedDocType = vueApp.docTypes?.find(e => e.namespace == namespace); //Null on empty list
 
     await vueApp.selectDocType();
