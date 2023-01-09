@@ -21,34 +21,34 @@
 <body onLoad="newUserOnLoad()">
     <div id="app">
         <div class="newuserlayout">
-            <form class="form-horizontal h-50 w-50 m-auto border" title="New User Form">
+            <form class="form-horizontal h-50 w-50 m-auto mt-4 border" title="New User Form">
                 <div class="form-group m-2">
                     <label for="email" class="control-label col-sm-2 h4">Email:</label>
-                    <div class="col-sm-10" title="Email Entry">
+                    <div class="col-sm" title="Email Entry">
                         <input type="email" class="form-control" id="email" placeholder="Enter email.." v-model="email"
                             tabindex="0" required>
                     </div>
                 </div>
                 <div class="form-group m-2">
                     <label class="control-label col-sm-2 h4" for="pwd">Password:</label>
-                    <div class="col-sm-10" title="Password Entry">
+                    <div class="col-sm" title="Password Entry">
                         <input type="password" class="form-control" id="pwd" placeholder="Enter password.."
                             v-model="password" required>
                     </div>
                 </div>
                 <div class="form-group m-2">
-                    <label class="control-label col-sm-6 h4" for="pwd2">Password Again:</label>
-                    <div class="col-sm-10" title="Password Again Entry">
+                    <label class="control-label col-sm-6 h4" for="pwd2">Confirm Password:</label>
+                    <div class="col-sm" title="Password Again Entry">
                         <input type="password" class="form-control" id="pwd2" placeholder="Enter password again.."
                             v-model="password2" required>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group text-center">
                     <input type="button" class="btn btn-primary m-2" @click="registerNewUser(email,password,password2)" value="Register User" />
-                    <input type="button" class="btn btn-close m-2" @click="cancel()"/>
+                    <input type="button" class="btn btn-primary m-2" value="Cancel" @click="cancel()"/>
                 </div>
             </form>
-            <div class="text-center text-danger h5">
+            <div class="text-center text-primary h5">
                 {{message}}
             </div>
         </div>

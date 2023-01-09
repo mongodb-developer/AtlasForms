@@ -21,31 +21,31 @@
 <body onLoad="loginOnLoad()">
     <div id="loginapp">
         <div class="loginlayout">
-            <form class="form-horizontal h-50 w-50 m-auto border" title="Login Form">
+            <form class="form-horizontal mt-4 h-50 w-50 m-auto border" title="Login Form">
                 <div class="form-group m-2">
                     <label class="control-label col-sm-2 h4" for="email">Email:</label>
-                    <div class="col-sm-10" title="Email Entry">
+                    <div class="col-sm" title="Email Entry">
                         <input type="email" class="form-control" id="email" placeholder="Enter email.." v-model="email"
                             tabindex="0" required>
                     </div>
                 </div>
                 <div class="form-group m-2">
                     <label class="control-label col-sm-2 h4" for="pwd">Password:</label>
-                    <div class="col-sm-10" title="Password Entry">
+                    <div class="col-sm" title="Password Entry">
                         <input type="password" class="form-control" id="pwd" placeholder="Enter password.."
                             v-model="password" required>
                     </div>
                 </div>
-                <div class="form-group text-center">
-                    <div class="col-sm-offset-2 col-sm-10 align-content-center justify-content-center"
+                <div class="form-group text-center mb-4">
+                    <div class="col-sm-offset-2 col-sm align-content-center justify-content-center"
                         title="Login Button">
                         <input type="button" class="btn btn-primary m-2" id="loginButton" value="Login" :disabled='email.length==0 || password.length==0'
                         @click="passwordLogin(email,password)"/>                     
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="button" class="btn btn-primary m-2" @click="newUser()" value="New User" />
-                    <input type="button" class="btn btn-primary m-2" @click="resetPassword()" value="Reset Password"/>
+                <div class="form-group text-center">
+                    <input type="button" class="btn btn-link m-2 " @click="newUser()" value="New User" />
+                    <input type="button" class="btn btn-link m-2 " @click="resetPassword()" value="Reset Password"/>
 
                 </div>
             </form>

@@ -22,57 +22,51 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 ## Installation
 
-Change xxxab to your own appid throught this repo and import.
+Change fiewc to your own appid throught this repo and import.
 If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
-- ~~Import button shown on Edit Screen~~
-- ~~Needs a Delete Button~~
-- ~~Need to verify field contents more  in AF_Doctypes~~
+
 - Offer sensible message if appid not set correctly.
-- Option for dropdowns not options.
+
+
 
 ## Improvements we could implement
 
+- Look at non Atlas hosting options for frontend
+- 
+- Optimise speed of server calls, 'Security' is slow in Global app due to fetch of user record.
 
 - Error Handling review, Refactor, lint,tidy code
   - Make Errors and Messages seperate so message shown if provided regardless of error state
   - Can then provide positive messages - your form submitted with reference ABC
 
 - All Strings in a consts class, inc errors and fieldnames
-  
-
-- Find a wat to Lint the JS for
-  - use await not then
-  - non ES6 style?
-  - camel case
-  - use of global vars
-  - unchecked returns 
-  - All Strings in a consts class, inc errors and fieldnames client and server.
 
 - Hide buttons
   - If a user doesn't have the permissions to do something, hide the buttons related to that, eg. no write permissions should mean edit  and create are hidden
 
-- Delete
- - Users with the correct permissions should have the ability to delete a document
-
 - Mobile Layout CSS/swipes (Lots of this bootstrap gives us)
 
 - Listview
-  - Choose Columns from Cient
+  - Choose Columns by User 
 
 - FormView
     - Formview rememeber personal layout changes
     - Controls
       - boolean support (button/box)
+      - Show URLs?? , This may be super hard for edits so we may need 'Virtual' fields which show content of others.
       - Constraints & Validation 
-        - On submit and on Change (Download JS to client??)
+        - On on Change as well as Submit (Download JS to client??)
     - Date Only Chooser
-    - 
-- Printing (Stylesheet)
-- Charts?
-- Acessability
-- Add Links (Does this need done)
+    
+- Printing (Stylesheet to render to printer) - Actually it's not too bad right now but we need 
+to disable scrolls and it only does one page. And we dont want ot print the hitlist.
+
+- Charts Integration (Requested but not relevant for now)
+- Accessability
+
+
   
 
 

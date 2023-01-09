@@ -39,10 +39,9 @@
                                 <option v-for="docType in docTypes" :value="docType">{{docType.title}}</option>
                             </select>
 
-                            <button type="button" :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null"
-                                v-show="!currentDocLocked" class="btn btn-primary ml-5" @click="newRecord()"> Create
-                            </button>
-                            <div class="input-group ml-5">
+                      
+
+                            <div class="input-group ml-2">
                                 <input v-show="!currentDocLocked" class="form-control " v-model="textquery"
                                     type="text" />
                                 <div class="input-group-append">
@@ -55,17 +54,19 @@
                             </div>
 
                             <button type="button" v-show="!currentDocLocked" :disabled="!selectedDocType.namespace"
-                                class="btn btn-primary ml-5" @click="clearForm()"> Clear </button>
+                                class="btn btn-primary ml-1" @click="clearForm()"> Clear </button>
 
                             <button type="button" :disabled="!selectedDocType.namespace || currentDoc?.doc?._id == null"
                                 v-show="!currentDocLocked" class="btn btn-primary ml-5" @click="editRecord()"> Edit
                             </button>
-
+                            <button type="button" :disabled="!selectedDocType.namespace || currentDoc?.doc?._id != null || Object.keys(fieldEdits).length === 0"
+                            v-show="!currentDocLocked" class="btn btn-primary ml-2" @click="newRecord()"> Save
+                        </button>
                             <button type="button" v-show="currentDocLocked" class="btn btn-primary"
-                                @click="commitEdit()"> Save Edits
+                                @click="commitEdit()"> Save
                             </button>
                             <button type="button" v-show="currentDocLocked" class="btn ml-5 btn-warning"
-                                @click="commitEdit(true)"> Cancel Edits
+                                @click="commitEdit(true)"> Cancel
                             </button>
                             <button type="button" v-show="currentDocLocked" class="btn ml-5 btn-danger"
                                 @click="deleteEdit()"> Delete Record
@@ -93,6 +94,7 @@
                     <!-- This data *is* a table and so HTML Table is fine to use-->
                     <table class="table table-bordered" id="listviewheaderrow">
                         <tr class="table-primary">
+                           
                             <th :class="`af_listviewheader ` + (idx==listViewFields.length-1?'af_listviewheader_last':'')"
                                 @click="sortListviewColumn(fieldname)" class=""
                                 v-for="(fieldname,idx) in listViewFields" :id="'lh_'+fieldname"
@@ -102,7 +104,7 @@
                             </th>
                         </tr>
                         <tr :class="(( result == currentDoc && result.doc._id ) ? ' table-active' : '')"
-                            v-for="result in results">
+                            v-for="(result,idx) in results">
                             <td @click="resultClick(result)" v-for="fieldname in listViewFields">
                                 <div>{{ getFieldValue(result,fieldname) }} </div>
                             </td>
@@ -110,7 +112,7 @@
                     </table>
                 </div>
             </div>
-
+          
 
             <!-- The code below iterates over the 'Schema' in selectedDocTypeSchema-->
             <!-- There is no recursion support so we explicity support only certain-->

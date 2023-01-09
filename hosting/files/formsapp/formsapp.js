@@ -277,7 +277,7 @@ function deleteArrayElement (name, index) {
   }
 
   if (removed === arrayLength) {
-    vueApp.addArrayElement(name)
+    vueApp.addArrayElement(name) 
   }
 }
 
@@ -305,9 +305,9 @@ async function runQuery () {
     const wrappedResults = []
     const downloaded = false
     for (const doc of results) {
-      wrappedResults.push({ downloaded, doc })
+      if(doc !== null) { wrappedResults.push({ downloaded, doc }) }
     }
-
+  
     vueApp.results = wrappedResults
 
     if (results.length === 0) {
@@ -382,7 +382,9 @@ function getLink (fieldname) {
  async function autoSearch(namespace,query){
 
   if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
+
     vueApp.selectedDocType = vueApp.docTypes?.find(e => e.namespace == namespace); //Null on empty list
+
     await vueApp.selectDocType();
     vueApp.fieldEdits=query;
     
@@ -391,7 +393,7 @@ function getLink (fieldname) {
     console.log(vueApp.results[0]);
     await resultClick(vueApp.results[0])
   } else {
-    console.log('no vueApp yet, trying again')
+    console.log('no vueApp ready yet, trying again')
     setTimeout(() => { autoSearch(namespace, query) }, 100)
   }
 }
