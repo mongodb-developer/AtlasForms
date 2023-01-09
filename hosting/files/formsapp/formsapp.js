@@ -384,8 +384,9 @@ function getLink (fieldname) {
   if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
 
     vueApp.selectedDocType = vueApp.docTypes?.find(e => e.namespace == namespace); //Null on empty list
-
+    if( vueApp.selectedDocType == null) console.log(`Cannot find ${namespace} in ${JSON.stringify( vueApp.docTypes)}`)
     await vueApp.selectDocType();
+    await clearForm()
     vueApp.fieldEdits=query;
     
     vueApp.editing = true; //Can edit in empty form
@@ -429,7 +430,7 @@ async function deleteEdit () {
 
   if (deleteResult.ok) {
     vueApp.currentDocLocked = false
-    clearForm()
+    await clearForm()
   } else {
     // Tell them Why not
   

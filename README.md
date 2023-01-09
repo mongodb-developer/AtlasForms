@@ -33,6 +33,9 @@ If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Improvements we could implement
 
+- Offer list of collections in AF_DocTypes
+- Allow Links to be labeled? 
+
 - Look at non Atlas hosting options for frontend
 - 
 - Optimise speed of server calls, 'Security' is slow in Global app due to fetch of user record.
