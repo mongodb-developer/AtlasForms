@@ -3,7 +3,7 @@
     "type": "mongodb-atlas",
     "config": {
         "clusterName": "AtlasCluster",
-        "readPreference": "nearest",
+        "readPreference": "primaryPreferred",
         "wireProtocolEnabled": false
     },
     "version": 1
