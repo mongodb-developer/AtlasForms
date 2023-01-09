@@ -11,6 +11,7 @@ exports = async function (docType) {
     return { ok: false, message: canSeeDoctype.message }
   }
 
+  
   const pickListsCollection = context.services.get('mongodb-atlas').db('__atlasforms').collection('picklists')
   const pickListObj = {}
   try {
@@ -27,6 +28,12 @@ exports = async function (docType) {
       }
     }
     pickListObj._optional = optional;
+    
+    // Special case for AF_Doctypes, optioanlly list the available collections
+    if( doctype.namespace === '__atlasforms.doctypes') {
+      pickListObj.namespace = ['TODO']
+      pickListObj.options.namespace = true
+    }
   } catch (e) {
     return { ok: false, message: e }
   }

@@ -1,36 +1,6 @@
 [
     {
-        "name": "commitEdit",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "internalCommitEdit",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "newAuthorization",
-        "private": true,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getListOfDoctypes",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "getPicklists",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
-        "name": "lockDocument",
+        "name": "queryDocType",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -40,25 +10,15 @@
         "private": true
     },
     {
-        "name": "queryDocType",
-        "private": false,
-        "run_as_system": true,
-        "disable_arg_logs": true
-    },
-    {
         "name": "importDocType",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "verify_READDOC_sample_airbnb_listingsAndReviews",
-        "private": true,
-        "run_as_system": true
-    },
-    {
-        "name": "utility_functions",
+        "name": "commitEdit",
         "private": false,
+        "run_as_system": true,
         "disable_arg_logs": true
     },
     {
@@ -67,19 +27,35 @@
         "run_as_system": true
     },
     {
-        "name": "deleteEdit",
+        "name": "lockDocument",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "ADMIN_PicklistGenerator",
+        "name": "utility_functions",
+        "private": false,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "createDocument",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "verify_CREATE___atlasforms_doctypes",
+        "private": true,
+        "run_as_system": true
+    },
+    {
+        "name": "newAuthorization",
         "private": true,
         "run_as_system": true,
         "disable_arg_logs": true
     },
     {
-        "name": "createDocument",
+        "name": "deleteEdit",
         "private": false,
         "run_as_system": true,
         "disable_arg_logs": true
@@ -96,8 +72,32 @@
         "run_as_system": true
     },
     {
-        "name": "verify_CREATE___atlasforms_doctypes",
+        "name": "verify_READDOC_sample_airbnb_listingsAndReviews",
         "private": true,
         "run_as_system": true
+    },
+    {
+        "name": "getListOfDoctypes",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "internalCommitEdit",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "ADMIN_PicklistGenerator",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "getPicklists",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]
