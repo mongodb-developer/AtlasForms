@@ -1,45 +1,45 @@
+/* eslint-disable no-undef */
 /* This class handles all authorization (AUTHZ) for the application */
-/* App Services does have authorization built in but in general it's*/
+/* App Services does have authorization built in but in general it's */
 /* AUTHZ by configuration (you can attach a function) - this is */
-/* Pure AUTHZ by code so you can define it any way you want.*/
+/* Pure AUTHZ by code so you can define it any way you want. */
 
 class Authorization {
+  constructor () {
+    this.USER_MANAGER = 'USER_MANAGER' /* Can Manage other users */
+    this.DOCTYPE_MANAGER = 'DOCTYPE_MANAGER' /* Can edit Doctypes, Add data sources */
+    this.PICKLIST_MANAGER = 'PICKLIST_MANAGER' /* Can edit dropdown */
+    this.READ_DOCTYPE = 'ACCESS' /* User can see a given doctype */
+    this.CREATE_DOCTYPE = 'CREATE' /* User can create a given doctype */
+    this.EDIT_DOCTYPE = 'EDIT' /* User can edit given doctype */
+    this.READ_DOCUMENT = 'READDOC' /* User can read a specific document (Can query) */
 
-
-  constructor() {
-    this.USER_MANAGER = "USER_MANAGER";    /* Can Manage other users*/
-    this.DOCTYPE_MANAGER = "DOCTYPE_MANAGER"; /* Can edit Doctypes, Add data sources */
-    this.PICKLIST_MANAGER = "PICKLIST_MANAGER"; /* Can edit dropdown*/
-    this.READ_DOCTYPE = "ACCESS"; /* User can see a given doctype */
-    this.CREATE_DOCTYPE = "CREATE"; /* User can create a given doctype */
-    this.EDIT_DOCTYPE = "EDIT"; /* User can edit given doctype */
-    this.READ_DOCUMENT = "READDOC"; /* User can read a specific document (Can query)*/
+    this.customFunctions = {}
   }
 
-  async lookupUser(user) {
+  async lookupUser (user) {
     // TODO:error handling
-    const userCollection = context.services.get("mongodb-atlas").db('__atlasforms').collection('users');
+    const starttime = new Date()
+    const userCollection = context.services.get('mongodb-atlas').db('__atlasforms').collection('users')
     this.userRecord = await userCollection.findOne({ _id: user })
-
+    console.log(`Fetch user record: ${new Date() - starttime}ms`)
   }
 
-  /* Return True is the user may do this , False if they may not*/
+  /* Return True is the user may do this , False if they may not */
 
-  async authorize(type, docType, targetRecord, ...args) {
-
+  async authorize (type, docType, targetRecord, ...args) {
     // console.log(`Request AUTHZ: ${type} ${docType?.namespace} ${targetRecord?._id}`);
 
-    let grant = { granted: false, message: "" }
+    const grant = { granted: false, message: '' }
 
     if (this.userRecord == null) {
-      grant.granted = false;
-      grant.message = 'Unknown User';
-      return grant;
+      grant.granted = false
+      grant.message = 'Unknown User'
+      return grant
     }
 
     if (this.userRecord.isSuperUser) {
-
-      grant.granted = true; /* Could still be denied by function*/
+      grant.granted = true /* Could still be denied by function */
     }
 
     /*****************************/
@@ -48,56 +48,65 @@ class Authorization {
     /* This can handle both security and business rules */
     /* Even call out to a custom function based on the docype if it exists */
 
-    //Simple one - Check user record permissions - This is a global permissions
-    //If we cannot do this we cannot see the doctype
+    // Simple one - Check user record permissions - This is a global permissions
+    // If we cannot do this we cannot see the doctype
 
     if ([this.READ_DOCTYPE, this.READ_DOCUMENT, this.EDIT_DOCTYPE, this.CREATE_DOCTYPE].includes(type)) {
-      grant.message = "Not Allowed";
+      grant.message = 'Not Allowed'
       for (const permission of this.userRecord.permissions) {
-        if (permission.item == docType.namespace &&
+        if (permission.item === docType.namespace &&
           permission.permissions.split(',').includes(type)) {
-          grant.granted = true;
-          grant.message = ""
+          grant.granted = true
+          grant.message = ''
         }
       }
     }
-    
-    
 
-    /* Execute a custom function for each operations/namspace combo*/
-    /*This can override the default*/
+    /* Execute a custom function for each operations/namspace combo */
+    /* This can override the default */
 
     try {
       if (docType) {
-        //This is called even for superusers
+        // This is called even for superusers
         const fname = `verify_${type}_${docType.namespace.replace(/\./g, '_')}`
-        const verify_fn = context.functions.execute(fname);
-        if (verify_fn) {
-          verify_fn(grant, targetRecord, ...args); 
+        // Cache the custom function for speed
+        if (this.customFunctions.fname === undefined) {
+          console.log('Check for custom authz fn')
+          this.customFunctions.fname = false
+          // Throws exception if it doesn't exist leaving as false
+          this.customFunctions.fname = context.functions.execute(fname)
+          console.log('Custom authz found')
+        }
+
+        if (this.customFunctions.fname) {
+          // console.log("Custom Authz Check")
+          this.customFunctions.fname(grant, targetRecord, ...args)
         }
       }
     } catch (e) {
       if (e.message.includes('function not found')) {
-        //console.log(`No Custom Permissions Function ${e}`)
+        console.log(`No Custom Authz Function ${e}`)
       } else {
-        console.log(e);
+        console.log(e)
       }
 
-      //console.log(`Granted: ${grant.granted}`)
+      // console.log(`Granted: ${grant.granted}`)
     }
 
     /****************************/
 
-    return grant;
+    return grant
   }
 }
 
 exports = async function (user) {
   const authClass = new Authorization()
-  await authClass.lookupUser(user); /* Cannot use await in a constructor*/
+
+  await authClass.lookupUser(user) /* Cannot use await in a constructor */
+
   if (!authClass.userRecord) {
-    console.log(`No User Permissions for ${user}`);
-    return null;
+    console.log(`No User Permissions for ${user}`)
+    return null
   }
-  return authClass;
-};
+  return authClass
+}
