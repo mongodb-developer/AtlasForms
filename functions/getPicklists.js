@@ -35,11 +35,14 @@ exports = async function (docType) {
       pickListObj._optional.namespace = true
       const admin = context.services.get('mongodb-atlas').admin();
       const dbNames = admin.getDBNames();
-      console.log(dbNames)
+      
       for( const dbName in dbNames) {
+        console.log(dbName)
         const db = context.services.get('mongodb-atlas').db(dbName);
         const collectionNames = db.getCollectionNames();
+          console.log(collectionNames)
         for(const collName in collectionNames) {
+             console.log(collName)
           pickListObj.namespace.push(`${dbName}.${collName}`) 
         }
       }
