@@ -26,17 +26,15 @@ Change fiewc to your own appid throught this repo and import.
 If required edit data_sources/mongodb-atlas/config.json to point at your cluster
 
 ## Known BUGS to fix
-- ~~Import button shown on Edit Screen~~
-- ~~Needs a Delete Button~~
-- ~~Need to verify field contents more  in AF_Doctypes~~
+
 - Offer sensible message if appid not set correctly.
-- ~~Option for dropdowns not optional~~
+
 
 
 ## Improvements we could implement
 
 - Look at non Atlas hosting options for frontend
-
+- 
 - Optimise speed of server calls, 'Security' is slow in Global app due to fetch of user record.
 
 - Error Handling review, Refactor, lint,tidy code
@@ -57,6 +55,7 @@ If required edit data_sources/mongodb-atlas/config.json to point at your cluster
     - Formview rememeber personal layout changes
     - Controls
       - boolean support (button/box)
+      - Show URLs?? , This may be super hard for edits so we may need 'Virtual' fields which show content of others.
       - Constraints & Validation 
         - On on Change as well as Submit (Download JS to client??)
     - Date Only Chooser
