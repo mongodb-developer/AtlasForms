@@ -30,7 +30,7 @@ exports = async function (docType) {
     pickListObj._optional = optional;
     
     // Special case for AF_Doctypes, optioanlly list the available collections
-    if( doctype.namespace === '__atlasforms.doctypes') {
+    if( docType.namespace === '__atlasforms.doctypes') {
       pickListObj.namespace = ['TODO']
       pickListObj.options.namespace = true
     }
