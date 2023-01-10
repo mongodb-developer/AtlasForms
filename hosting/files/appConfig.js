@@ -1,6 +1,8 @@
 //Change this so your browser app knows what atlas app services to connect to
 
-const atlasAppConfig = { ATLAS_SERVICES_APPID : "atlasforms-fiewc" }
+
+const atlasAppConfig = { ATLAS_SERVICES_APPID : "atlasforms-xxxab" }
+
 
 //All the strings that aren't in HTML to allow localization
 //Avoid showing end users errors returned from the server, log them instead.
