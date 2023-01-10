@@ -381,12 +381,13 @@ function getLink (fieldname) {
 
  async function autoSearch(namespace,query){
 
-  if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0) {
+  if(vueApp && vueApp.docTypes && vueApp.docTypes.length>0 && vueApp.ready) {
 
 
     vueApp.selectedDocType = vueApp.docTypes?.find(e => e.namespace == namespace); //Null on empty list
-
+    if( vueApp.selectedDocType == null) console.log(`Cannot find ${namespace} in ${JSON.stringify( vueApp.docTypes)}`)
     await vueApp.selectDocType();
+    await clearForm()
     vueApp.fieldEdits=query;
     
     vueApp.editing = true; //Can edit in empty form
@@ -430,7 +431,7 @@ async function deleteEdit () {
 
   if (deleteResult.ok) {
     vueApp.currentDocLocked = false
-    clearForm()
+    await clearForm()
   } else {
     // Tell them Why not
   
@@ -491,7 +492,8 @@ async function formsOnLoad () {
         show_modal: false,
         textquery: '',
         showImport: false,
-        childTabs: {}
+        childTabs: {},
+        ready: false
       }
     },
     mounted () {
@@ -512,8 +514,9 @@ async function formsOnLoad () {
   // Set the Document Type dropdown to the first value
   if (vueApp.docTypes.length > 0) {
     vueApp.selectedDocType = vueApp.docTypes?.[0] // Null on empty list
-    vueApp.selectDocType()
+    await vueApp.selectDocType()
     vueApp.editing = true // Can edit in empty form
+    vueApp.ready = true;
   } else {
     formAlert(appStrings.AF_NO_DOCTYPES)
   }

@@ -24,7 +24,7 @@ It differs from a 4GL in having no proprietery coding language - it si instead a
 
 
 
-Change hozzz to your own appid throught this repo and import.
+Change xxxab to your own appid throught this repo and import.
 
 
 ## Known BUGS to fix
@@ -34,6 +34,9 @@ Change hozzz to your own appid throught this repo and import.
 
 
 ## Improvements we could implement
+
+- Offer list of collections in AF_DocTypes
+- ~~Allow Links to be labeled?~~ 
 
 - Look at non Atlas hosting options for frontend
 - 

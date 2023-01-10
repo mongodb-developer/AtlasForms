@@ -71,7 +71,7 @@
                             <button type="button" v-show="currentDocLocked" class="btn ml-5 btn-danger"
                                 @click="deleteEdit()"> Delete Record
                             </button>
-                            <button type="button" v-show="showImport && !currentDocLocked" class="btn btn-primary ml-10"
+                            <button type="button" v-show="showImport && !currentDocLocked" class="btn btn-primary ml-2"
                                 @click="importDoc()">Import</button>
 
 
@@ -150,7 +150,7 @@
                                                 <label class="af_fieldlabel"
                                                     :for="innername">{{formatFieldname(innername)}}
                                                     <span class="ml-2" @click="followLink(`${name}.${innername}`)"
-                                                        v-if="!editing && getLink(`${name}.${innername}`)">🔗</span>
+                                                        v-if="!editing && getLink(`${name}.${innername}`)">🔗 {{getLink(`${name}.${innername}`).label}}</span>
                                                 </label>
 
 
@@ -529,7 +529,7 @@
 
                                     <label class="af_fieldlabel" :for="name">{{formatFieldname(name)}} <span
                                             class="ml-2" @click="followLink(name)"
-                                            v-if="!editing && getLink(name)">🔗</span> </label>
+                                            v-if="!editing && getLink(name)"> 🔗{{getLink(name).label}}</span> </label>
 
                                     <!-- Date-->
                                     <input v-if="valtype == 'date'" :data-bsontype="valtype"
