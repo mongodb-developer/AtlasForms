@@ -19,6 +19,6 @@ const appStrings = {
      AF_DOC_CANNOT_LOCK: (msg) => `Cannot edit this record.  ${msg}.`,
      AF_DOC_CANNOT_CREATE: (msg) => `Cannot create this record.  ${msg}.`,
      AF_NOT_LOCKED: "You do not currently have this document locked for edit",
-     AF_SERVER_ERROR: (msg)=>`Error from Server: ${msg}`,
+     AF_SERVER_ERROR: (msg)=>`Error from Server: ${JSON.stringify(msg)}`,
      AF_NO_DOCTYPES: "Your Administrator has not granted you any permissions yet."
 }

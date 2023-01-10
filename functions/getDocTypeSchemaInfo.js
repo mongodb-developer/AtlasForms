@@ -190,7 +190,7 @@ function getSystemDocTypeSchemaInfo (namespace) {
       title: 'string',
       schema: 'string:1000',
       listViewFields: ['string'],
-      links: [{ fromField: 'string', namespace: 'string', tofield: 'string' }]
+      links: [{ fromField: 'string:20', namespace: 'string:20', tofield: 'string:20', label: 'string:20' }]
     }
   }
 
