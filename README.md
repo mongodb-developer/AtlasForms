@@ -6,7 +6,7 @@ Free, open source, serverless frontend for managing data in your Organisation. A
 
 # Docs
 
-Docs are being written in google Docs for now
+Docs are being written in Google Docs for now
 
 Getting Started: https://mdb.link/AtlasForms
 Manual: https://mdb.link/AtlasFormsManual
@@ -18,7 +18,7 @@ Atlas forms is a Forms based, End user interface to allow users to Create, Find,
 database development where required and makes a Zero Coding solution to building an internal GUI
 to interact with Data.
 
-It differs from a 4GL in having no proprietery coding language - it si instead a skeleton application in modern Javascript running with serverless function on MongoDBs Atlas Developer Data PLatform. It is intended to be modified to fit rewuirements and has been designed to me modular and easily modified.
+It differs from a 4GL in having no proprietery coding language - it is instead a skeleton application in modern Javascript running with serverless function on MongoDBs Atlas Developer Data Platform. It is intended to be modified to fit requirements and has been designed to me modular and easily modified.
 
 ## Installation
 
